@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="e2e" tests="1" failures="0" errors="0" skipped="0" time="4.309">
+  <testsuite name="tests/landing.e2e.ts" tests="1" failures="0" errors="0" skipped="0" time="4.309">
+    <testcase name="landing links to the marketplace [web]" classname="tests/landing.e2e.ts" time="4.309"/>
+  </testsuite>
+</testsuites>

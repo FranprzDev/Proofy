@@ -1,9 +1,6 @@
-import uvicorn
+from frontier_agent.cli import main
 
-
-def main() -> None:
-    uvicorn.run("frontier_agent.api.app:app", host="127.0.0.1", port=8000, reload=True)
-
+__all__ = ["main"]
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

@@ -1,0 +1,3 @@
+[{"filePath": "web/a.ts", "messages": [
+  {"ruleId": "no-undef", "severity": 2, "message": "x is not defined", "line": 4, "column": 1},
+  {"ruleId": "no-console", "severity": 1, "message": "Unexpected console", "line": 9, "column": 1}]}]

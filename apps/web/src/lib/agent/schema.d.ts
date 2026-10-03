@@ -122,20 +122,70 @@ export interface components {
             /** Suggested Question */
             suggested_question: string;
         };
+        /** ChangedFile */
+        ChangedFile: {
+            /** Path */
+            path: string;
+            /** Content */
+            content?: string | null;
+        };
         /** CicdInput */
         CicdInput: {
             expected: components["schemas"]["Ref"];
             evidence_ref?: components["schemas"]["Ref"] | null;
+            pull_request?: components["schemas"]["PullRequest"] | null;
+            /** Expected Test Ids */
+            expected_test_ids?: string[];
+            /** E2E Report Json */
+            e2e_report_json?: string | null;
+            /** E2E Junit Xml */
+            e2e_junit_xml?: string | null;
             /** Results */
             results?: components["schemas"]["ScenarioResult"][];
+            static?: components["schemas"]["StaticReports"];
+            /** Clauses */
+            clauses?: string[];
         };
         /** CicdState */
         CicdState: {
             expected: components["schemas"]["Ref"];
             evidence_ref?: components["schemas"]["Ref"] | null;
+            pull_request?: components["schemas"]["PullRequest"] | null;
+            /** Expected Test Ids */
+            expected_test_ids?: string[];
+            /** E2E Report Json */
+            e2e_report_json?: string | null;
+            /** E2E Junit Xml */
+            e2e_junit_xml?: string | null;
             /** Results */
             results?: components["schemas"]["ScenarioResult"][];
+            static?: components["schemas"]["StaticReports"];
+            /** Clauses */
+            clauses?: string[];
+            status?: components["schemas"]["ReviewStatus"] | null;
+            /** Findings */
+            findings?: components["schemas"]["Finding"][];
+            /** E2E Commit */
+            e2e_commit?: string | null;
+            /** E2E Dirty */
+            e2e_dirty?: boolean | null;
+            /**
+             * E2E Report Parsed
+             * @default false
+             */
+            e2e_report_parsed: boolean;
+            /** Static Tools Parsed */
+            static_tools_parsed?: components["schemas"]["StaticTool"][];
             analysis?: components["schemas"]["Verdict"] | null;
+            agent_dynamic?: components["schemas"]["Verdict"] | null;
+            agent_static?: components["schemas"]["Verdict"] | null;
+            /**
+             * Summary
+             * @default
+             */
+            summary: string;
+            dynamic_verdict?: components["schemas"]["Verdict"] | null;
+            static_verdict?: components["schemas"]["Verdict"] | null;
             verdict?: components["schemas"]["Verdict"] | null;
             /**
              * Attestation Authorized
@@ -144,6 +194,11 @@ export interface components {
             attestation_authorized: boolean;
             /** Observations */
             observations?: string[];
+            /**
+             * Pr Comment
+             * @default
+             */
+            pr_comment: string;
         };
         /** DocumentInput */
         DocumentInput: {
@@ -153,6 +208,11 @@ export interface components {
             document: string;
             /** Answers */
             answers?: string[];
+            /**
+             * Contract Version
+             * @default draft
+             */
+            contract_version: string;
         };
         /** DocumentState */
         DocumentState: {
@@ -162,14 +222,25 @@ export interface components {
             document: string;
             /** Answers */
             answers?: string[];
+            /**
+             * Contract Version
+             * @default draft
+             */
+            contract_version: string;
             /** @default pending */
             status: components["schemas"]["DocumentStatus"];
             /** Clauses */
             clauses?: string[];
             /** Ambiguities */
             ambiguities?: components["schemas"]["Ambiguity"][];
-            /** Scenarios */
-            scenarios?: components["schemas"]["Scenario"][];
+            /** Test Cases */
+            test_cases?: components["schemas"]["TestCase"][];
+            /** Out Of Scope */
+            out_of_scope?: string[];
+            /** E2E Suite */
+            e2e_suite?: {
+                [key: string]: string;
+            };
             /** Pending Items */
             pending_items?: string[];
             /**
@@ -187,11 +258,85 @@ export interface components {
          * DocumentStatus
          * @enum {string}
          */
-        DocumentStatus: "pending" | "needs_clarification" | "proposal";
+        DocumentStatus: "pending" | "needs_clarification" | "proposal" | "llm_unavailable";
+        /** E2EStep */
+        E2EStep: {
+            /**
+             * Title
+             * @default
+             */
+            title: string;
+            verdict: components["schemas"]["E2EStepVerdict"];
+            /**
+             * Detail
+             * @default
+             */
+            detail: string;
+        };
+        /**
+         * E2EStepVerdict
+         * @description Per-step verdict of a TesterArmy agent step (`report.json`).
+         * @enum {string}
+         */
+        E2EStepVerdict: "passed" | "failed" | "blocked" | "exhausted" | "skipped";
+        /** Finding */
+        Finding: {
+            source: components["schemas"]["FindingSource"];
+            severity: components["schemas"]["Severity"];
+            /** Message */
+            message: string;
+            /** Path */
+            path?: string | null;
+            /** Line */
+            line?: number | null;
+            /** Rule */
+            rule?: string | null;
+            /** Test Id */
+            test_id?: string | null;
+            /**
+             * Blocking
+             * @default false
+             */
+            blocking: boolean;
+        };
+        /**
+         * FindingSource
+         * @enum {string}
+         */
+        FindingSource: "e2e" | "ruff" | "eslint" | "mypy" | "tsc" | "format" | "indentation" | "review";
         /** HTTPValidationError */
         HTTPValidationError: {
             /** Detail */
             detail?: components["schemas"]["ValidationError"][];
+        };
+        /**
+         * Priority
+         * @enum {string}
+         */
+        Priority: "high" | "medium" | "low";
+        /** PullRequest */
+        PullRequest: {
+            /** Number */
+            number: number;
+            /** Head Sha */
+            head_sha: string;
+            /**
+             * Base Sha
+             * @default
+             */
+            base_sha: string;
+            /**
+             * Title
+             * @default
+             */
+            title: string;
+            /**
+             * Diff
+             * @default
+             */
+            diff: string;
+            /** Changed Files */
+            changed_files?: components["schemas"]["ChangedFile"][];
         };
         /**
          * Ref
@@ -205,15 +350,11 @@ export interface components {
             /** Revision */
             revision: string;
         };
-        /** Scenario */
-        Scenario: {
-            /** Clause */
-            clause: string;
-            /** Description */
-            description: string;
-            /** Expected Result */
-            expected_result: string;
-        };
+        /**
+         * ReviewStatus
+         * @enum {string}
+         */
+        ReviewStatus: "reviewed" | "llm_required" | "no_verdict";
         /** ScenarioResult */
         ScenarioResult: {
             /** Scenario Id */
@@ -224,12 +365,80 @@ export interface components {
              * @default
              */
             detail: string;
+            /** Steps */
+            steps?: components["schemas"]["E2EStep"][];
         };
         /**
          * ScenarioStatus
          * @enum {string}
          */
         ScenarioStatus: "passed" | "failed" | "skipped" | "error";
+        /**
+         * Severity
+         * @enum {string}
+         */
+        Severity: "error" | "warning" | "info";
+        /**
+         * StaticReports
+         * @description Raw tool outputs; None = the tool was not run.
+         */
+        StaticReports: {
+            /** Ruff Json */
+            ruff_json?: string | null;
+            /** Eslint Json */
+            eslint_json?: string | null;
+            /** Mypy Output */
+            mypy_output?: string | null;
+            /** Tsc Output */
+            tsc_output?: string | null;
+            /** Unformatted Files */
+            unformatted_files?: string[];
+        };
+        /**
+         * StaticTool
+         * @enum {string}
+         */
+        StaticTool: "ruff" | "eslint" | "mypy" | "tsc" | "format";
+        /**
+         * TestCase
+         * @description Verbal test case: plain-language steps and expectations for an agentic E2E runner.
+         */
+        TestCase: {
+            /** Id */
+            id: string;
+            /** Clause */
+            clause: string;
+            /** Title */
+            title: string;
+            /** Objective */
+            objective: string;
+            /** Preconditions */
+            preconditions?: string[];
+            /** Steps */
+            steps?: string[];
+            /** Expected Results */
+            expected_results?: string[];
+            /**
+             * Start Path
+             * @default /
+             */
+            start_path: string;
+            /** @default ui */
+            kind: components["schemas"]["TestKind"];
+            /** @default medium */
+            priority: components["schemas"]["Priority"];
+            /** Test Data */
+            test_data?: {
+                [key: string]: string;
+            };
+            /** Credentials Role */
+            credentials_role?: string | null;
+        };
+        /**
+         * TestKind
+         * @enum {string}
+         */
+        TestKind: "ui" | "api";
         /** ValidationError */
         ValidationError: {
             /** Location */
