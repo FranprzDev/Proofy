@@ -1,206 +1,62 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Guía visual del acuerdo, desarrollo, verificación y pago de entregas de software sobre Solana.">
-  <title>Cómo funciona · Entregas de software sobre Solana</title>
-  <style>
-    :root { color-scheme: light; --ink:#182c36; --muted:#4c626d; --line:#d7e1e5; --paper:#fff; --accent:#076c60; --soft:#eaf6f2; --amber:#fff4db; }
-    * { box-sizing:border-box; }
-    html { scroll-behavior:smooth; scroll-padding-top:24px; }
-    body { margin:0; background:#f4f7f8; color:var(--ink); font:17px/1.65 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
-    a { color:var(--accent); text-underline-offset:4px; }
-    a:focus-visible, summary:focus-visible { outline:3px solid #ad5c00; outline-offset:5px; }
-    header, main, footer { max-width:1120px; margin:auto; padding:36px 24px; }
-    header { padding-top:64px; }
-    h1,h2,h3 { line-height:1.2; letter-spacing:-.025em; }
-    h1 { font-size:clamp(2.2rem,5vw,3.9rem); max-width:900px; margin:16px 0 24px; }
-    h2 { font-size:clamp(1.6rem,3vw,2.2rem); margin:0 0 20px; }
-    h3 { font-size:1.2rem; margin:0 0 12px; }
-    p { margin:0 0 16px; }
-    li { margin-bottom:8px; }
-    ul,ol { padding-left:24px; }
-    .eyebrow { color:var(--accent); font-weight:750; font-size:.8rem; letter-spacing:.12em; text-transform:uppercase; }
-    .lead { max-width:820px; font-size:1.2rem; color:var(--muted); }
-    .notice { padding:18px 22px; border-left:4px solid var(--accent); background:var(--soft); border-radius:0 12px 12px 0; }
-    .warning { background:var(--amber); border-color:#a26400; }
-    nav { display:flex; flex-wrap:wrap; gap:10px 20px; margin-top:26px; }
-    nav a { font-size:.95rem; }
-    main { padding-top:0; }
-    section { margin:0 0 28px; padding:32px; background:var(--paper); border:1px solid var(--line); border-radius:18px; }
-    .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; }
-    .three { grid-template-columns:repeat(3,minmax(0,1fr)); }
-    .card { padding:22px; border:1px solid var(--line); border-radius:12px; }
-    .card p:last-child { margin-bottom:0; }
-    .muted,figcaption,small { color:var(--muted); }
-    .tag { display:inline-block; padding:3px 10px; border-radius:20px; background:var(--soft); color:var(--accent); font-size:.8rem; font-weight:700; }
-    .tag.pending { background:var(--amber); color:#7a4a00; }
-    figure { margin:22px 0; }
-    figcaption { margin-top:12px; font-size:.92rem; }
-    .flow { display:flex; flex-wrap:wrap; gap:12px; align-items:stretch; padding:0; list-style:none; }
-    .flow li { flex:1 1 150px; padding:18px; margin:0; background:var(--soft); border:1px solid #c2ded5; border-radius:12px; }
-    .flow strong,.flow span { display:block; }
-    .flow strong { margin-bottom:6px; }
-    .flow span { font-size:.95rem; }
-    .connector { text-align:center; color:var(--accent); font-weight:700; margin:14px 0; }
-    .architecture { border:1px solid var(--line); border-radius:12px; padding:20px; background:#f8fafb; }
-    .architecture .card { background:white; }
-    .chain { background:var(--soft)!important; border-color:#a6d1c3; }
-    .table-wrap { overflow-x:auto; }
-    table { border-collapse:collapse; width:100%; font-size:.96rem; }
-    caption { text-align:left; margin-bottom:12px; color:var(--muted); }
-    th,td { padding:14px; text-align:left; vertical-align:top; border-bottom:1px solid var(--line); }
-    th { background:#f0f5f6; }
-    code { background:#edf1f3; padding:2px 6px; border-radius:5px; font-size:.9em; overflow-wrap:anywhere; }
-    .formula { padding:18px; border-radius:12px; background:var(--soft); font-weight:650; }
-    details { border-top:1px solid var(--line); padding:16px 0; }
-    summary { cursor:pointer; font-weight:700; }
-    details p { margin:12px 0 0; }
-    footer { padding-top:0; font-size:.9rem; }
-    @media(max-width:700px) { header { padding-top:32px; } header,main,footer { padding-left:16px; padding-right:16px; } section { padding:22px 18px; } .grid,.three { grid-template-columns:1fr; } .flow { flex-direction:column; } .flow li { flex:auto; } th,td { padding:10px; } }
-    @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } }
-    @media print { body { background:white; font-size:11pt; } header { padding-top:0; } section { border:0; padding:18px 0; } nav { display:none; } .card,.flow li { break-inside:avoid; } a { color:inherit; } }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Software verificado · Pagos automáticos en Solana</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f3f6f7;color:#1b303a;font:17px/1.6 system-ui,-apple-system,sans-serif}main{max-width:1040px;margin:auto;padding:40px 24px}h1,h2,h3{line-height:1.2;letter-spacing:-.025em}h1{font-size:clamp(2rem,5vw,3.3rem);margin:14px 0 20px}h2{font-size:1.4rem;margin:0 0 14px}h3{font-size:1.05rem;margin:0 0 8px}p{margin:0 0 14px}.label{color:#096859;font-size:.8rem;font-weight:750;letter-spacing:.08em;text-transform:uppercase}.lead{font-size:1.15rem;color:#435b66}section{margin-top:20px;padding:24px;background:white;border:1px solid #d5e0e4;border-radius:14px}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}.flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding:0;list-style:none}.flow li{padding:16px;background:#eaf5f0;border:1px solid #c3ddd2;border-radius:10px}.flow strong,.flow span{display:block}.flow span{margin-top:6px;font-size:.93rem}.architecture{padding:16px;background:#f1f5f7;border-radius:10px;text-align:center}.architecture p{margin:4px 0}.note,footer{color:#435b66;font-size:.9rem}.decision{border-left:4px solid #096859}a{color:#096859;text-underline-offset:4px}a:focus-visible{outline:3px solid #956200;outline-offset:4px}footer{margin-top:20px}@media(max-width:650px){main{padding:24px 16px}.grid,.flow{grid-template-columns:1fr}section{padding:20px}}@media print{body{background:white;font-size:10pt}main{padding:0}h1{font-size:25pt}section{margin-top:12px;padding:12px;break-inside:avoid}.grid,.flow{gap:10px}}
+</style>
 </head>
 <body>
-  <header>
-    <div class="eyebrow">Guía del producto · Documento conceptual</div>
-    <h1>De lo acordado<br>a lo entregado y pagado.</h1>
-    <p class="lead">Una plataforma para que cliente y freelancer acuerden qué construir, comprueben el resultado y liquiden cada módulo con fondos reservados en Solana.</p>
-    <div class="notice"><strong>Antes de empezar:</strong> esta página explica el producto previsto. No es una aplicación operativa, no conecta wallets, no ejecuta pruebas ni mueve fondos. Las propuestas y decisiones pendientes están señaladas.</div>
-    <nav aria-label="Secciones de la guía">
-      <a href="#resumen">Resumen</a><a href="#personas">Participantes</a><a href="#uso">Cómo usarla</a><a href="#arquitectura">Arquitectura</a><a href="#informacion">Información</a><a href="#verificacion">Verificación</a><a href="#pago">Pago</a><a href="#cambios">Cambios y disputas</a><a href="#mvp">MVP</a><a href="#pendientes">Pendientes</a><a href="#preguntas">Preguntas frecuentes</a>
-    </nav>
-  </header>
-  <main>
-    <section id="resumen">
-      <span class="eyebrow">01 · La idea en un minuto</span>
-      <h2>Tres piezas, responsabilidades diferentes</h2>
-      <div class="grid three">
-        <article class="card"><h3>Acuerdo claro</h3><p>Un documento rector define las obligaciones. Ambas partes aclaran cada inciso y acuerdan escenarios de prueba legibles.</p></article>
-        <article class="card"><h3>Frontier Agent</h3><p>Acompaña el desarrollo con verificación del código y su comportamiento. Explica los problemas; el freelancer los corrige.</p></article>
-        <article class="card"><h3>Pago condicionado</h3><p>Solana mantiene el estado y los fondos del hito. El programa comprueba las condiciones para pagar; no evalúa el código.</p></article>
-      </div>
-      <figure aria-label="Diagrama del recorrido general">
-        <ol class="flow"><li><strong>1 → Acordar</strong><span>Alcance y escenarios</span></li><li><strong>2 → Financiar</strong><span>Fondos del hito reservados</span></li><li><strong>3 → Construir</strong><span>PRs y correcciones</span></li><li><strong>4 → Verificar</strong><span>Evidencia y visto bueno</span></li><li><strong>5 → Aceptar y cobrar</strong><span>Cliente acepta; freelancer solicita</span></li></ol>
-        <figcaption>Merge, entrega, visto bueno técnico, aceptación y pago son eventos distintos. Ninguno reemplaza automáticamente al siguiente.</figcaption>
-      </figure>
-      <p><strong>Lo que buscamos:</strong> reducir el riesgo de entregar sin cobrar y de pagar sin recibir lo acordado. No prometer software sin errores ni eliminar toda confianza humana.</p>
-    </section>
-    <section id="personas">
-      <span class="eyebrow">02 · Quién hace qué</span><h2>Una experiencia para ambas partes</h2>
-      <div class="grid">
-        <article class="card"><h3>Cliente</h3><p>Acuerda el alcance y los escenarios, financia el hito, revisa la entrega y acepta o explica su rechazo.</p></article>
-        <article class="card"><h3>Freelancer</h3><p>Acuerda condiciones, desarrolla en GitHub, corrige observaciones, entrega el módulo y solicita su liquidación.</p></article>
-        <article class="card"><h3>Plataforma y Frontier Agent</h3><p>Organizan el acuerdo, proporcionan el pipeline, verifican evidencia y coordinan el flujo. El agente no modifica el código del producto ni arbitra automáticamente.</p></article>
-        <article class="card"><h3>Revisión humana</h3><p>Interviene si las partes no resuelven un desacuerdo. Quién participa, qué facultades tiene y cómo decide sigue pendiente.</p></article>
-      </div>
-      <p class="muted">El proveedor inicial es un freelancer. Las software factories forman parte de la visión posterior.</p>
-    </section>
-    <section id="uso">
-      <span class="eyebrow">03 · Guía de uso prevista</span><h2>Desde crear el proyecto hasta cobrar</h2>
-      <p><span class="tag pending">Organización de pantallas propuesta</span> Estas áreas explican la experiencia; no representan interfaces implementadas.</p>
-      <ol>
-        <li><strong>Proyecto e invitación.</strong> Cualquiera crea el proyecto e invita a la otra parte. Se identifica quién puede aceptar y cobrar; una parte no activa el acuerdo por ambas.</li>
-        <li><strong>Documento rector.</strong> Se carga el documento y la información del proyecto. La IA ayuda a interpretar incisos y detectar ambigüedades, sin asumir que entiende todo correctamente.</li>
-        <li><strong>Grill compartido.</strong> Ambas partes responden en un espacio común. Las respuestas tienen autor y los desacuerdos quedan visibles.</li>
-        <li><strong>Escenarios y cobertura.</strong> Cada inciso sobre código tiene escenarios y resultados esperados. Una frase como «búsqueda rápida» debe convertirse en una condición medible con contexto.</li>
-        <li><strong>Hitos y condiciones.</strong> Se acuerdan módulos, dependencias, exclusiones, importes, activo, fee, fechas, revisión, cancelación, disputa y entrega. Documento y escenarios corresponden a una misma versión aceptada.</li>
-        <li><strong>Financiamiento.</strong> El cliente reserva los fondos del hito en escrow antes del trabajo cubierto. Un hito futuro sin financiamiento no tiene pago garantizado.</li>
-        <li><strong>Desarrollo y revisión.</strong> El freelancer trabaja mediante PRs. El pipeline ejecuta controles; el Frontier Agent deja observaciones y se repite la verificación después de corregir.</li>
-        <li><strong>Entrega.</strong> Se prepara un manifiesto con revisión exacta, archivos, hashes, documentación, instrucciones y evidencia. El cliente revisa el resultado.</li>
-        <li><strong>Aceptación y solicitud.</strong> Con visto bueno vigente y aceptación del cliente, el freelancer solicita la liquidación. El programa valida las condiciones.</li>
-        <li><strong>Confirmación.</strong> Se confirma la transacción de pago al freelancer y fee a la plataforma. Un botón pulsado no demuestra que el pago ocurrió.</li>
-      </ol>
-    </section>
-    <section id="arquitectura">
-      <span class="eyebrow">04 · Arquitectura conceptual</span><h2>Qué ocurre fuera y dentro de Solana</h2>
-      <figure class="architecture" aria-label="Diagrama de arquitectura conceptual por capas">
-        <div class="card"><h3>Cliente + freelancer → Frontend compartido</h3><p>Proyecto, documento, grill, escenarios, hitos, resultados, aceptación y solicitud de liquidación.</p></div>
-        <p class="connector">↓ Acciones y consultas del producto</p>
-        <div class="card"><h3>Servicios de la plataforma · Fuera de la cadena</h3><p>Coordinan versiones, permisos, evidencia, eventos de GitHub y comunicación con el programa. La tecnología y el mecanismo de integración aún no están elegidos.</p></div>
-        <p class="connector">↓ Procesamiento, desarrollo y verificación</p>
-        <div class="grid three"><div class="card"><h3>Almacenamiento privado</h3><p>Documento rector, archivos, artefactos y reportes. Acceso y retención por definir.</p></div><div class="card"><h3>GitHub + CI/CD</h3><p>PRs, revisiones de código, controles, build, entorno de prueba y E2E.</p></div><div class="card"><h3>Frontier Agent</h3><p>Revisa código y resultados; produce comentarios y el resultado técnico.</p></div></div>
-        <p class="connector">↓ Evidencia verificada → atestación técnica + aceptación autorizada</p>
-        <div class="card chain"><h3>Programa en Solana · En la cadena</h3><p>Estado del acuerdo, hitos, compromisos criptográficos, fondos reservados y comprobaciones de liquidación.</p><p><strong>Si cumple las condiciones:</strong> pago al proveedor + fee de la plataforma en la misma transacción.</p></div>
-        <figcaption>El diagrama representa responsabilidades, no APIs ya diseñadas. Solana no ejecuta CI ni observa GitHub por sí sola.</figcaption>
-      </figure>
-      <div class="notice warning"><strong>Modelo híbrido de confianza:</strong> la plataforma verifica información externa; el programa hace cumplir condiciones de pago. El visto bueno es una <strong>atestación técnica</strong>, no un «shard» ni un «shred».</div>
-      <p style="margin-top:16px"><span class="tag pending">Propuesta</span> Usar un programa reutilizable con cuentas independientes por acuerdo, hitos y bóvedas, en lugar de desplegar un programa por cliente. Autoridades, aislamiento y política de actualización siguen pendientes.</p>
-    </section>
-    <section id="informacion">
-      <span class="eyebrow">05 · Arquitectura de información</span><h2>Cómo se relacionan los datos del proyecto</h2>
-      <figure><ol class="flow"><li><strong>Proyecto</strong><span>Cliente, freelancer y repositorio</span></li><li><strong>Acuerdo versionado</strong><span>Documento y condiciones</span></li><li><strong>Incisos y escenarios</strong><span>Qué cumplir y cómo comprobarlo</span></li><li><strong>Hitos y revisiones</strong><span>Trabajo, precio y código exacto</span></li><li><strong>Evidencia y liquidación</strong><span>Verificación, aceptación y pago</span></li></ol><figcaption>La relación entre incisos, escenarios e hitos debe quedar explícita. Un hito puede incluir varios PRs; un PR no es automáticamente una unidad de pago.</figcaption></figure>
-      <div class="table-wrap"><table><caption>Mapa conceptual: no es un esquema definitivo de base de datos.</caption><thead><tr><th scope="col">Información</th><th scope="col">Para qué sirve</th><th scope="col">Dónde se conserva conceptualmente</th></tr></thead><tbody>
-        <tr><td>Documento rector y escenarios</td><td>Definir obligaciones y cobertura aceptadas</td><td>Privados fuera de Solana; compromiso de versión en cadena</td></tr>
-        <tr><td>Hito</td><td>Relacionar alcance, dependencias, importe y entrega</td><td>Detalle fuera de cadena; estado y condiciones económicas en Solana</td></tr>
-        <tr><td>Repositorio, PRs y SHA</td><td>Identificar exactamente el código probado</td><td>GitHub y registros de evidencia vinculados al hito</td></tr>
-        <tr><td>Manifiesto y reportes</td><td>Identificar archivos, resultados, instrucciones y permisos</td><td>Almacenamiento externo; hashes comprometidos en cadena</td></tr>
-        <tr><td>Atestación y aceptación</td><td>Vincular aprobaciones a la misma entrega</td><td>Registro verificable relacionado con el programa; formato pendiente</td></tr>
-        <tr><td>Fondos y transacción</td><td>Financiar y comprobar la liquidación</td><td>Solana</td></tr>
-      </tbody></table></div>
-      <p style="margin-top:16px"><strong>Hash:</strong> una huella digital que permite comprobar coincidencia de contenido. No demuestra calidad, disponibilidad de archivos, propiedad intelectual ni entrega efectiva.</p>
-      <p><strong>Privacidad:</strong> no publicar documentos privados, datos personales, secretos o comunicaciones en cadena. El acceso, cifrado y recuperación de archivos requieren políticas propias.</p>
-    </section>
-    <section id="verificacion">
-      <span class="eyebrow">06 · Qué verifica el producto</span><h2>Escenarios claros, evidencia y correcciones</h2>
-      <div class="grid"><article class="card"><h3>Análisis estático</h3><p>Formato, lint, tipos, análisis del código, secretos, dependencias y licencias según las condiciones aplicables. No garantiza detectar todas las vulnerabilidades o fugas de memoria.</p></article><article class="card"><h3>Pruebas dinámicas</h3><p>Unitarias, integración, E2E y casos negativos. Rendimiento, recursos y memoria cuando formen parte del alcance acordado.</p></article></div>
-      <figure><ol class="flow"><li><strong>PR actualizado →</strong><span>Código identificado</span></li><li><strong>Controles →</strong><span>Estáticos, build e integración</span></li><li><strong>Entorno integrado →</strong><span>E2E de escenarios pactados</span></li><li><strong>Revisión técnica →</strong><span>Hallazgos y evidencia</span></li><li><strong>Resultado</strong><span>Corregir, esperar o dar visto bueno</span></li></ol><figcaption>Si requiere corrección: comentarios → freelancer corrige → nueva ejecución. El Frontier Agent no modifica el código del producto.</figcaption></figure>
-      <div class="table-wrap"><table><caption>Resultados de verificación: no son estados on-chain definitivos.</caption><thead><tr><th scope="col">Resultado</th><th scope="col">Qué significa</th><th scope="col">Qué pasa después</th></tr></thead><tbody><tr><td><strong>Favorable</strong></td><td>La revisión obtiene el visto bueno técnico</td><td>Puede continuar hacia aceptación; no paga por sí solo</td></tr><tr><td><strong>Requiere corrección</strong></td><td>Incumplimiento u objeción técnica bloqueante</td><td>Comentarios, corrección y nueva verificación</td></tr><tr><td><strong>Inconcluso / en espera</strong></td><td>No se pudo comprobar el resultado</td><td>No habilita pago; no prueba que el código esté mal</td></tr></tbody></table></div>
-      <h3 style="margin-top:24px">Ejemplo de cobertura y comentario</h3>
-      <p>Inciso: <strong>«Solo administradores pueden exportar datos».</strong> Deben acordarse tanto el caso permitido como el rechazado. Comprobar únicamente que un administrador exporta no demuestra que se impida a los demás.</p>
-      <div class="card"><p><strong>Esperado:</strong> rechazar la exportación de un usuario sin permiso, sin exponer datos.</p><p><strong>Observado:</strong> un usuario sin permiso recibe los datos exportados.</p><p><strong>Comentario:</strong> «Esta revisión incumple el inciso de permisos. Corregí la autorización para poder obtener el visto bueno».</p><p class="muted">Ejemplo ilustrativo. Una observación real identifica hito, revisión, inciso y escenario; incluye evidencia reproducible y ubicación de código solo si está fundamentada.</p></div>
-      <div class="notice warning" style="margin-top:18px"><strong>Tests verdes no bastan:</strong> el Frontier Agent puede bloquear por una objeción técnica adicional. Debe explicarla y distinguirla de una obligación contractual existente. Los límites de ese criterio, severidades e impugnación de falsos positivos todavía no están definidos.</div>
-      <p style="margin-top:16px">La seguridad es prioritaria y bloqueante: falta acordar los controles mínimos y umbrales. El código de PRs debe ejecutarse aislado, con datos sintéticos y sin claves de pago, secretos de producción ni wallets con fondos reales. Se verifican y deduplican eventos, y se vincula evidencia a revisión, entorno, workflow y criterios.</p>
-      <p>Los stacks de PRs descomponen un módulo en cambios dependientes, por ejemplo <strong>modelo de datos → API → interfaz</strong>. Hay que revisar cada diff contra su base y probar el resultado integrado. La herramienta de stacks sigue pendiente.</p>
-    </section>
-    <section id="pago">
-      <span class="eyebrow">07 · Fondos y autorización</span><h2>Un visto bueno no es un pago</h2>
-      <p><strong>Escrow</strong> significa fondos reservados bajo reglas del programa. Protege el financiamiento del hito, pero no elimina disputas ni garantiza que todo se resuelva automáticamente.</p>
-      <figure><ol class="flow"><li><strong>Atestación técnica</strong><span>Revisión exacta con visto bueno</span></li><li><strong>Aceptación del cliente</strong><span>Conformidad autorizada con esa entrega</span></li><li><strong>Solicitar liquidación</strong><span>Acción del freelancer</span></li><li><strong>Programa comprueba</strong><span>Fondos, autorizaciones y estado</span></li><li><strong>Transacción confirmada</strong><span>Proveedor cobra y plataforma recibe fee</span></li></ol><figcaption>La secuencia comunica el flujo esperado; mecanismos de firma, formato de atestación e integración siguen pendientes.</figcaption></figure>
-      <h3>Condiciones para la liquidación ordinaria</h3><ul><li>Financiamiento suficiente e importes acordados.</li><li>Atestación vigente y aceptación correspondientes al mismo hito, versión y entrega.</li><li>Autoridades autorizadas y ausencia de disputa activa.</li><li>Hito no pagado previamente: repetir un evento no debe duplicar el pago.</li><li>Transferencias exitosas antes de registrar la liquidación.</li></ul>
-      <p><span class="tag pending">Modelo económico propuesto</span> Porcentaje del importe bruto liquidado, con tasa y destinatario fijados en el acuerdo, sin cambios retroactivos.</p>
-      <div class="formula">Fee = importe bruto × tasa acordada<br>Neto del proveedor = importe bruto − fee</div>
-      <p style="margin-top:14px">Ejemplo ilustrativo, no tarifa elegida: sobre 1.000 unidades con 3 %, el fee sería 30 y el neto 970. Red y operación se muestran aparte. Se usan unidades enteras y redondeo acordado, no coma flotante.</p>
-      <p>El fee debe cubrir CI, agentes, entornos, almacenamiento, RPC, soporte, seguridad y disputas. El margen y los costos de verificaciones repetidas aún no están validados; no se necesita un token propio para este modelo.</p>
-      <p><strong>Reembolso:</strong> devolución al cliente por las reglas de cancelación o disputa. No es la liquidación normal del trabajo.</p>
-    </section>
-    <section id="cambios">
-      <span class="eyebrow">08 · Cuando algo cambia o no hay acuerdo</span><h2>No reutilizar aprobaciones ni inventar obligaciones</h2>
-      <div class="grid"><article class="card"><h3>Cambia código aprobado</h3><p>La aprobación anterior no sirve para la nueva revisión. Se bloquea la liquidación hasta restaurar lo aprobado o acordar un nuevo hito específico, con verificación de la revisión resultante.</p><p class="muted">Cómo demostrar restauración después de revert, rebase o squash sigue pendiente. No se define reversión automática de pagos ya hechos.</p></article><article class="card"><h3>Corrección o nuevo alcance</h3><p>Corregir cumple una obligación existente. Agregar una función nueva requiere acuerdo sobre escenarios, importe y plazo: no es automáticamente una corrección gratuita.</p></article></div>
-      <figure><ol class="flow"><li><strong>Cliente rechaza →</strong><span>Motivos vinculados al acuerdo</span></li><li><strong>Ambas partes conversan →</strong><span>Intentan resolver el desacuerdo</span></li><li><strong>Si persiste →</strong><span>Derivación humana</span></li><li><strong>Resolución</strong><span>Procedimiento y facultades pendientes</span></li></ol><figcaption>Una disputa activa impide liquidaciones ordinarias. La persona que revisa no recibe automáticamente poder para mover fondos.</figcaption></figure>
-      <p><strong>No se libera por silencio en el MVP.</strong> Inactividad, abandono, plazos, arbitraje y recuperación deben definirse. Sin esas reglas, los fondos pueden quedar bloqueados.</p>
-    </section>
-    <section id="entrega">
-      <span class="eyebrow">09 · Qué se entrega</span><h2>El código y los archivos permanecen fuera de Solana</h2>
-      <p>El manifiesto identifica repositorio, revisiones, archivos y hashes, instrucciones, dependencias, documentación, reportes y permisos comprometidos. No se propone una red de archivos fragmentados propia.</p>
-      <p><span class="tag pending">Propuesta</span> Repositorio privado controlado por el cliente, acceso para el freelancer y almacenamiento privado de artefactos. El cliente puede revisar el código; el escrow no impide copiar aquello que ya puede ver.</p>
-      <p>Acceso al código, derecho de uso y propiedad intelectual son cosas distintas. Se pactan fuera de la blockchain. Retención, recuperación, cifrado y entrega de accesos siguen pendientes; una URL temporal no garantiza disponibilidad futura.</p>
-    </section>
-    <section id="mvp">
-      <span class="eyebrow">10 · Primera demostración</span><h2>Un recorrido pequeño que pruebe las reglas</h2>
-      <p><span class="tag pending">Alcance de demo propuesto</span> Un cliente, un freelancer, dos módulos dependientes, repositorio GitHub, stack pequeña de PRs y escrow por hito en entorno local o devnet.</p>
-      <div class="grid"><article class="card"><h3>Mostrar el camino correcto</h3><p>Acuerdo y escenarios, financiamiento, controles estáticos y un E2E representativo, manifiesto exacto, atestación, aceptación y liquidación con fee.</p></article><article class="card"><h3>Mostrar que no se puede cobrar incorrectamente</h3><p>Una prueba fallida o una revisión modificada impide usar el visto bueno. Repetir una solicitud no duplica el pago.</p></article></div>
-      <p style="margin-top:16px">Fuera del alcance inicial: marketplace, almacenamiento fragmentado propio, arbitraje descentralizado, onboarding fiat completo y todos los lenguajes. No hay activo de pago ni proveedor de wallet elegido.</p>
-      <div class="notice warning">Una demo no equivale a auditoría ni autorización para usar fondos reales. Wallets, fondos de prueba y costos deben explicarse; la experiencia para personas sin conocimientos cripto todavía necesita validación.</div>
-    </section>
-    <section id="pendientes">
-      <span class="eyebrow">11 · Lo que todavía no está resuelto</span><h2>Decisiones abiertas, no promesas ocultas</h2>
-      <div class="grid"><article class="card"><h3>Producto y calidad</h3><ul><li>Traducción de escenarios a pruebas y permisos para mantenerlas.</li><li>Límites del bloqueo técnico, severidades y apelación.</li><li>Seguridad mínima y tratamiento de hallazgos.</li><li>Restauración de revisiones, reintentos y sus costos.</li></ul></article><article class="card"><h3>Confianza y operación</h3><ul><li>Firmas, atestaciones, autoridades e invalidación.</li><li>Persona revisora, facultades, plazos e inactividad.</li><li>Actualización del programa y recuperación ante fallos.</li><li>Retención, permisos y recuperación de archivos.</li></ul></article><article class="card"><h3>Pagos y negocio</h3><ul><li>Activo, fee, red y acceso para usuarios sin wallet.</li><li>Margen frente al costo de CI, IA y disputas.</li><li>Demanda y disposición a pagar de ambas partes.</li><li>Comparación con alternativas antes de afirmar novedad.</li></ul></article><article class="card"><h3>Marco externo</h3><ul><li>Evento de hackathon, fechas y requisitos.</li><li>Investigación de precedentes y herramientas de Colosseum.</li><li>Revisión especializada de propiedad intelectual, privacidad, fondos, impuestos y jurisdicción.</li><li>Validación comercial y auditoría antes de operar con fondos reales.</li></ul></article></div>
-    </section>
-    <section id="preguntas">
-      <span class="eyebrow">12 · En palabras simples</span><h2>Preguntas frecuentes</h2>
-      <details open><summary>¿Mi software tiene que ser una aplicación blockchain?</summary><p>No. El proyecto puede ser software convencional. Solana es la base del acuerdo y del pago, no el lugar donde corre la aplicación del cliente.</p></details>
-      <details open><summary>¿Solana decide si mi código es bueno?</summary><p>No. La verificación ocurre fuera de la cadena. El programa comprueba condiciones y autorizaciones relacionadas con ese resultado.</p></details>
-      <details open><summary>¿Tengo que leer el código de las pruebas?</summary><p>Los casos contractuales son escenarios legibles: situación, acción y resultado esperado. La implementación de pruebas depende del lenguaje y debe corresponder a lo acordado.</p></details>
-      <details open><summary>¿El Frontier Agent puede rechazar aunque pasen los tests?</summary><p>Sí, por una objeción de su revisión técnica. Tiene que explicarla y no fingir que existe un inciso que nunca se acordó. Los límites y la impugnación están pendientes.</p></details>
-      <details open><summary>¿Atestación, aceptación y liquidación son lo mismo?</summary><p>No. Atestación: visto bueno técnico de una revisión. Aceptación: conformidad del cliente. Liquidación: pago bajo las condiciones del acuerdo.</p></details>
-      <details open><summary>¿Qué significa SHA?</summary><p>Es el identificador de una revisión de Git. Permite señalar qué código fue probado, en lugar de aprobar una rama que puede cambiar.</p></details>
-      <details open><summary>¿Qué pasa si el agente no puede ejecutar las pruebas?</summary><p>Deja el resultado inconcluso, en espera. No aprueba ni habilita pago, pero tampoco afirma que el código esté mal sin evidencia.</p></details>
-      <details open><summary>¿La IA reemplaza el contrato legal o garantiza justicia?</summary><p>No. Ayuda a aclarar y verificar. Los derechos, obligaciones y procedimientos necesitan acuerdos explícitos y revisión especializada cuando corresponda.</p></details>
-    </section>
-  </main>
-  <footer><p><strong>Documentación fuente:</strong> <a href="proyecto.md">Proyecto</a> · <a href="reglas-del-acuerdo.md">Reglas del acuerdo</a> · <a href="../GLOSSARY.md">Glosario</a> · <a href="adr/0001-bloqueo-por-revision-tecnica.md">Decisión sobre bloqueo técnico</a>.</p><p>Guía estática y autocontenida. Se puede abrir localmente; no carga servicios externos, no solicita credenciales y no transmite información.</p></footer>
+<main>
+<header>
+<div class="label">Propuesta para revisión · Hackathon Solana</div>
+<h1>Software que cumple.<br>Pagos que se liberan automáticamente.</h1>
+<p class="lead">Cliente y proveedor acuerdan requisitos claros. El Frontier Agent verifica cada hito y, cuando cumple, el sistema liquida automáticamente su pago desde un escrow en Solana.</p>
+<p class="note">Producto definido; prototipo previsto en local/devnet. No se presenta como sistema implementado, auditado o habilitado para fondos reales.</p>
+</header>
+<section class="grid">
+<article><h2>Problema</h2><p>El cliente teme pagar sin recibir lo acordado. El proveedor teme entregar sin cobrar.</p></article>
+<article><h2>Solución</h2><p>Fondos reservados, código verificable y pagos progresivos por cumplimiento, no por horas o commits.</p></article>
+<article><h2>Usuarios</h2><p>Clientes, freelancers y factories. Acceso con Phantom; se evalúa el código, no el tipo de proveedor.</p></article>
+</section>
+<section>
+<h2>Cómo funciona</h2>
+<ol class="flow" aria-label="Diagrama del flujo del producto">
+<li><strong>1 → Acordar</strong><span>Documento, escenarios legibles e importe por hito. Ambas partes aceptan las reglas.</span></li>
+<li><strong>2 → Financiar</strong><span>El cliente reserva los fondos del trabajo cubierto en escrow.</span></li>
+<li><strong>3 → Verificar</strong><span>Pipeline + Frontier Agent: pruebas y revisión. Si falla, informa qué corregir.</span></li>
+<li><strong>4 → Pagar</strong><span>Aprobación válida → pago automático + comisión porcentual pactada.</span></li>
+</ol>
+<p class="note">Sin aprobación manual rutinaria por entrega ni botón obligatorio para cobrar. Un resultado inconcluso queda en espera, sin pago.</p>
+</section>
+<section>
+<h2>Arquitectura mínima</h2>
+<div class="architecture" role="group" aria-label="Diagrama conceptual de arquitectura">
+<p><strong>Next.js + Phantom</strong> · Frontend y backend web: landing, marketplace y acuerdos</p>
+<p aria-hidden="true">↓</p>
+<p><strong>Python + LangGraph · Frontier Agent</strong></p>
+<p>Agente documental: contrato, grill y escenarios acordados</p>
+<p>Agente CI/CD: GitHub, pruebas aisladas, evidencia y comentarios</p>
+<p aria-hidden="true">↓</p>
+<p><strong>Atestación autorizada + ejecutor automático</strong> · Envía la transacción</p>
+<p aria-hidden="true">↓</p>
+<p><strong>Programa Solana</strong> · Valida condiciones y transfiere pago + comisión</p>
+</div>
+<p class="note" style="margin-top:12px">Solana no evalúa el software: hace cumplir las condiciones económicas. Código y documentos privados permanecen fuera de cadena.</p>
+</section>
+<section class="grid">
+<article><h3>Correcciones</h3><p>El agente comenta; el proveedor corrige. Cambiar código aprobado invalida la evidencia para la nueva revisión.</p></article>
+<article><h3>Disputas</h3><p>Resuelve una persona de la plataforma. Una disputa activa bloquea el pago afectado todavía pendiente.</p></article>
+<article><h3>Demostración</h3><p>Un hito cobrado; otro fallido, corregido y luego pagado. Evidencia y transacciones sin duplicados.</p></article>
+</section>
+<section class="decision">
+<h2>Qué buscamos validar con la dirección</h2>
+<p>El encaje de la propuesta y una demo que conecte <strong>cumplimiento verificable → aprobación → pago automático por hitos</strong>.</p>
+<p class="note">Al implementar se concretan activo y porcentaje, permisos humanos, orden disputa/pago y límites del bloqueo técnico. No se garantiza ausencia de bugs.</p>
+</section>
+<footer>Documentación: <a href="proyecto.md">producto</a> · <a href="arquitectura-web.md">web Next.js</a> · <a href="arquitectura-agentes.md">agentes Python/LangGraph</a>. Solo diseño; sin implementación en esta etapa.</footer>
+</main>
 </body>
 </html>

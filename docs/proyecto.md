@@ -6,13 +6,13 @@ Crear una plataforma construida sobre Solana para freelancers y software factori
 
 «Construida sobre Solana» describe la base del producto, no que cada componente se ejecute dentro de la blockchain: el desarrollo, las pruebas y la distribución de archivos se realizan fuera de la cadena y se vinculan al acuerdo on-chain.
 
-El contrato sirve a ambas partes: el cliente sabe que sus fondos no se liberan sin cumplir las condiciones pactadas, y el proveedor sabe que el pago del hito está financiado. La calidad se verifica fuera de Solana; el smart contract hace cumplir las condiciones de pago asociadas a esa verificación y a la aceptación.
+El contrato sirve a ambas partes: el cliente sabe que sus fondos no se liberan sin cumplir las condiciones pactadas, y el proveedor sabe que el pago del hito está financiado. La calidad se verifica fuera de Solana; el smart contract hace cumplir las condiciones de pago asociadas a esa verificación y a las reglas aceptadas inicialmente por ambas partes.
 
 La plataforma busca reducir dos riesgos: que el desarrollador entregue sin cobrar y que el cliente pague sin recibir lo acordado. La empresa intermediaria obtiene ingresos mediante un fee transparente sobre los pagos liberados.
 
 Este documento organiza la idea inicial. No es una aplicación a Colosseum ni implica que exista una implementación, auditoría o validación comercial. Las decisiones identificadas como propuestas deben confirmarse antes de construir.
 
-Las reglas confirmadas durante el grill se detallan en [reglas del acuerdo y la verificación](reglas-del-acuerdo.md). El [glosario](../GLOSSARY.md) define los términos del producto.
+Este es el documento de referencia del producto, con reglas, glosario y decisiones. La arquitectura se separa en [web con Next.js](arquitectura-web.md) y [agentes con Python/LangGraph](arquitectura-agentes.md). La [presentación breve](proyecto.html) sirve para revisar el concepto con la dirección del hackathon. [PROPUESTA-Dylan.md](../PROPUESTA-Dylan.md) se conserva como antecedente, no como fuente de reglas contradictorias. No se afirma aprobación del evento ni disponibilidad para fondos reales. Esta etapa es exclusivamente documental: no autoriza crear aplicaciones ni instalar dependencias.
 
 ## 2. Usuarios y problema
 
@@ -21,7 +21,9 @@ Las reglas confirmadas durante el grill se detallan en [reglas del acuerdo y la 
 - **Software factory:** presta el mismo servicio como organización, con responsables definidos para firmar y cobrar.
 - **Plataforma:** proporciona al desarrollador el pipeline CI/CD, conecta sus resultados con el acuerdo en Solana y coordina entregas y pagos, cobrando un fee por el servicio.
 
-La primera experiencia se diseña para ambas partes del contrato: un cliente y un freelancer. Las software factories forman parte de la visión posterior, no del usuario proveedor inicial.
+La experiencia se diseña para ambas partes: cliente y proveedor, que puede ser freelancer o software factory. El Frontier Agent evalúa código verificable y testeable, no el tipo de organización. Cualquiera sirve para la demostración; una factory define representantes autorizados y destinatario de cobro.
+
+El acceso elegido es una wallet de Solana mediante **Phantom**. Debe demostrarse control de la dirección para autenticar la sesión; conectar no basta. Sign In With Solana es la referencia para el diseño, no una integración ya implementada. La firma de acceso no acepta el contrato ni autoriza pagos. Nunca se solicita frase de recuperación o clave privada. Recuperación, cambio de wallet, SDK y sesiones siguen por diseñar.
 
 Hoy el alcance puede quedar desconectado del código, las entregas pueden ser difíciles de evaluar y el pago puede depender de confianza informal. La propuesta vincula cada módulo contratado con sus PRs, criterios de aceptación, pruebas, artefactos y liquidación.
 
@@ -55,6 +57,7 @@ Antes de empezar, ambas partes acuerdan:
 - Repositorio y permisos de acceso.
 - Módulos, dependencias, entregables y exclusiones.
 - Criterios de aceptación funcionales y técnicos por módulo.
+- Evaluador autorizado y consentimiento inicial para aprobar y liquidar automáticamente los hitos válidos, sin nueva aprobación manual por entrega.
 - Importe, activo de pago, fee y quién paga los costos de red.
 - Fechas, período de revisión y procedimiento de corrección.
 - Reglas de cancelación, inactividad, disputa y reembolso.
@@ -94,21 +97,23 @@ Esto evita desplegar una copia del programa por cliente. La elección final requ
 
 ## 5. Flujo de contratación, entrega y pago
 
-1. Cliente y freelancer cargan el proyecto y su documento rector; con ayuda del agente de IA aclaran los incisos, definen el alcance y leen y acuerdan los casos de prueba y criterios de aceptación.
+1. Cliente y proveedor cargan el proyecto y su documento rector; con ayuda del agente de IA aclaran los incisos, definen el alcance y leen y acuerdan los casos de prueba y criterios de aceptación.
 2. Ambos aceptan la misma versión del acuerdo y sus condiciones económicas.
 3. Se crea el acuerdo on-chain y el cliente deposita los fondos del hito en escrow.
 4. El proveedor desarrolla el módulo mediante PRs enlazados al hito.
 5. CI ejecuta los controles estáticos y dinámicos sobre una revisión identificada.
 6. Se prepara un manifiesto de entrega con código, artefactos y resultados verificables.
-7. El cliente revisa el resultado contra los criterios pactados y acepta o solicita correcciones justificadas.
-8. Con verificaciones vigentes y aceptación autorizada, el freelancer pulsa «Solicitar liquidación». El programa comprueba las condiciones y, si se cumplen, liquida el hito: pago al proveedor y fee a la plataforma. El botón no reemplaza las autorizaciones ni inicia un pago incondicional.
+7. El Frontier Agent verifica los criterios y produce el resultado técnico: favorable, requiere corrección o inconcluso. Un resultado favorable válido aprueba automáticamente el hito.
+8. La plataforma inicia automáticamente la transacción de liquidación. El programa comprueba financiamiento, atestación vigente, autoridades, dependencias, ausencia de disputa activa y que el hito no fue pagado. Si cumple, transfiere pago al proveedor y comisión acordada. No requiere aceptación manual por entrega ni botón de cobro.
 9. Se confirma la transacción y queda accesible la entrega acordada.
 
 La liberación ordinaria corresponde al pago del cliente hacia el proveedor, con el fee acordado para la plataforma. Una devolución al cliente es un reembolso y se rige por las condiciones de cancelación o resolución de disputa; no es la liquidación ordinaria del trabajo.
 
 El financiamiento debe preceder al trabajo cubierto. Si se financia un hito a la vez, el proveedor conoce que los siguientes aún no están garantizados.
 
-**Merge, entrega, aceptación y pago son eventos distintos.** El orden exacto de integración y aceptación depende del acuerdo. Para el MVP se propone una entrega revisable antes del pago, sin asumir que un merge transfiere automáticamente derechos legales.
+**Merge, entrega, atestación, aprobación y pago son eventos distintos**, aunque aprobación y liquidación se automaticen. Ambas partes autorizan inicialmente las reglas. Un merge no demuestra pago ni transfiere automáticamente derechos legales.
+
+El pago corresponde al cumplimiento funcional, no a líneas de código, commits u horas. Cada hito tiene importe propio; pagar varios hitos no equivale a pagar parcialmente un único hito.
 
 ## 6. Desarrollo mediante stacked PRs
 
@@ -161,9 +166,9 @@ Ejecutan la aplicación o sus componentes:
 
 La propuesta incluye **el Frontier Agent integrado en el pipeline que recibe el desarrollador** para ayudar a diseñar, ejecutar y analizar E2E sobre el entorno del PR candidato a merge. Su objetivo es acompañar el desarrollo hasta que el módulo funcione conforme a los criterios acordados, no solamente evaluar una entrega al final.
 
-El Frontier Agent verifica código y comportamiento contra los escenarios legibles acordados. No evalúa inicialmente obligaciones ajenas a ese alcance ni sustituye la aceptación del cliente.
+El Frontier Agent verifica código y comportamiento contra los escenarios legibles acordados. No evalúa inicialmente obligaciones ajenas a ese alcance. La aceptación bilateral ocurre al acordar las reglas; la aprobación de cada hito es automática.
 
-El Frontier Agent informa los incumplimientos mediante comentarios y señala qué debe corregir el desarrollador; no modifica el código del producto. Mientras no se corrijan y verifiquen los incumplimientos, no emite una atestación técnica favorable y el hito no queda habilitado para su liquidación ordinaria. Una nueva revisión debe verificarse nuevamente; obtener esa atestación no sustituye las demás autorizaciones de pago.
+El Frontier Agent informa los incumplimientos mediante comentarios y señala qué debe corregir el desarrollador; no modifica el código del producto. Mientras no se corrijan y verifiquen los incumplimientos, no emite una atestación técnica favorable y el hito no queda habilitado para su liquidación ordinaria. Una nueva revisión debe verificarse nuevamente; obtener esa atestación desencadena la liquidación automática, sujeta a las condiciones del programa.
 
 Sus límites deben quedar claros:
 
@@ -194,9 +199,9 @@ Desarrollo del módulo → PR / actualización de PR
   → E2E contra criterios pactados
   → si falla: reporte al desarrollador → corrección → nueva ejecución
   → si pasa: reporte y manifiesto de evidencia
-  → revisión técnica y aceptación contractual
+  → revisión técnica y atestación válida → aprobación automática
   → integración y entrega conforme al acuerdo
-  → liquidación autorizada en Solana
+  → envío automático de liquidación → confirmación en Solana
 ```
 
 GitHub permite exigir status checks antes del merge mediante protección de ramas. Eso demuestra el resultado de los controles configurados, no cumplimiento contractual completo: [status checks](https://docs.github.com/en/pull-requests/reference/status-checks).
@@ -217,11 +222,13 @@ Si se incorpora merge queue, los workflows deben cubrir `merge_group` y probar l
 
 Solana no observa GitHub ni decide si una aplicación cumple lo prometido. Una integración fuera de la cadena debe verificar la evidencia y comunicar una atestación al programa.
 
-La propuesta de MVP exige **aceptación firmada del cliente y atestación técnica de la plataforma**, vinculadas al mismo hito, versión y manifiesto. El proveedor autoriza inicialmente el acuerdo y sus reglas; las funciones exactas de cada firma se definirán antes de implementar.
+El MVP exige **aceptación bilateral inicial de las reglas y atestación técnica autorizada por hito**, vinculada al acuerdo, versión, revisión y manifiesto. No requiere otra aceptación humana rutinaria. Aprobación válida → envío automático de liquidación.
+
+Solana no envía transacciones espontáneamente: un ejecutor de la plataforma inicia el pago. El programa valida las condiciones; un comentario del LLM no basta. Se confirma y reconcilia el resultado antes de comunicar pago completado. Un envío incierto exige consultar la cadena antes de reintentar, evitando duplicados. Formato de atestación, claves, ejecutor y recuperación siguen por implementar.
 
 La plataforma actúa como verificador de evidencia, no como juez infalible ni custodio con retiro libre. Esta dependencia debe explicitarse: se trata de un modelo híbrido de confianza, no de un sistema completamente trustless.
 
-La verificación técnica y la resolución de disputas son responsabilidades separadas. Ejecutar las pruebas o emitir una atestación técnica no convierte automáticamente al verificador en árbitro. Sigue pendiente elegir quién resuelve las disputas y bajo qué procedimiento y autorizaciones.
+La verificación técnica y la resolución de disputas son responsabilidades separadas. Ejecutar las pruebas o emitir una atestación técnica no convierte automáticamente al verificador en árbitro. Las disputas las resuelve una persona de la plataforma. Identidad concreta, facultades y procedimiento deben definirse antes de operar fondos reales.
 
 Invariantes del programa:
 
@@ -239,25 +246,27 @@ Estados conceptuales del hito:
 
 ```text
 Borrador → Acordado → Financiado → En desarrollo → Entregado
-  → Verificado → Aceptado → Liquidado
+  → Verificado / Aprobado automáticamente → Liquidado
 ```
 
 Desde la entrega puede solicitarse una corrección y producirse una nueva revisión. Una disputa congela las salidas ordinarias; cancelación, reembolso y resolución requieren las autorizaciones pactadas.
 
 Una corrección atiende una obligación de la versión acordada. Una obligación nueva constituye un cambio de alcance y requiere acuerdo sobre sus escenarios, importe y plazo; no se presenta como corrección gratuita.
 
-Si el cliente rechaza una entrega técnicamente verificada, debe indicar motivos vinculados al acuerdo. Se busca primero un acuerdo entre las partes y, si el desacuerdo persiste, se deriva a una persona para su revisión. La derivación humana no concede por sí sola autoridad para mover fondos: siguen pendientes la identidad del responsable, sus facultades y el procedimiento de resolución. El Frontier Agent no arbitra automáticamente.
+Si surge un desacuerdo, se presentan motivos vinculados al acuerdo y se busca aclararlo entre las partes. Una persona de la plataforma resuelve las disputas; el Frontier Agent no arbitra automáticamente ni implementa el código del proveedor. La persona no obtiene retiro libre de fondos: sus autorizaciones y resultados posibles deben diseñarse.
+
+El orden entre disputa y pago automático debe implementarse explícitamente: cuándo se registra el reclamo, si existe ventana y qué ocurre después de liquidar. No se inventa aquí un plazo. Una disputa puede congelar fondos aún pendientes, no revertir automáticamente una transferencia ya completada.
 
 Antes de usar fondos reales deben definirse:
 
 - Plazo de revisión y recordatorios.
 - Qué ocurre si el cliente desaparece y cómo se tramita un rechazo sin fundamento dentro de la derivación humana acordada.
 - Qué ocurre si el proveedor abandona o incumple.
-- Quién arbitra, qué evidencia considera y qué resultados puede autorizar.
+- Qué persona de la plataforma resuelve, qué evidencia considera y qué resultados puede autorizar.
 - Si existen pagos parciales, retenciones o garantías posteriores.
 - Procedimiento de recuperación frente a fallos de la plataforma.
 
-**No se propone liberar fondos automáticamente por silencio en el MVP.** Sin una política de inactividad y resolución, el escrow puede quedar bloqueado; esta es una condición pendiente, no un problema resuelto por la blockchain.
+**El pago automático se basa en aprobación válida, no en silencio.** Sin una política de inactividad y resolución, el escrow puede quedar bloqueado; esta es una condición pendiente, no un problema resuelto por la blockchain.
 
 ## 11. Entrega de archivos y propiedad intelectual
 
@@ -271,7 +280,7 @@ Los archivos privados no se publican en la cadena. Si se requiere cifrado, se de
 
 ## 12. Sustentabilidad: fee de la plataforma
 
-Propuesta: cobrar un porcentaje del importe bruto de cada hito efectivamente liquidado. La tasa y el destinatario se fijan en el acuerdo y no cambian retroactivamente.
+La comisión elegida es un porcentaje del importe acordado, fijado en el contrato y aplicado a los hitos liquidados. El porcentaje numérico no se ha elegido. Base de cálculo propuesta: importe bruto de cada hito efectivamente liquidado. La tasa y el destinatario se fijan en el acuerdo y no cambian retroactivamente.
 
 ```text
 fee = importe_bruto × tasa_acordada
@@ -300,17 +309,17 @@ La comisión por éxito puede no cubrir verificaciones repetidas sobre entregas 
 
 Propuesta de alcance mínimo:
 
-1. Un cliente y un freelancer, con una experiencia para ambas partes.
+1. Un cliente y un proveedor, freelancer o factory, con acceso Phantom y experiencia para ambas partes.
 2. Un proyecto con dos módulos dependientes y criterios explícitos.
 3. Un programa compartido y escrow por hito en entorno local/devnet.
 4. Integración con un repositorio GitHub y una pequeña stack de PRs.
 5. Checks estáticos y un recorrido E2E representativo.
 6. Manifiesto de entrega ligado a una revisión exacta.
-7. Aceptación del cliente, atestación técnica y liquidación con fee.
+7. Aceptación inicial del acuerdo, atestación válida, aprobación y liquidación automáticas con comisión porcentual.
 8. Demostración de rechazo: prueba fallida o revisión modificada no permite cobrar.
 9. Demostración de que repetir el evento no duplica el pago.
 
-No incluye inicialmente un marketplace, almacenamiento fragmentado propio, arbitraje descentralizado, onboarding fiat completo ni compatibilidad con todos los lenguajes.
+La web inicial contempla landing y marketplace. Funciones concretas de publicación, búsqueda, contratación y persistencia del marketplace se definirán antes de implementarlas. No incluye almacenamiento fragmentado propio, arbitraje descentralizado, onboarding fiat completo ni compatibilidad con todos los lenguajes.
 
 La demo no equivale a auditoría de seguridad ni autorización para operar fondos reales. La disponibilidad de wallet, fondos de prueba y pago de transacciones debe explicarse; para clientes sin experiencia cripto, la fricción de onboarding es una hipótesis comercial pendiente.
 
@@ -320,8 +329,9 @@ La demo no equivale a auditoría de seguridad ni autorización para operar fondo
 - **Colosseum:** utilizar Copilot para investigar precedentes y el hub para evaluar herramientas; este documento no afirma haber realizado ese estudio.
 - **Demanda:** entrevistar clientes y proveedores sobre impagos, aceptación y disposición a pagar.
 - **Diferenciación:** comparar con escrow freelance, gestión de entregas y QA existentes antes de afirmar novedad.
-- **Pagos:** elegir activo, responsables de fees y acceso para usuarios sin wallet; verificar elegibilidad y costos si intervienen terceros.
+- **Pagos:** elegir activo, porcentaje concreto, financiamiento total/por hito y responsables de costos; acceso Phantom decidido, recuperación y usuarios sin wallet por diseñar.
 - **Confianza:** cerrar atestaciones, autoridades, disputas, inactividad y actualización del programa.
+- **Automatización y disputas:** implementar el orden entre reclamo y envío de pago, poderes del humano de plataforma y recuperación de transacciones inciertas; no se ha fijado una ventana de disputa.
 - **Legal:** revisar propiedad intelectual, privacidad, tratamiento de fondos, impuestos y obligaciones según jurisdicción con asesoramiento especializado.
 - **Entrega:** decidir control del repositorio, retención de archivos y momento de transferencia de derechos.
 - **Calidad:** concretar los criterios medibles por proyecto, la traducción de escenarios a pruebas, quién puede cambiar checks obligatorios y los límites del bloqueo por revisión técnica adicional del Frontier Agent.
@@ -331,6 +341,112 @@ La demo no equivale a auditoría de seguridad ni autorización para operar fondo
 
 ## 15. Síntesis
 
-La plataforma vincula **alcance acordado → módulos → stacked PRs → evidencia estática y dinámica → aceptación → pago y fee en Solana**.
+La plataforma vincula **alcance aceptado inicialmente → módulos → stacked PRs → evidencia → aprobación automática → pago automático y comisión en Solana**.
 
 Su valor no está en registrar un PR en blockchain, sino en conectar lo contratado, lo construido, lo verificado y lo pagado mediante un proceso auditable, con límites de confianza explícitos.
+
+## 16. Arquitectura e información para implementación
+
+```text
+Cliente + proveedor → Next.js + Phantom
+  → Frontend y backend web: landing / marketplace / acuerdo / seguimiento
+  → Python + LangGraph: Frontier Agent
+     ├─ Agente documental: documento / grill / incisos / escenarios
+     └─ Agente CI/CD: revisión / tests / evidencia / comentarios / resultado
+          ↔ GitHub: PRs y SHA
+          ↔ Pipeline aislado: ejecución de código y pruebas
+  ↔ Almacenamiento privado: documentos, artefactos y evidencia
+  → Servicio de autorización: valida evidencia y emite atestación
+  → Ejecutor automático: envía transacción
+  → Programa Solana: valida condiciones, paga neto + comisión
+  → Confirmación y reconciliación
+```
+
+Responsabilidades conceptuales, no servicios implementados. **Next.js** incluye frontend y backend web inicial. **Python con LangGraph** orquesta el Frontier Agent compuesto por agente documental y agente CI/CD; reemplaza la idea previa de NestJS. La documentación específica de cada parte describe sus límites, no una aplicación existente.
+
+Proyecto, roles, versiones, incisos, escenarios, hitos, revisiones, manifiestos, evaluaciones, disputas y transacciones son la información mínima a modelar. Proveedor IA, almacenamiento, base de datos, SDK de wallet/Solana, versiones e interfaz entre Next.js y Python siguen pendientes. Revisión y claves de pago deben separarse.
+
+Ejemplo económico ilustrativo con presupuesto financiado de 1.000 unidades, antes de descontar comisión:
+
+| Hito | Bruto | Resultado | Bruto liquidado acumulado | Saldo reservado |
+| --- | ---: | --- | ---: | ---: |
+| Registro e inicio de sesión | 300 | Aprobado y liquidado | 300 | 700 |
+| Recuperación de contraseña | 200 | Requiere corrección | 300 | 700 |
+| Recuperación corregida | 200 | Mismo hito aprobado | 500 | 500 |
+| Catálogo y búsqueda | 500 | Pendiente | 500 | 500 |
+
+La corrección no crea un cobro adicional. Bruto liquidado = neto del proveedor + comisión. Financiar todo o por hito sigue por precisar; solo trabajo financiado tiene fondos garantizados.
+
+## 17. Resultados y comprobaciones del producto
+
+| Resultado | Efecto |
+| --- | --- |
+| Favorable | Atestación válida, aprobación automática y envío del pago si las condiciones se cumplen |
+| Requiere corrección | Observaciones; proveedor corrige; nueva verificación sin pago previo |
+| Inconcluso / en espera | No se aprueba ni paga; no atribuir fallo del código sin evidencia |
+
+Ejemplos para convertir en tests del prototipo, no suite ejecutable existente:
+
+1. Aceptación inicial de una sola parte: no activar.
+2. Inciso ambiguo o sin escenarios: completar acuerdo antes de activar.
+3. Tests que omiten una condición: no afirmar cumplimiento completo.
+4. Obligación fuera de alcance: mostrar no verificada, nunca aprobada por tests.
+5. Objeción técnica bloqueante con tests verdes: explicar hallazgo y no atestar favorablemente.
+6. Entorno caído: inconcluso, sin pago.
+7. Revisión modificada: no reutilizar evidencia anterior.
+8. Obligación nueva: cambio de alcance bilateral, no corrección gratuita.
+9. Firma no autorizada, saldo insuficiente, dependencias incumplidas o disputa activa: rechazar liquidación.
+10. Evaluación válida y todas las condiciones cumplidas: pago automático y comisión correcta sin aprobación manual por entrega.
+11. Evento duplicado o confirmación incierta: reconciliar y no pagar dos veces.
+12. Disputa: atención humana de plataforma bajo permisos explícitos, no arbitraje automático del agente.
+
+La restauración tras revert/rebase y los efectos posteriores a pagos liquidados necesitan política; no se promete devolución automática.
+
+## 18. Línea de trabajo para comenzar el prototipo
+
+Estas tareas describen una fase futura. El stack elegido es Next.js para web/backend y Python/LangGraph para agentes; no se crea estructura de código en esta etapa documental:
+
+1. Modelar datos, versiones, roles y trazabilidad de hitos.
+2. Preparar landing y marketplace en Next.js, y luego acceso Phantom con autenticación verificada, sesión e invitaciones.
+3. Construir carga documental en Next.js y agente documental en Python/LangGraph para grill, escenarios y aceptación bilateral inicial.
+4. Integrar un repositorio/lenguaje inicial y pipeline aislado con reportes reproducibles.
+5. Implementar agente CI/CD del Frontier Agent en Python/LangGraph para evaluación/comentarios, no modificación del código del producto.
+6. Construir escrow y atestaciones en local/devnet con importes, comisión, autoridades y deduplicación.
+7. Automatizar envío, confirmación y reconciliación de liquidaciones.
+8. Definir y probar procedimiento humano de disputa y su orden respecto del pago.
+9. Ejecutar los ejemplos anteriores como verificaciones end-to-end de la demo.
+
+Se puede iniciar con servicios simulados y fondos de prueba. Cerrar cada política abierta antes de implementar su lógica dependiente; no convertir un default del prototipo en contrato comercial. No mainnet ni fondos reales sin revisión adicional.
+
+Métricas del piloto: entregas incorrectas aprobadas, correctas rechazadas, tiempo/costo de evaluación, demora aprobación→pago, disputas, cambios de alcance, margen y disposición a pagar. No se afirma novedad competitiva ni se adoptan como verificadas las referencias de Dylan.
+
+## 19. Glosario integrado
+
+| Término | Definición |
+| --- | --- |
+| Documento rector | Referencia versionada de obligaciones acordadas |
+| Inciso | Cláusula individual que se aclara y vincula a escenarios |
+| Caso acordado | Escenario legible independiente del lenguaje, aceptado por ambas partes |
+| Calidad | Adecuación al documento rector según verificaciones acordadas |
+| Hito | Unidad contractual de trabajo y pago; puede abarcar varios PRs |
+| Frontier Agent | Sistema con agente documental y agente CI/CD en Python/LangGraph; informa, no desarrolla el código del proveedor ni arbitra |
+| Atestación técnica | Declaración verificable sobre resultado, hito y revisión; no shard/shred ni pago |
+| Aceptación del acuerdo | Consentimiento bilateral inicial sobre versión y reglas automáticas |
+| Aprobación del hito | Resultado automático basado en evaluación válida, sin aceptación manual rutinaria |
+| Liquidación | Transferencia del pago y comisión, registrada tras éxito de la transacción |
+| Escrow | Fondos reservados bajo reglas del programa |
+| Corrección | Cambio necesario para cumplir una obligación existente |
+| Cambio de alcance | Cambio de obligaciones que exige nueva aceptación bilateral |
+| Inconcluso | Evaluación sin evidencia suficiente para aprobar o rechazar |
+| Objeción adicional | Hallazgo técnico bloqueante que no corresponde a un inciso explícito |
+| Disputa | Desacuerdo resuelto por una persona de la plataforma con procedimiento definido |
+
+## 20. Decisión integrada sobre bloqueo técnico
+
+Se eligió permitir que el Frontier Agent bloquee por revisión técnica aunque pasen los escenarios, en lugar de convertir todo hallazgo adicional en sugerencia opcional. El objetivo es detectar problemas fuera de la cobertura de tests. Esto introduce dependencia del juicio del verificador y exige límites, severidades e impugnación. Cada bloqueo distingue incumplimiento contractual de objeción adicional y no inventa incisos. No otorga poder de arbitraje ni retiro libre de fondos.
+
+## 21. Referencia de acceso y cierre
+
+[Phantom: Sign In With Solana](https://github.com/phantom/sign-in-with-solana) es la referencia para diseñar el acceso. Verificar documentación actual al implementar.
+
+Producto acordado: código verificable de freelancers o factories, criterios claros aceptados previamente, evaluación del Frontier Agent, aprobación y pago automáticos, comisión porcentual y resolución humana de disputas. La definición permite iniciar el prototipo local/devnet, conservando visibles los parámetros técnicos y operativos pendientes.
