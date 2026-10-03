@@ -1,6 +1,6 @@
 # Arquitectura web — Next.js
 
-Diseño documental. Existe un scaffold en `apps/web` (landing y marketplace placeholder, route handlers hacia el agente); Phantom/SIWS, persistencia y marketplace real siguen sin implementar. Las reglas de negocio están en [proyecto.md](proyecto.md); los agentes se describen en [arquitectura-agentes.md](arquitectura-agentes.md).
+Diseño documental. Existe un scaffold en `apps/web` (landing y marketplace placeholder, route handlers hacia el agente). El backend ya implementa acceso Phantom/SIWS sin estado y la liberación de hitos vía escrow Solana (sin cambios de UI); persistencia y marketplace real siguen sin implementar. Contratos concretos: [api-endpoints.md](api-endpoints.md); login con email especificado en [auth-email-password.md](auth-email-password.md). Las reglas de negocio están en [proyecto.md](proyecto.md); los agentes se describen en [arquitectura-agentes.md](arquitectura-agentes.md).
 
 ## Decisión
 
