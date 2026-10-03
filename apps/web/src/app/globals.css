@@ -370,3 +370,11 @@ body {
   .landing-page main > section:nth-of-type(3n),
   .landing-page .landing-aurora { border-radius: 0 0 20px 20px; }
 }
+
+/* ===== WebGPU backgrounds (vgpu) ===== */
+.shader-canvas { opacity: 0; transition: opacity 1.2s ease; }
+.shader-canvas[data-ready] { opacity: 1; }
+/* The live shader replaces the static CSS ambience it was layered over. */
+.shader-canvas[data-ready] ~ .hero-grid,
+.shader-canvas[data-ready] ~ .hero-halo,
+.shader-canvas[data-ready] ~ .cta-static-glow { display: none; }

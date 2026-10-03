@@ -1,5 +1,7 @@
 import { HeroWorkflow } from "./HeroWorkflow";
 import { LandingIcon, type LandingIconName } from "./LandingIcon";
+import { ShaderCanvas } from "./gpu/ShaderCanvas";
+import { HERO_FIELD_SHADER } from "./gpu/heroField.wgsl";
 
 const features: { icon: LandingIconName; title: string; detail: string }[] = [
   { icon: "wallet", title: "Fondos protegidos", detail: "Escrow on-chain" },
@@ -10,6 +12,7 @@ const features: { icon: LandingIconName; title: string; detail: string }[] = [
 export function Hero() {
   return (
     <section className="landing-hero relative overflow-hidden px-6 pt-36 pb-0 sm:pt-40">
+      <ShaderCanvas shader={HERO_FIELD_SHADER} interactive className="absolute inset-0 h-full w-full" />
       <div className="hero-grid" aria-hidden="true" />
       <div className="hero-halo" aria-hidden="true" />
       <div className="relative mx-auto grid max-w-7xl items-center gap-12 pb-16 lg:grid-cols-[1.15fr_1fr] lg:gap-10 lg:pb-24">

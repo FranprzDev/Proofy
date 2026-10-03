@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { RevealOnScroll } from "./RevealOnScroll";
+import { ShaderCanvas } from "./gpu/ShaderCanvas";
+import { VERIFICATION_CORE_SHADER } from "./gpu/verificationCore.wgsl";
 
 export function CTASection() {
   const [email, setEmail] = useState("");
@@ -16,14 +18,15 @@ export function CTASection() {
 
   return (
     <section id="acceso-temprano" className="relative py-24 sm:py-32 px-6 overflow-hidden">
+      <ShaderCanvas shader={VERIFICATION_CORE_SHADER} interactive className="absolute top-1/2 left-1/2 h-[min(1100px,140vw)] w-[min(1400px,180vw)] -translate-x-1/2 -translate-y-1/2" />
       {/* Background Decorative Rings & Neon Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-tr from-lime/15 via-lime/5 to-transparent rounded-full blur-3xl pointer-events-none" />
+      <div className="cta-static-glow absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-tr from-lime/15 via-lime/5 to-transparent rounded-full blur-3xl pointer-events-none" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-white/[0.04] rounded-full pointer-events-none" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1100px] h-[1100px] border border-white/[0.02] rounded-full pointer-events-none" />
 
       <div className="mx-auto max-w-5xl relative z-10">
         <RevealOnScroll>
-          <div className="relative rounded-3xl border border-lime/30 bg-gradient-to-b from-[#15151f]/90 via-[#0e0e15]/90 to-[#07070b]/95 p-8 sm:p-14 lg:p-16 text-center backdrop-blur-xl shadow-[0_0_60px_rgba(190,255,0,0.1)] overflow-hidden">
+          <div className="relative rounded-3xl border border-lime/30 bg-gradient-to-b from-[#15151f]/70 via-[#0e0e15]/65 to-[#07070b]/80 p-8 sm:p-14 lg:p-16 text-center backdrop-blur-xl shadow-[0_0_60px_rgba(190,255,0,0.1)] overflow-hidden">
             {/* Top Badge */}
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-lime/30 bg-lime/10 text-lime text-xs font-semibold uppercase tracking-wider mb-6">
               <span className="w-2 h-2 rounded-full bg-lime animate-ping" />
