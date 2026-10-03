@@ -8,6 +8,9 @@ importers:
 
   .:
     devDependencies:
+      '@ai-sdk/google':
+        specifier: ^4.0.87
+        version: 4.0.87(zod@4.6.1)
       '@e2e-dev/web':
         specifier: 0.11.2
         version: 0.11.2(e2e@0.16.0(ai@7.0.127(zod@4.6.1)))(playwright@1.63.0)
@@ -25,6 +28,12 @@ packages:
 
   '@ai-sdk/gateway@4.0.103':
     resolution: {integrity: sha512-nnGTUHzPRQ14jhv9CL4OQrzcRBIFTBMIPKGIi9Z9u/4GtwSRxa/nxUX6np2Iwp5phOzO0a0njj/j9Jolf5AEaA==}
+    engines: {node: '>=22'}
+    peerDependencies:
+      zod: ^3.25.76 || ^4.1.8
+
+  '@ai-sdk/google@4.0.87':
+    resolution: {integrity: sha512-s0tWc+QeSce7O2ZLm+VWSRQy16dGfqEcMIUxEWh+LFvXX3h0TLH8jxCQ2H1qhiBgTta+6A97eHPhBlRFu1xy+g==}
     engines: {node: '>=22'}
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
@@ -359,6 +368,12 @@ snapshots:
       '@ai-sdk/provider': 4.0.21
       '@ai-sdk/provider-utils': 5.0.53(zod@4.6.1)
       '@vercel/oidc': 3.2.0
+      zod: 4.6.1
+
+  '@ai-sdk/google@4.0.87(zod@4.6.1)':
+    dependencies:
+      '@ai-sdk/provider': 4.0.21
+      '@ai-sdk/provider-utils': 5.0.53(zod@4.6.1)
       zod: 4.6.1
 
   '@ai-sdk/provider-utils@5.0.53(zod@4.6.1)':

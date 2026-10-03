@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       E2E_TELEMETRY_DISABLED: "1"
-      AI_GATEWAY_API_KEY: ${{ secrets.AI_GATEWAY_API_KEY }}
+      GOOGLE_GENERATIVE_AI_API_KEY: ${{ secrets.GOOGLE_GENERATIVE_AI_API_KEY }}
       # Next.js dev server started by e2e.config.ts; server-only values for the build.
       AGENT_API_URL: http://localhost:8000
     steps:
