@@ -18,6 +18,7 @@ from frontier_agent.graphs.document import (
     DocumentState,
     build_document_graph,
 )
+from frontier_agent.llm import get_chat_model
 from frontier_agent.logging_config import configure_logging
 from frontier_agent.security import require_api_key, verify_github_signature
 
@@ -28,8 +29,9 @@ def create_app() -> FastAPI:
     configure_logging(get_settings().log_level)
     app = FastAPI(title="Frontier Agent", version="0.1.0")
     checkpointer = make_checkpointer()
-    document = build_document_graph(checkpointer)
-    cicd = build_cicd_graph(checkpointer)
+    llm = get_chat_model() if get_settings().llm_enabled else None
+    document = build_document_graph(checkpointer, llm)
+    cicd = build_cicd_graph(checkpointer, llm)
     auth = [Depends(require_api_key)]
 
     def cfg(thread_id: str | None) -> Any:

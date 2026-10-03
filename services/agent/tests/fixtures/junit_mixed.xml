@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="e2e" tests="4">
+    <testcase name="TC-001: Home loads"/>
+    <testcase name="TC-002: Checkout works"><failure message="button missing">trace</failure></testcase>
+    <testcase name="TC-003: Profile"><skipped/></testcase>
+    <testcase name="TC-004: Search"><error message="boom"/></testcase>
+  </testsuite>
+</testsuites>
