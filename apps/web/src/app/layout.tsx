@@ -1,29 +1,52 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Bebas_Neue, Space_Grotesk, Comfortaa } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const bebasNeue = Bebas_Neue({
+  weight: "400",
+  variable: "--font-bebas-neue",
   subsets: ["latin"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
   subsets: ["latin"],
+  display: "swap",
+});
+
+const comfortaa = Comfortaa({
+  variable: "--font-comfortaa",
+  subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Proofy",
-  description: "Milestone payments verified by agents",
+  title: "Proofy — Entregas verificadas. Pagos automáticos.",
+  description:
+    "Plataforma sobre Solana que conecta contratación, verificación de calidad por IA y pago automático de hitos para freelancers y software factories.",
+  keywords: [
+    "Solana",
+    "freelance",
+    "escrow",
+    "smart contract",
+    "verificación",
+    "pagos automáticos",
+    "Proofy",
+  ],
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      lang="es"
+      className={`${bebasNeue.variable} ${spaceGrotesk.variable} ${comfortaa.variable} antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-screen">{children}</body>
     </html>
   );
 }
