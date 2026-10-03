@@ -12,7 +12,7 @@ La plataforma busca reducir dos riesgos: que el desarrollador entregue sin cobra
 
 Este documento organiza la idea inicial. No es una aplicación a Colosseum ni implica que exista una implementación, auditoría o validación comercial. Las decisiones identificadas como propuestas deben confirmarse antes de construir.
 
-Este es el documento de referencia del producto, con reglas, glosario y decisiones. La arquitectura se separa en [web con Next.js](arquitectura-web.md) y [agentes con Python/LangGraph](arquitectura-agentes.md). La [presentación breve](proyecto.html) sirve para revisar el concepto con la dirección del hackathon. [PROPUESTA-Dylan.md](../PROPUESTA-Dylan.md) se conserva como antecedente, no como fuente de reglas contradictorias. No se afirma aprobación del evento ni disponibilidad para fondos reales. Esta etapa es exclusivamente documental: no autoriza crear aplicaciones ni instalar dependencias.
+Este es el documento de referencia del producto, con reglas, glosario y decisiones. La arquitectura se separa en [web con Next.js](arquitectura-web.md) y [agentes con Python/LangGraph](arquitectura-agentes.md). La [presentación breve](proyecto.html) sirve para revisar el concepto con la dirección del hackathon. No se afirma aprobación del evento ni disponibilidad para fondos reales. Esta etapa es exclusivamente documental: no autoriza crear aplicaciones ni instalar dependencias.
 
 ## 2. Usuarios y problema
 

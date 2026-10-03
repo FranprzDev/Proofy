@@ -1,0 +1,3 @@
+{"id":"clear","input":{"contract_id":"c1","document":"Email login\nCSV export"},"expected":{"status":"proposal"}}
+{"id":"ambiguous-tbd","input":{"contract_id":"c1","document":"Email login\nPayments TBD"},"expected":{"status":"needs_clarification"}}
+{"id":"empty","input":{"contract_id":"c1","document":""},"expected":{"status":"needs_clarification"}}
