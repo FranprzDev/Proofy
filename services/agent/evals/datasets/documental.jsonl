@@ -1,0 +1,3 @@
+{"id":"claro","input":{"contrato_id":"c1","documento":"Login con email\nExportar CSV"},"expected":{"estado":"propuesta"}}
+{"id":"ambiguo-tbd","input":{"contrato_id":"c1","documento":"Login con email\nPagos TBD"},"expected":{"estado":"necesita_aclaracion"}}
+{"id":"vacio","input":{"contrato_id":"c1","documento":""},"expected":{"estado":"necesita_aclaracion"}}

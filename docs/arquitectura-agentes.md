@@ -1,10 +1,10 @@
 # Arquitectura de agentes — Python + LangGraph
 
-Diseño documental del **Frontier Agent**. Complementa [proyecto.md](proyecto.md) y [arquitectura-web.md](arquitectura-web.md). No es una implementación ni una evaluación funcionando.
+Diseño del **Frontier Agent**. Complementa [proyecto.md](proyecto.md) y [arquitectura-web.md](arquitectura-web.md). El scaffold en `services/agent` contiene grafos stub; no hay evaluación real funcionando.
 
 ## Decisión
 
-Python con LangGraph organiza dos agentes especializados del producto: documental y CI/CD. Reemplaza la propuesta previa de NestJS/LangGraph. Next.js conserva frontend/backend web inicial; no se elige aún un framework HTTP Python, proveedor LLM, almacenamiento o SDK.
+Python con LangGraph organiza dos agentes especializados del producto: documental y CI/CD. Reemplaza la propuesta previa de NestJS/LangGraph. Next.js conserva frontend/backend web inicial; el servicio Python se expone con FastAPI.
 
 ## 1. Agente documental
 
@@ -12,7 +12,7 @@ Python con LangGraph organiza dos agentes especializados del producto: documenta
 
 **Trabajo:** ayudar a interpretar incisos, detectar ambigüedades, conducir el grill compartido, proponer condiciones medibles y escenarios legibles y hacer visible la cobertura inciso→escenarios→resultado esperado.
 
-**Salida prevista:** propuesta de requisitos y escenarios ligada a una versión, pendientes y obligaciones fuera del alcance verificable. Ambas partes deben leer y aceptar el acuerdo antes de activarlo; el agente no acepta por ellas.
+**Salida prevista:** si hay ambigüedades o falta información, estado `necesita_aclaracion` con la lista de ambigüedades (inciso, motivo, pregunta sugerida): el agente avisa y no propone escenarios ni inventa condiciones. Si no, propuesta de requisitos y escenarios ligada a una versión, pendientes y obligaciones fuera del alcance verificable. Ambas partes deben leer y aceptar el acuerdo antes de activarlo; el agente no acepta por ellas.
 
 No se presupone que la IA comprende el contrato sin errores. No redefine unilateralmente montos, alcance ni obligaciones; no convierte tests en sustituto del documento rector.
 
@@ -54,8 +54,22 @@ La secuencia expresa el ciclo de negocio, no obliga a ejecutar ambos agentes en 
 - No publicar documentos, secretos o payloads privados en logs, prompts públicos o cadena.
 - El prototipo debe permanecer inconcluso cuando falte evidencia; nunca simular una aprobación real.
 
-## Decisiones de implementación todavía pendientes
+## Decisiones de implementación
 
-Esquemas de estado y entradas/salidas, grafos, checkpoints/persistencia, modelos y herramientas, API con Next.js, integración GitHub/CI, webhooks, permisos de cambio de pruebas, reintentos y costos. Ninguna dependencia ni servicio se instala en esta etapa.
+Tomadas para el scaffold (`services/agent`, ver [ADR 0001](adr/0001-agente-python-langgraph.md)):
 
-Referencias para la fase futura: [LangGraph Python](https://docs.langchain.com/oss/python/langgraph/overview) y [Graph API](https://docs.langchain.com/oss/python/langgraph/graph-api). Verificar versiones al implementar.
+- **HTTP:** FastAPI con contratos Pydantic exportables a OpenAPI (cliente TypeScript para Next.js) y streaming SSE.
+- **Auth Next.js → Python:** API key compartida por header `X-API-Key`, comparada en tiempo constante, desde env; falla cerrada si no está configurada.
+- **LLM:** agnóstico mediante `LLM_MODEL=<proveedor>:<modelo>`; Gemini por defecto para la demo. Topes por env de reintentos, tokens y recursión del grafo.
+- **Evidencia CI/CD:** llega por webhook `workflow_run` de una GitHub App, identificada por SHA exacto; firma HMAC con secret por env. El scaffold solo valida firma y parsea el evento (stub), sin llamar a GitHub.
+- **Persistencia:** `MemorySaver` tras una fábrica de checkpointer; Postgres después.
+- **Ambigüedad:** el grafo documental termina en `necesita_aclaracion` en vez de proponer escenarios; vuelve a evaluarse cuando llegan `respuestas`. El scaffold detecta marcas léxicas (stub determinista); el criterio real lo definirá el LLM.
+- **Observabilidad:** logging estructurado JSON, solo identificadores y sin payloads privados. Sin LangSmith ni OpenTelemetry por ahora.
+
+Los grafos son stubs sin LLM: la separación análisis → validación/autorización existe, sin ejecución de pago ni claves.
+
+## Decisiones todavía pendientes
+
+Esquemas definitivos de estado y entradas/salidas, modelos y herramientas de cada nodo, conexión del webhook con el grafo CI/CD (mapear SHA → hito y versión), permisos de cambio de pruebas, política de reintentos y costos más allá de los topes, Postgres y su esquema, despliegue del servicio Python y gestión/rotación de la API key y del secret del webhook.
+
+Referencias: [LangGraph Python](https://docs.langchain.com/oss/python/langgraph/overview) y [Graph API](https://docs.langchain.com/oss/python/langgraph/graph-api).

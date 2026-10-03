@@ -1,0 +1,741 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Frontier Agent",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Health",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object",
+                  "title": "Response Health Health Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/documental/invoke": {
+      "post": {
+        "summary": "Documental Invoke",
+        "operationId": "documental_invoke_documental_invoke_post",
+        "parameters": [
+          {
+            "name": "thread_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Thread Id"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DocumentalInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentalState"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/documental/stream": {
+      "post": {
+        "summary": "Documental Stream",
+        "operationId": "documental_stream_documental_stream_post",
+        "parameters": [
+          {
+            "name": "thread_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Thread Id"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DocumentalInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cicd/invoke": {
+      "post": {
+        "summary": "Cicd Invoke",
+        "operationId": "cicd_invoke_cicd_invoke_post",
+        "parameters": [
+          {
+            "name": "thread_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Thread Id"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CicdInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CicdState"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cicd/stream": {
+      "post": {
+        "summary": "Cicd Stream",
+        "operationId": "cicd_stream_cicd_stream_post",
+        "parameters": [
+          {
+            "name": "thread_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Thread Id"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CicdInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhooks/github": {
+      "post": {
+        "summary": "Github Webhook",
+        "description": "Stub: valida firma y parsea `workflow_run`. No llama a GitHub ni al grafo todav\u00eda.",
+        "operationId": "github_webhook_webhooks_github_post",
+        "parameters": [
+          {
+            "name": "x-hub-signature-256",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Hub-Signature-256"
+            }
+          },
+          {
+            "name": "x-github-event",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Github-Event"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "title": "Response Github Webhook Webhooks Github Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Ambiguedad": {
+        "properties": {
+          "inciso": {
+            "type": "string",
+            "title": "Inciso"
+          },
+          "motivo": {
+            "type": "string",
+            "title": "Motivo"
+          },
+          "pregunta_sugerida": {
+            "type": "string",
+            "title": "Pregunta Sugerida"
+          }
+        },
+        "type": "object",
+        "required": [
+          "inciso",
+          "motivo",
+          "pregunta_sugerida"
+        ],
+        "title": "Ambiguedad"
+      },
+      "CicdInput": {
+        "properties": {
+          "esperado": {
+            "$ref": "#/components/schemas/Ref"
+          },
+          "evidencia_ref": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Ref"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "resultados": {
+            "items": {
+              "$ref": "#/components/schemas/ScenarioResult"
+            },
+            "type": "array",
+            "title": "Resultados"
+          }
+        },
+        "type": "object",
+        "required": [
+          "esperado"
+        ],
+        "title": "CicdInput"
+      },
+      "CicdState": {
+        "properties": {
+          "esperado": {
+            "$ref": "#/components/schemas/Ref"
+          },
+          "evidencia_ref": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Ref"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "resultados": {
+            "items": {
+              "$ref": "#/components/schemas/ScenarioResult"
+            },
+            "type": "array",
+            "title": "Resultados"
+          },
+          "analisis": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Verdict"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "veredicto": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Verdict"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "atestacion_autorizada": {
+            "type": "boolean",
+            "title": "Atestacion Autorizada",
+            "default": false
+          },
+          "observaciones": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Observaciones"
+          }
+        },
+        "type": "object",
+        "required": [
+          "esperado"
+        ],
+        "title": "CicdState"
+      },
+      "DocumentalInput": {
+        "properties": {
+          "contrato_id": {
+            "type": "string",
+            "title": "Contrato Id"
+          },
+          "documento": {
+            "type": "string",
+            "title": "Documento"
+          },
+          "respuestas": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Respuestas"
+          }
+        },
+        "type": "object",
+        "required": [
+          "contrato_id",
+          "documento"
+        ],
+        "title": "DocumentalInput"
+      },
+      "DocumentalState": {
+        "properties": {
+          "contrato_id": {
+            "type": "string",
+            "title": "Contrato Id"
+          },
+          "documento": {
+            "type": "string",
+            "title": "Documento"
+          },
+          "respuestas": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Respuestas"
+          },
+          "estado": {
+            "$ref": "#/components/schemas/EstadoDocumental",
+            "default": "pendiente"
+          },
+          "incisos": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Incisos"
+          },
+          "ambiguedades": {
+            "items": {
+              "$ref": "#/components/schemas/Ambiguedad"
+            },
+            "type": "array",
+            "title": "Ambiguedades"
+          },
+          "escenarios": {
+            "items": {
+              "$ref": "#/components/schemas/Escenario"
+            },
+            "type": "array",
+            "title": "Escenarios"
+          },
+          "pendientes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Pendientes"
+          },
+          "aceptado_por_cliente": {
+            "type": "boolean",
+            "title": "Aceptado Por Cliente",
+            "default": false
+          },
+          "aceptado_por_proveedor": {
+            "type": "boolean",
+            "title": "Aceptado Por Proveedor",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "contrato_id",
+          "documento"
+        ],
+        "title": "DocumentalState"
+      },
+      "Escenario": {
+        "properties": {
+          "inciso": {
+            "type": "string",
+            "title": "Inciso"
+          },
+          "descripcion": {
+            "type": "string",
+            "title": "Descripcion"
+          },
+          "resultado_esperado": {
+            "type": "string",
+            "title": "Resultado Esperado"
+          }
+        },
+        "type": "object",
+        "required": [
+          "inciso",
+          "descripcion",
+          "resultado_esperado"
+        ],
+        "title": "Escenario"
+      },
+      "EstadoDocumental": {
+        "type": "string",
+        "enum": [
+          "pendiente",
+          "necesita_aclaracion",
+          "propuesta"
+        ],
+        "title": "EstadoDocumental"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "Ref": {
+        "properties": {
+          "hito_id": {
+            "type": "string",
+            "title": "Hito Id"
+          },
+          "contrato_version": {
+            "type": "string",
+            "title": "Contrato Version"
+          },
+          "revision": {
+            "type": "string",
+            "title": "Revision"
+          }
+        },
+        "type": "object",
+        "required": [
+          "hito_id",
+          "contrato_version",
+          "revision"
+        ],
+        "title": "Ref",
+        "description": "Identifica contra qu\u00e9 se eval\u00faa: hito, versi\u00f3n acordada y revisi\u00f3n exacta."
+      },
+      "ScenarioResult": {
+        "properties": {
+          "scenario_id": {
+            "type": "string",
+            "title": "Scenario Id"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ScenarioStatus"
+          },
+          "detail": {
+            "type": "string",
+            "title": "Detail",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "scenario_id",
+          "status"
+        ],
+        "title": "ScenarioResult"
+      },
+      "ScenarioStatus": {
+        "type": "string",
+        "enum": [
+          "passed",
+          "failed",
+          "skipped",
+          "error"
+        ],
+        "title": "ScenarioStatus"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "Verdict": {
+        "type": "string",
+        "enum": [
+          "favorable",
+          "requiere_correccion",
+          "inconcluso"
+        ],
+        "title": "Verdict"
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
 # Arquitectura web — Next.js
 
-Diseño documental. No hay aplicación, dependencias instaladas ni scaffold de implementación como entregable de esta etapa. Las reglas de negocio están en [proyecto.md](proyecto.md); los agentes se describen en [arquitectura-agentes.md](arquitectura-agentes.md).
+Diseño documental. Existe un scaffold en `apps/web` (landing y marketplace placeholder, route handlers hacia el agente); Phantom/SIWS, persistencia y marketplace real siguen sin implementar. Las reglas de negocio están en [proyecto.md](proyecto.md); los agentes se describen en [arquitectura-agentes.md](arquitectura-agentes.md).
 
 ## Decisión
 
@@ -50,4 +50,4 @@ El diagrama es lógico: no fija HTTP, colas, streaming ni servidor Python concre
 - Almacenamiento, permisos, retención y recuperación de archivos.
 - Versiones, despliegue y observabilidad sin exponer documentos o secretos.
 
-La documentación no autoriza instalar paquetes ni iniciar aplicaciones; esa fase requiere un nuevo pedido.
+El scaffold llama al agente solo desde el servidor con `X-API-Key` (ver [ADR 0001](adr/0001-agente-python-langgraph.md)).
