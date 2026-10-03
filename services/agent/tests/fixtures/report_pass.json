@@ -1,0 +1,293 @@
+{
+ "schemaVersion": "report-1",
+ "run": {
+  "id": "01a1034e-2626-7ce3-adf2-2cdde2ab80a4",
+  "specVersion": "0.1",
+  "runner": {
+   "name": "e2e",
+   "version": "0.16.0"
+  },
+  "status": "passed",
+  "exitCode": 0,
+  "startedAt": "2026-10-03T19:46:56.391Z",
+  "finishedAt": "2026-10-03T19:47:18.838Z",
+  "project": {
+   "id": "proofy-e2e",
+   "configDigest": "9d8d26b4e9b16233ca8e2eefc86c4c050218aab4d9d80ef58cf924d0bdb075d2"
+  },
+  "environment": {
+   "ci": false,
+   "trustNoticeShown": false,
+   "os": "darwin 25.6.0",
+   "arch": "arm64",
+   "runtime": "node v26.0.0"
+  },
+  "vcs": {
+   "commit": "abc",
+   "branch": "feat/x",
+   "dirty": false
+  },
+  "targets": [
+   {
+    "id": "web",
+    "index": 0,
+    "platform": "web",
+    "baseOrigin": "http://127.0.0.1:3000",
+    "environment": "test",
+    "engine": {
+     "name": "web",
+     "version": "0.11.2",
+     "spiVersion": 1
+    },
+    "capabilities": [
+     "actions",
+     "artifacts",
+     "browser",
+     "keyboard",
+     "location",
+     "observation",
+     "pointer",
+     "state"
+    ],
+    "artifactCapabilities": [
+     "screenshot",
+     "trace",
+     "video"
+    ],
+    "stateCapability": true
+   }
+  ],
+  "serialGroups": [],
+  "results": [
+   {
+    "id": "eee745803b61ef787dc5e927635142162af676792ac3554c2ffbd015a5d16471",
+    "testId": "tests/a.e2e.ts::TC-001",
+    "kind": "test",
+    "declarationIndex": 0,
+    "titlePath": [
+     "TC-001: Home loads"
+    ],
+    "file": "tests/landing.e2e.ts",
+    "source": {
+     "file": "tests/landing.e2e.ts",
+     "line": 5,
+     "column": 1
+    },
+    "targetId": "web",
+    "platform": "web",
+    "agent": "default",
+    "repeat": 0,
+    "tags": [],
+    "selected": true,
+    "status": "passed",
+    "attempts": [
+     {
+      "id": "01a1034e-6df0-752d-bf2f-afc6aa54e5de",
+      "index": 0,
+      "status": "passed",
+      "startedAt": "2026-10-03T19:47:14.033Z",
+      "durationMs": 4309,
+      "artifacts": [
+       {
+        "id": "01a1034e-6df0-752d-bf2f-afc6aa54e5de:artifact:0",
+        "kind": "trace",
+        "mediaType": "application/zip",
+        "redaction": "not-required",
+        "producer": {
+         "kind": "attempt"
+        },
+        "path": "web/tests_landing.e2e.ts__landing_20links_20to_20the_20marketplace-5c3b71f1/default/attempt-0/trace/trace.zip",
+        "size": 146309,
+        "sha256": "fd8dad1d54f3426b0c1e9fc47b34abe5a8d8c7c563a5e997d8cd0c33e19f3768"
+       }
+      ],
+      "secondaryErrors": [],
+      "cleanup": "complete",
+      "steps": [
+       {
+        "id": "01a1034e-6df0-752d-bf2f-afc6aa54e5de:0",
+        "index": 0,
+        "kind": "app",
+        "api": "app.open",
+        "label": "/",
+        "status": "passed",
+        "startedAt": "2026-10-03T19:47:15.440Z",
+        "durationMs": 1129,
+        "events": [],
+        "artifacts": [],
+        "source": {
+         "file": "tests/landing.e2e.ts",
+         "line": 6,
+         "column": 13
+        }
+       },
+       {
+        "id": "01a1034e-6df0-752d-bf2f-afc6aa54e5de:1",
+        "index": 1,
+        "kind": "assertion",
+        "api": "expect.toBeVisible",
+        "label": "getByRole(\"heading\", name: \"Proofy\")",
+        "status": "passed",
+        "startedAt": "2026-10-03T19:47:16.572Z",
+        "durationMs": 61,
+        "events": [],
+        "artifacts": [],
+        "source": {
+         "file": "tests/landing.e2e.ts",
+         "line": 7,
+         "column": 65
+        }
+       },
+       {
+        "id": "01a1034e-6df0-752d-bf2f-afc6aa54e5de:2",
+        "index": 2,
+        "kind": "locator",
+        "api": "locator.click",
+        "label": "getByRole(\"link\", name: \"Go to the marketplace\")",
+        "status": "passed",
+        "startedAt": "2026-10-03T19:47:16.634Z",
+        "durationMs": 1505,
+        "events": [],
+        "artifacts": [],
+        "source": {
+         "file": "tests/landing.e2e.ts",
+         "line": 8,
+         "column": 69
+        }
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "eee745803b61ef787dc5e927635142162af676792ac3554c2ffbd015a5d16471",
+    "testId": "tests/a.e2e.ts::TC-002",
+    "kind": "test",
+    "declarationIndex": 0,
+    "titlePath": [
+     "TC-002: Checkout works"
+    ],
+    "file": "tests/landing.e2e.ts",
+    "source": {
+     "file": "tests/landing.e2e.ts",
+     "line": 5,
+     "column": 1
+    },
+    "targetId": "web",
+    "platform": "web",
+    "agent": "default",
+    "repeat": 0,
+    "tags": [],
+    "selected": true,
+    "status": "passed",
+    "attempts": [
+     {
+      "id": "01a1034e-6df0-752d-bf2f-afc6aa54e5de",
+      "index": 0,
+      "status": "passed",
+      "startedAt": "2026-10-03T19:47:14.033Z",
+      "durationMs": 4309,
+      "artifacts": [
+       {
+        "id": "01a1034e-6df0-752d-bf2f-afc6aa54e5de:artifact:0",
+        "kind": "trace",
+        "mediaType": "application/zip",
+        "redaction": "not-required",
+        "producer": {
+         "kind": "attempt"
+        },
+        "path": "web/tests_landing.e2e.ts__landing_20links_20to_20the_20marketplace-5c3b71f1/default/attempt-0/trace/trace.zip",
+        "size": 146309,
+        "sha256": "fd8dad1d54f3426b0c1e9fc47b34abe5a8d8c7c563a5e997d8cd0c33e19f3768"
+       }
+      ],
+      "secondaryErrors": [],
+      "cleanup": "complete",
+      "steps": [
+       {
+        "id": "01a1034e-6df0-752d-bf2f-afc6aa54e5de:0",
+        "index": 0,
+        "kind": "app",
+        "api": "app.open",
+        "label": "/",
+        "status": "passed",
+        "startedAt": "2026-10-03T19:47:15.440Z",
+        "durationMs": 1129,
+        "events": [],
+        "artifacts": [],
+        "source": {
+         "file": "tests/landing.e2e.ts",
+         "line": 6,
+         "column": 13
+        }
+       },
+       {
+        "id": "01a1034e-6df0-752d-bf2f-afc6aa54e5de:1",
+        "index": 1,
+        "kind": "assertion",
+        "api": "expect.toBeVisible",
+        "label": "getByRole(\"heading\", name: \"Proofy\")",
+        "status": "passed",
+        "startedAt": "2026-10-03T19:47:16.572Z",
+        "durationMs": 61,
+        "events": [],
+        "artifacts": [],
+        "source": {
+         "file": "tests/landing.e2e.ts",
+         "line": 7,
+         "column": 65
+        }
+       },
+       {
+        "id": "01a1034e-6df0-752d-bf2f-afc6aa54e5de:2",
+        "index": 2,
+        "kind": "locator",
+        "api": "locator.click",
+        "label": "getByRole(\"link\", name: \"Go to the marketplace\")",
+        "status": "passed",
+        "startedAt": "2026-10-03T19:47:16.634Z",
+        "durationMs": 1505,
+        "events": [],
+        "artifacts": [],
+        "source": {
+         "file": "tests/landing.e2e.ts",
+         "line": 8,
+         "column": 69
+        }
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "errors": [],
+  "summary": {
+   "discovered": 1,
+   "selected": 1,
+   "executed": 1,
+   "passed": 1,
+   "failed": 0,
+   "flaky": 0,
+   "skipped": 0
+  },
+  "limits": {
+   "maxAgentContextBytes": 16384,
+   "maxLedgerBytes": 8192,
+   "maxObservationBytes": 262144,
+   "maxEventsPerStep": 1000,
+   "maxModelTokensPerCall": 64000
+  },
+  "usage": {
+   "discoveredResults": 1,
+   "maxAgentContextBytes": 0,
+   "maxLedgerBytes": 0,
+   "maxObservationBytes": 0,
+   "artifactBytes": 146309,
+   "downloads": 0,
+   "events": 0,
+   "modelTokens": 0,
+   "maxModelCallsInStep": 0,
+   "maxActionStepsInStep": 0
+  }
+ }
+}

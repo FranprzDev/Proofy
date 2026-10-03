@@ -2,12 +2,20 @@
 
 import json
 import re
-from typing import Any, Literal
+from typing import Any, NamedTuple
 
 from defusedxml import ElementTree
 from defusedxml.ElementTree import ParseError
 
-from frontier_agent.graphs.cicd.state import Finding, ScenarioResult, ScenarioStatus
+from frontier_agent.graphs.cicd.state import (
+    E2EStep,
+    E2EStepVerdict,
+    Finding,
+    FindingSource,
+    ScenarioResult,
+    ScenarioStatus,
+    Severity,
+)
 
 TEST_ID_RE = re.compile(r"^\s*(TC-\d+)\s*[:\-]?\s*")
 STARTUP_MARKER = "APP_UNREACHABLE"
@@ -53,8 +61,8 @@ def parse_ruff_json(raw: str) -> list[Finding]:
     items: list[dict[str, Any]] = json.loads(raw)
     return [
         Finding(
-            source="ruff",
-            severity="error",
+            source=FindingSource.RUFF,
+            severity=Severity.ERROR,
             blocking=True,
             path=i.get("filename"),
             line=(i.get("location") or {}).get("row"),
@@ -74,8 +82,8 @@ def parse_eslint_json(raw: str) -> list[Finding]:
             is_error = msg.get("severity", 1) >= 2
             out.append(
                 Finding(
-                    source="eslint",
-                    severity="error" if is_error else "warning",
+                    source=FindingSource.ESLINT,
+                    severity=Severity.ERROR if is_error else Severity.WARNING,
                     blocking=is_error,
                     path=f.get("filePath"),
                     line=msg.get("line"),
@@ -86,9 +94,7 @@ def parse_eslint_json(raw: str) -> list[Finding]:
     return out
 
 
-def _parse_text(
-    raw: str, pattern: re.Pattern[str], source: Literal["mypy", "tsc"]
-) -> list[Finding]:
+def _parse_text(raw: str, pattern: re.Pattern[str], source: FindingSource) -> list[Finding]:
     out: list[Finding] = []
     for ln in raw.splitlines():
         m = pattern.match(ln.strip())
@@ -98,7 +104,7 @@ def _parse_text(
         out.append(
             Finding(
                 source=source,
-                severity="error" if is_error else "warning",
+                severity=Severity.ERROR if is_error else Severity.WARNING,
                 blocking=is_error,
                 path=m["path"],
                 line=int(m["line"]),
@@ -110,21 +116,119 @@ def _parse_text(
 
 
 def parse_mypy_output(raw: str) -> list[Finding]:
-    return _parse_text(raw, _MYPY_RE, "mypy")
+    return _parse_text(raw, _MYPY_RE, FindingSource.MYPY)
 
 
 def parse_tsc_output(raw: str) -> list[Finding]:
-    return _parse_text(raw, _TSC_RE, "tsc")
+    return _parse_text(raw, _TSC_RE, FindingSource.TSC)
 
 
 def unformatted_findings(paths: list[str]) -> list[Finding]:
     return [
         Finding(
-            source="format",
-            severity="error",
+            source=FindingSource.FORMAT,
+            severity=Severity.ERROR,
             blocking=True,
             path=p,
             message="File is not formatted (run the formatter).",
         )
         for p in paths
     ]
+
+
+_ENV_CODES = (
+    STARTUP_MARKER,
+    "ENVIRONMENT_UNAVAILABLE",
+    "AUTH_CREDENTIAL_UNAVAILABLE",
+    "AUTOMATION_UNSUPPORTED",
+    "POLICY_DENIED",
+)
+_STEP_TITLE_KEYS = ("label", "title", "instruction", "api")
+
+
+def _error_text(err: Any) -> str:
+    if isinstance(err, dict):
+        code, msg = err.get("code"), err.get("message")
+        return " ".join(str(x) for x in (code, msg) if x)[:500]
+    return str(err)[:500] if err else ""
+
+
+def _parse_steps(result: dict[str, Any]) -> list[E2EStep]:
+    attempts = result.get("attempts") or []
+    steps: list[E2EStep] = []
+    for raw in (attempts[-1].get("steps") or []) if attempts else []:
+        try:
+            verdict = E2EStepVerdict(str(raw.get("status", "")))
+        except ValueError:
+            continue
+        title = next((str(raw[k]) for k in _STEP_TITLE_KEYS if raw.get(k)), "")
+        detail = _error_text(raw.get("error")) or str(raw.get("summary") or "")[:500]
+        steps.append(E2EStep(title=title[:200], verdict=verdict, detail=detail))
+    return steps
+
+
+class ParsedReport(NamedTuple):
+    results: list[ScenarioResult]
+    run_errors: list[str]
+    commit: str | None
+    dirty: bool | None
+    run_status: str
+
+
+def parse_report_json(raw: str) -> ParsedReport:
+    """TesterArmy `report.json` (schemaVersion report-1). Raises ValueError if invalid.
+
+    `failed` with a blocked step or an environment error code is ERROR (the app or the
+    environment, not the code under review); `interrupted` is ERROR; `flaky` passed.
+    """
+    try:
+        data = json.loads(raw)
+        run = data["run"]
+        raw_results = run.get("results") or []
+        run_errors = [_error_text(e) for e in run.get("errors") or []]
+        vcs = run.get("vcs") or {}
+        commit = vcs.get("commit")
+        dirty = vcs.get("dirty")
+        run_status = str(run.get("status", ""))
+    except (json.JSONDecodeError, KeyError, TypeError, AttributeError) as exc:
+        raise ValueError(f"Invalid e2e report.json: {exc!r}") from exc
+    results: list[ScenarioResult] = []
+    for item in raw_results:
+        if item.get("selected") is False:
+            continue
+        title_path = [str(t) for t in item.get("titlePath") or []]
+        title = " > ".join(title_path)
+        m = re.search(r"TC-\d+", title)
+        steps = _parse_steps(item)
+        attempts = item.get("attempts") or []
+        detail = _error_text(item.get("error")) or (
+            _error_text(attempts[-1].get("error")) if attempts else ""
+        )
+        status_raw = str(item.get("status", ""))
+        if status_raw in ("passed", "flaky"):
+            status = ScenarioStatus.PASSED
+        elif status_raw == "skipped":
+            status = ScenarioStatus.SKIPPED
+        elif status_raw == "failed":
+            env = any(s.verdict == E2EStepVerdict.BLOCKED for s in steps) or any(
+                code in detail for code in _ENV_CODES
+            )
+            status = ScenarioStatus.ERROR if env else ScenarioStatus.FAILED
+        else:
+            status = ScenarioStatus.ERROR
+            detail = detail or f"Test ended as {status_raw or 'unknown'}."
+        results.append(
+            ScenarioResult(
+                scenario_id=m.group(0) if m else (title or "unnamed"),
+                status=status,
+                detail=detail,
+                steps=steps,
+            )
+        )
+    return ParsedReport(
+        results,
+        run_errors,
+        str(commit) if commit else None,
+        dirty if isinstance(dirty, bool) else None,
+        run_status,
+    )

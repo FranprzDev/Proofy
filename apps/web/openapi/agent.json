@@ -460,6 +460,17 @@
             "type": "array",
             "title": "Expected Test Ids"
           },
+          "e2e_report_json": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "E2E Report Json"
+          },
           "e2e_junit_xml": {
             "anyOf": [
               {
@@ -527,6 +538,17 @@
             "type": "array",
             "title": "Expected Test Ids"
           },
+          "e2e_report_json": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "E2E Report Json"
+          },
           "e2e_junit_xml": {
             "anyOf": [
               {
@@ -555,12 +577,91 @@
             "type": "array",
             "title": "Clauses"
           },
+          "status": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ReviewStatus"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "findings": {
             "items": {
               "$ref": "#/components/schemas/Finding"
             },
             "type": "array",
             "title": "Findings"
+          },
+          "e2e_commit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "E2E Commit"
+          },
+          "e2e_dirty": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "E2E Dirty"
+          },
+          "e2e_report_parsed": {
+            "type": "boolean",
+            "title": "E2E Report Parsed",
+            "default": false
+          },
+          "static_tools_parsed": {
+            "items": {
+              "$ref": "#/components/schemas/StaticTool"
+            },
+            "type": "array",
+            "title": "Static Tools Parsed"
+          },
+          "analysis": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Verdict"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "agent_dynamic": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Verdict"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "agent_static": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Verdict"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "summary": {
+            "type": "string",
+            "title": "Summary",
+            "default": ""
           },
           "dynamic_verdict": {
             "anyOf": [
@@ -573,16 +674,6 @@
             ]
           },
           "static_verdict": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/Verdict"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "analysis": {
             "anyOf": [
               {
                 "$ref": "#/components/schemas/Verdict"
@@ -747,34 +838,52 @@
         "enum": [
           "pending",
           "needs_clarification",
-          "proposal"
+          "proposal",
+          "llm_unavailable"
         ],
         "title": "DocumentStatus"
+      },
+      "E2EStep": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "title": "Title",
+            "default": ""
+          },
+          "verdict": {
+            "$ref": "#/components/schemas/E2EStepVerdict"
+          },
+          "detail": {
+            "type": "string",
+            "title": "Detail",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "verdict"
+        ],
+        "title": "E2EStep"
+      },
+      "E2EStepVerdict": {
+        "type": "string",
+        "enum": [
+          "passed",
+          "failed",
+          "blocked",
+          "exhausted",
+          "skipped"
+        ],
+        "title": "E2EStepVerdict",
+        "description": "Per-step verdict of a TesterArmy agent step (`report.json`)."
       },
       "Finding": {
         "properties": {
           "source": {
-            "type": "string",
-            "enum": [
-              "e2e",
-              "ruff",
-              "eslint",
-              "mypy",
-              "tsc",
-              "format",
-              "indentation",
-              "review"
-            ],
-            "title": "Source"
+            "$ref": "#/components/schemas/FindingSource"
           },
           "severity": {
-            "type": "string",
-            "enum": [
-              "error",
-              "warning",
-              "info"
-            ],
-            "title": "Severity"
+            "$ref": "#/components/schemas/Severity"
           },
           "message": {
             "type": "string",
@@ -838,6 +947,20 @@
         ],
         "title": "Finding"
       },
+      "FindingSource": {
+        "type": "string",
+        "enum": [
+          "e2e",
+          "ruff",
+          "eslint",
+          "mypy",
+          "tsc",
+          "format",
+          "indentation",
+          "review"
+        ],
+        "title": "FindingSource"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -850,6 +973,15 @@
         },
         "type": "object",
         "title": "HTTPValidationError"
+      },
+      "Priority": {
+        "type": "string",
+        "enum": [
+          "high",
+          "medium",
+          "low"
+        ],
+        "title": "Priority"
       },
       "PullRequest": {
         "properties": {
@@ -915,6 +1047,15 @@
         "title": "Ref",
         "description": "Identifies what is evaluated against: milestone, agreed version and exact revision."
       },
+      "ReviewStatus": {
+        "type": "string",
+        "enum": [
+          "reviewed",
+          "llm_required",
+          "no_verdict"
+        ],
+        "title": "ReviewStatus"
+      },
       "ScenarioResult": {
         "properties": {
           "scenario_id": {
@@ -928,6 +1069,13 @@
             "type": "string",
             "title": "Detail",
             "default": ""
+          },
+          "steps": {
+            "items": {
+              "$ref": "#/components/schemas/E2EStep"
+            },
+            "type": "array",
+            "title": "Steps"
           }
         },
         "type": "object",
@@ -946,6 +1094,15 @@
           "error"
         ],
         "title": "ScenarioStatus"
+      },
+      "Severity": {
+        "type": "string",
+        "enum": [
+          "error",
+          "warning",
+          "info"
+        ],
+        "title": "Severity"
       },
       "StaticReports": {
         "properties": {
@@ -1005,6 +1162,17 @@
         "title": "StaticReports",
         "description": "Raw tool outputs; None = the tool was not run."
       },
+      "StaticTool": {
+        "type": "string",
+        "enum": [
+          "ruff",
+          "eslint",
+          "mypy",
+          "tsc",
+          "format"
+        ],
+        "title": "StaticTool"
+      },
       "TestCase": {
         "properties": {
           "id": {
@@ -1050,23 +1218,30 @@
             "default": "/"
           },
           "kind": {
-            "type": "string",
-            "enum": [
-              "ui",
-              "api"
-            ],
-            "title": "Kind",
+            "$ref": "#/components/schemas/TestKind",
             "default": "ui"
           },
           "priority": {
-            "type": "string",
-            "enum": [
-              "high",
-              "medium",
-              "low"
-            ],
-            "title": "Priority",
+            "$ref": "#/components/schemas/Priority",
             "default": "medium"
+          },
+          "test_data": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Test Data"
+          },
+          "credentials_role": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Credentials Role"
           }
         },
         "type": "object",
@@ -1078,6 +1253,14 @@
         ],
         "title": "TestCase",
         "description": "Verbal test case: plain-language steps and expectations for an agentic E2E runner."
+      },
+      "TestKind": {
+        "type": "string",
+        "enum": [
+          "ui",
+          "api"
+        ],
+        "title": "TestKind"
       },
       "ValidationError": {
         "properties": {
