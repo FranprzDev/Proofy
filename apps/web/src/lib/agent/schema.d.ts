@@ -136,6 +136,8 @@ export interface components {
             pull_request?: components["schemas"]["PullRequest"] | null;
             /** Expected Test Ids */
             expected_test_ids?: string[];
+            /** E2E Report Json */
+            e2e_report_json?: string | null;
             /** E2E Junit Xml */
             e2e_junit_xml?: string | null;
             /** Results */
@@ -151,6 +153,8 @@ export interface components {
             pull_request?: components["schemas"]["PullRequest"] | null;
             /** Expected Test Ids */
             expected_test_ids?: string[];
+            /** E2E Report Json */
+            e2e_report_json?: string | null;
             /** E2E Junit Xml */
             e2e_junit_xml?: string | null;
             /** Results */
@@ -158,11 +162,30 @@ export interface components {
             static?: components["schemas"]["StaticReports"];
             /** Clauses */
             clauses?: string[];
+            status?: components["schemas"]["ReviewStatus"] | null;
             /** Findings */
             findings?: components["schemas"]["Finding"][];
+            /** E2E Commit */
+            e2e_commit?: string | null;
+            /** E2E Dirty */
+            e2e_dirty?: boolean | null;
+            /**
+             * E2E Report Parsed
+             * @default false
+             */
+            e2e_report_parsed: boolean;
+            /** Static Tools Parsed */
+            static_tools_parsed?: components["schemas"]["StaticTool"][];
+            analysis?: components["schemas"]["Verdict"] | null;
+            agent_dynamic?: components["schemas"]["Verdict"] | null;
+            agent_static?: components["schemas"]["Verdict"] | null;
+            /**
+             * Summary
+             * @default
+             */
+            summary: string;
             dynamic_verdict?: components["schemas"]["Verdict"] | null;
             static_verdict?: components["schemas"]["Verdict"] | null;
-            analysis?: components["schemas"]["Verdict"] | null;
             verdict?: components["schemas"]["Verdict"] | null;
             /**
              * Attestation Authorized
@@ -235,19 +258,31 @@ export interface components {
          * DocumentStatus
          * @enum {string}
          */
-        DocumentStatus: "pending" | "needs_clarification" | "proposal";
+        DocumentStatus: "pending" | "needs_clarification" | "proposal" | "llm_unavailable";
+        /** E2EStep */
+        E2EStep: {
+            /**
+             * Title
+             * @default
+             */
+            title: string;
+            verdict: components["schemas"]["E2EStepVerdict"];
+            /**
+             * Detail
+             * @default
+             */
+            detail: string;
+        };
+        /**
+         * E2EStepVerdict
+         * @description Per-step verdict of a TesterArmy agent step (`report.json`).
+         * @enum {string}
+         */
+        E2EStepVerdict: "passed" | "failed" | "blocked" | "exhausted" | "skipped";
         /** Finding */
         Finding: {
-            /**
-             * Source
-             * @enum {string}
-             */
-            source: "e2e" | "ruff" | "eslint" | "mypy" | "tsc" | "format" | "indentation" | "review";
-            /**
-             * Severity
-             * @enum {string}
-             */
-            severity: "error" | "warning" | "info";
+            source: components["schemas"]["FindingSource"];
+            severity: components["schemas"]["Severity"];
             /** Message */
             message: string;
             /** Path */
@@ -264,11 +299,21 @@ export interface components {
              */
             blocking: boolean;
         };
+        /**
+         * FindingSource
+         * @enum {string}
+         */
+        FindingSource: "e2e" | "ruff" | "eslint" | "mypy" | "tsc" | "format" | "indentation" | "review";
         /** HTTPValidationError */
         HTTPValidationError: {
             /** Detail */
             detail?: components["schemas"]["ValidationError"][];
         };
+        /**
+         * Priority
+         * @enum {string}
+         */
+        Priority: "high" | "medium" | "low";
         /** PullRequest */
         PullRequest: {
             /** Number */
@@ -305,6 +350,11 @@ export interface components {
             /** Revision */
             revision: string;
         };
+        /**
+         * ReviewStatus
+         * @enum {string}
+         */
+        ReviewStatus: "reviewed" | "llm_required" | "no_verdict";
         /** ScenarioResult */
         ScenarioResult: {
             /** Scenario Id */
@@ -315,12 +365,19 @@ export interface components {
              * @default
              */
             detail: string;
+            /** Steps */
+            steps?: components["schemas"]["E2EStep"][];
         };
         /**
          * ScenarioStatus
          * @enum {string}
          */
         ScenarioStatus: "passed" | "failed" | "skipped" | "error";
+        /**
+         * Severity
+         * @enum {string}
+         */
+        Severity: "error" | "warning" | "info";
         /**
          * StaticReports
          * @description Raw tool outputs; None = the tool was not run.
@@ -337,6 +394,11 @@ export interface components {
             /** Unformatted Files */
             unformatted_files?: string[];
         };
+        /**
+         * StaticTool
+         * @enum {string}
+         */
+        StaticTool: "ruff" | "eslint" | "mypy" | "tsc" | "format";
         /**
          * TestCase
          * @description Verbal test case: plain-language steps and expectations for an agentic E2E runner.
@@ -361,19 +423,22 @@ export interface components {
              * @default /
              */
             start_path: string;
-            /**
-             * Kind
-             * @default ui
-             * @enum {string}
-             */
-            kind: "ui" | "api";
-            /**
-             * Priority
-             * @default medium
-             * @enum {string}
-             */
-            priority: "high" | "medium" | "low";
+            /** @default ui */
+            kind: components["schemas"]["TestKind"];
+            /** @default medium */
+            priority: components["schemas"]["Priority"];
+            /** Test Data */
+            test_data?: {
+                [key: string]: string;
+            };
+            /** Credentials Role */
+            credentials_role?: string | null;
         };
+        /**
+         * TestKind
+         * @enum {string}
+         */
+        TestKind: "ui" | "api";
         /** ValidationError */
         ValidationError: {
             /** Location */

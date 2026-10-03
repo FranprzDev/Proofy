@@ -6,13 +6,10 @@ from langgraph.graph import END, START, StateGraph
 from langgraph.graph.state import CompiledStateGraph
 
 from frontier_agent.graphs.cicd.nodes import (
-    analyze,
-    evaluate_dynamic,
-    evaluate_static,
-    make_review_code,
+    collect_evidence,
+    make_review,
     render_comment,
     validate_and_authorize,
-    verify_refs,
 )
 from frontier_agent.graphs.cicd.state import CicdInput, CicdState
 
@@ -23,11 +20,8 @@ def build_cicd_graph(
 ) -> CompiledStateGraph[Any, Any, Any, Any]:
     g = StateGraph(CicdState, input_schema=CicdInput)
     steps: list[tuple[str, Any]] = [
-        ("verify_refs", verify_refs),
-        ("evaluate_dynamic", evaluate_dynamic),
-        ("evaluate_static", evaluate_static),
-        ("review_code", make_review_code(llm)),
-        ("analyze", analyze),
+        ("collect_evidence", collect_evidence),
+        ("review", make_review(llm)),
         ("validate_and_authorize", validate_and_authorize),
         ("render_comment", render_comment),
     ]

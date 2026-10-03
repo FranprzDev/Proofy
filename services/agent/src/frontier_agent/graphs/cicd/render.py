@@ -1,16 +1,16 @@
 """Markdown PR comment for the provider."""
 
-from frontier_agent.graphs.cicd.state import CicdState, Finding
+from frontier_agent.graphs.cicd.state import CicdState, Finding, FindingSource
 
 _TITLES = {
-    "e2e": "E2E tests",
-    "ruff": "Ruff",
-    "eslint": "ESLint",
-    "mypy": "mypy",
-    "tsc": "TypeScript",
-    "format": "Formatting",
-    "indentation": "Indentation",
-    "review": "Code review",
+    FindingSource.E2E: "E2E tests",
+    FindingSource.RUFF: "Ruff",
+    FindingSource.ESLINT: "ESLint",
+    FindingSource.MYPY: "mypy",
+    FindingSource.TSC: "TypeScript",
+    FindingSource.FORMAT: "Formatting",
+    FindingSource.INDENTATION: "Indentation",
+    FindingSource.REVIEW: "Code review",
 }
 _VERDICT = {
     "favorable": "Favorable",
@@ -43,6 +43,8 @@ def render_comment(state: CicdState) -> str:
         f"| Blocking items | {len(blocking)} |",
         f"| Warnings | {len(warnings)} |",
     ]
+    if state.summary:
+        out += ["", "### Reviewer summary", state.summary]
     if blocking:
         out += ["", "### What to fix"]
         for src, title in _TITLES.items():

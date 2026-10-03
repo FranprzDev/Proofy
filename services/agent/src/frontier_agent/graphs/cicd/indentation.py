@@ -2,7 +2,7 @@
 
 from pathlib import PurePosixPath
 
-from frontier_agent.graphs.cicd.state import ChangedFile, Finding
+from frontier_agent.graphs.cicd.state import ChangedFile, Finding, FindingSource, Severity
 
 INDENT_UNITS = {
     ".py": 4,
@@ -24,8 +24,8 @@ def check_indentation(path: str, content: str) -> list[Finding]:
 
     def err(line: int | None, msg: str) -> Finding:
         return Finding(
-            source="indentation",
-            severity="error",
+            source=FindingSource.INDENTATION,
+            severity=Severity.ERROR,
             blocking=True,
             path=path,
             line=line,

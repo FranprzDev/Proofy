@@ -11,6 +11,8 @@ from frontier_agent.graphs.document import DocumentStatus, build_document_graph
 
 Subparsers = Any
 EXIT_NEEDS_CLARIFICATION = 3
+EXIT_LLM_UNAVAILABLE = 4
+EXIT_AGENT_FAILED = 5
 
 
 def _serve(_: argparse.Namespace) -> int:
@@ -47,6 +49,14 @@ def _plan(args: argparse.Namespace) -> int:
             "answers": [a for a in answers if a],
         }
     )
+    if out["status"] == DocumentStatus.LLM_UNAVAILABLE:
+        for item in out["pending_items"]:
+            print(f"error: {item}", file=sys.stderr)
+        return EXIT_LLM_UNAVAILABLE
+    if out["status"] == DocumentStatus.PENDING:
+        for item in out["pending_items"]:
+            print(f"error: {item}", file=sys.stderr)
+        return EXIT_AGENT_FAILED
     if out["status"] == DocumentStatus.NEEDS_CLARIFICATION:
         print("Needs clarification before proposing tests:")
         for a in out["ambiguities"]:

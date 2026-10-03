@@ -69,3 +69,38 @@ def test_tsc() -> None:
 def test_unformatted() -> None:
     (f,) = unformatted_findings(["a.py"])
     assert f.source == "format" and f.blocking
+
+
+def test_report_json_real_sample() -> None:
+    from frontier_agent.graphs.cicd.parsers import parse_report_json
+    from frontier_agent.graphs.cicd.state import E2EStepVerdict
+
+    rep = parse_report_json((FIX / "testerarmy_report_sample.json").read_text())
+    assert rep.commit == "2a9ae923f5943f34c21a4ad7cc5aedeb810e66b8" and rep.dirty is False
+    (r,) = rep.results
+    assert r.status == ScenarioStatus.PASSED
+    assert r.scenario_id == "landing links to the marketplace"
+    assert r.steps and all(s.verdict == E2EStepVerdict.PASSED for s in r.steps)
+    assert r.steps[0].title == "/"
+
+
+def test_report_json_failed_and_blocked() -> None:
+    from frontier_agent.graphs.cicd.parsers import parse_report_json
+    from frontier_agent.graphs.cicd.state import E2EStepVerdict
+
+    res = {r.scenario_id: r for r in parse_report_json((FIX / "report_failed.json").read_text())[0]}
+    assert res["TC-001"].status == ScenarioStatus.PASSED
+    assert res["TC-002"].status == ScenarioStatus.FAILED
+    assert "Pay not visible" in res["TC-002"].detail
+    rep = parse_report_json((FIX / "report_blocked.json").read_text())
+    blocked = {r.scenario_id: r for r in rep.results}["TC-002"]
+    assert blocked.status == ScenarioStatus.ERROR
+    assert blocked.steps[-1].verdict == E2EStepVerdict.BLOCKED
+
+
+def test_report_json_invalid() -> None:
+    from frontier_agent.graphs.cicd.parsers import parse_report_json
+
+    for raw in ("nope", "{}", "[]"):
+        with pytest.raises(ValueError):
+            parse_report_json(raw)
