@@ -450,3 +450,54 @@ Se eligió permitir que el Frontier Agent bloquee por revisión técnica aunque 
 [Phantom: Sign In With Solana](https://github.com/phantom/sign-in-with-solana) es la referencia para diseñar el acceso. Verificar documentación actual al implementar.
 
 Producto acordado: código verificable de freelancers o factories, criterios claros aceptados previamente, evaluación del Frontier Agent, aprobación y pago automáticos, comisión porcentual y resolución humana de disputas. La definición permite iniciar el prototipo local/devnet, conservando visibles los parámetros técnicos y operativos pendientes.
+
+## 22. Trazabilidad de lo acordado durante la conversación
+
+Esta matriz permite comprobar que la división documental conserva los acuerdos. Resume decisiones vigentes, no añade requisitos nuevos ni afirma implementación. Las propuestas no confirmadas y los detalles técnicos abiertos no se convierten en decisiones por aparecer en este documento.
+
+### Decisiones vigentes
+
+| Acuerdo de la conversación | Dónde está documentado |
+| --- | --- |
+| La experiencia sirve a cliente y proveedor; freelancer o factory sirven para el ejemplo. Se evalúa código, no tipo de organización | Sección 2 |
+| Cualquiera crea el proyecto e invita; ninguna parte activa unilateralmente el acuerdo | Sección 3 |
+| Documento rector cargado en almacenamiento externo y procesado con ayuda de IA | Sección 3; agente documental en arquitectura-agentes.md |
+| Grill compartido por inciso, con autor de respuestas y desacuerdos visibles | Sección 3 |
+| Calidad significa adecuación al documento rector; no satisfacción ilimitada ni ausencia garantizada de bugs | Secciones 2 y 3 |
+| Los casos se leen y acuerdan como escenarios legibles, independientes del lenguaje, antes de activar el contrato | Sección 3 |
+| Cada inciso sobre código tiene escenarios y resultados esperados; «rápida» debe tener condición medible y contexto | Sección 3 |
+| Tests incompletos no sustituyen el documento rector; se corrige y acuerda la verificación sin inventar obligaciones | Sección 3 |
+| Enfoque inicial en código y comportamiento; otras obligaciones se muestran explícitamente fuera de la verificación del agente | Sección 3 |
+| El nombre del sistema de agentes es Frontier Agent, no bot; el visto bueno es atestación, no shard/shred | Secciones 7 y 19 |
+| El pipeline acompaña al desarrollador durante el trabajo, no evalúa únicamente al entregar | Secciones 1, 7 y 8 |
+| El agente informa y comenta qué corregir; el proveedor modifica el código | Sección 7; arquitectura-agentes.md, agente CI/CD |
+| Cada observación explica específicamente el incumplimiento con inciso/escenario, esperado, observado y evidencia reproducible | Sección 7 |
+| El agente puede bloquear por revisión técnica aunque los escenarios pasen; debe explicar la objeción | Secciones 7 y 20 |
+| La seguridad es prioritaria y bloqueante | Secciones 7 y 8 |
+| Entorno caído o resultado inconcluso deja en espera, sin aprobación ni pago | Secciones 7 y 17 |
+| Cambio de código invalida aprobación; antes de liquidar se restaura lo aprobado o se acuerda nuevo hito, con nueva verificación | Sección 6 |
+| Corregir una obligación existente no es agregar alcance; alcance nuevo exige acuerdo, escenarios, importe y plazo | Secciones 3 y 10 |
+| Contrato y criterios claros se aceptan inicialmente por ambas partes; no hay aceptación manual rutinaria de cada entrega | Secciones 3, 5 y 9 |
+| Aprobación de hito válido y pago automáticos, sin botón obligatorio de cobro | Secciones 5 y 9 |
+| Humanos de la plataforma resuelven disputas; el agente no arbitra | Secciones 9 y 10 |
+| Comisión porcentual del importe acordado; tasa numérica todavía no elegida | Sección 12 |
+| Acceso mediante wallet Solana con Phantom; conectar y autenticar/aceptar/pagar son acciones distintas | Sección 2; arquitectura-web.md |
+| Next.js para frontend y backend inicial con landing y marketplace | Secciones 13 y 16; arquitectura-web.md |
+| Python + LangGraph para Frontier Agent con dos agentes: documental y CI/CD | Secciones 16 y 19; arquitectura-agentes.md |
+| Esta etapa solo entrega documentos y HTML; no crear aplicaciones, instalar dependencias ni ejecutar agentes | Introducción; arquitectura-web.md y arquitectura-agentes.md |
+
+### Decisiones anteriores reemplazadas explícitamente
+
+| Alternativa anterior | Decisión vigente |
+| --- | --- |
+| Empezar exclusivamente con freelancer y dejar factories para después | El ejemplo admite cualquiera; mismos criterios para el código |
+| Cliente acepta cada entrega y freelancer pulsa «Solicitar liquidación» | Aprobación y pago automáticos conforme a reglas aceptadas inicialmente |
+| Marketplace fuera del alcance inicial | Landing y marketplace incluidos en la web inicial; operaciones concretas pendientes |
+| NestJS con LangGraph como backend de agentes | Python con LangGraph; Next.js mantiene frontend/backend web |
+| Crear estructura básica de aplicaciones en esta fase | Solo documentación, por aclaración explícita posterior |
+
+### Pendientes que no se presentarán como acordados
+
+Porcentaje concreto, activo, financiamiento total/por hito, base final del cobro de comisión, poderes humanos y orden disputa/pago, límites del veto técnico, controles mínimos concretos, recuperación de wallets, operaciones del marketplace, proveedor IA, persistencia, SDK, endpoints, modelos de estado y despliegue. Secciones 14 y 16 y ambos documentos de arquitectura conservan estos puntos abiertos.
+
+Las métricas y ejemplos tomados como mejoras de la comparación con Dylan están identificados como propuestas o líneas de validación. Sus antecedentes competitivos no se presentan como investigación verificada. Su documento original permanece intacto.
