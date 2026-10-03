@@ -18,3 +18,8 @@ export type ChangedFile = Schemas["ChangedFile"];
 export type StaticReports = Schemas["StaticReports"];
 export type ScenarioResult = Schemas["ScenarioResult"];
 export type Finding = Schemas["Finding"];
+
+// The Python agent also accepts a TesterArmy `report.json` string; typed loosely until schema.d.ts is regenerated.
+export type CicdRequest = CicdInput & { e2e_report_json?: string | null };
+/** Every CicdRequest field except `expected` (the server builds that one). */
+export type CicdEvidence = Omit<CicdRequest, "expected">;

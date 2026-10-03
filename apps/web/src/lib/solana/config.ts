@@ -1,16 +1,22 @@
 // Public cluster config (usable on client and server). Mainnet is intentionally unsupported.
 import { address, type Address } from "@solana/kit";
 
-const CLUSTERS = {
-  devnet: { chain: "solana:devnet", rpc: "https://api.devnet.solana.com", ws: "wss://api.devnet.solana.com" },
-  testnet: { chain: "solana:testnet", rpc: "https://api.testnet.solana.com", ws: "wss://api.testnet.solana.com" },
-  localnet: { chain: "solana:localnet", rpc: "http://127.0.0.1:8899", ws: "ws://127.0.0.1:8900" },
-} as const;
+export enum SolanaCluster {
+  Devnet = "devnet",
+  Testnet = "testnet",
+  Localnet = "localnet",
+}
+export type Cluster = SolanaCluster;
 
-export type Cluster = keyof typeof CLUSTERS;
+const CLUSTERS: Record<SolanaCluster, { chain: string; rpc: string; ws: string }> = {
+  [SolanaCluster.Devnet]: { chain: "solana:devnet", rpc: "https://api.devnet.solana.com", ws: "wss://api.devnet.solana.com" },
+  [SolanaCluster.Testnet]: { chain: "solana:testnet", rpc: "https://api.testnet.solana.com", ws: "wss://api.testnet.solana.com" },
+  [SolanaCluster.Localnet]: { chain: "solana:localnet", rpc: "http://127.0.0.1:8899", ws: "ws://127.0.0.1:8900" },
+};
 
-export function resolveCluster(raw: string | undefined): Cluster {
-  return raw && raw in CLUSTERS ? (raw as Cluster) : "devnet";
+/** Unknown values (including mainnet names) fall back to devnet. */
+export function resolveCluster(raw: string | undefined): SolanaCluster {
+  return Object.values(SolanaCluster).find((c) => c === raw) ?? SolanaCluster.Devnet;
 }
 
 export const cluster: Cluster = resolveCluster(process.env.NEXT_PUBLIC_SOLANA_CLUSTER);
@@ -28,7 +34,7 @@ export function getEscrowProgramId(): Address {
 }
 
 export function explorerTxUrl(signature: string): string {
-  const suffix = cluster === "localnet" ? "?cluster=custom&customUrl=" + encodeURIComponent(rpcUrl) : `?cluster=${cluster}`;
+  const suffix = cluster === SolanaCluster.Localnet ? "?cluster=custom&customUrl=" + encodeURIComponent(rpcUrl) : `?cluster=${cluster}`;
   return `https://explorer.solana.com/tx/${signature}${suffix}`;
 }
 

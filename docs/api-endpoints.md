@@ -139,6 +139,7 @@ Libera un hito **solo** si el Agente 2 devuelve `attestation_authorized: true` y
     "pull_request": { "number": 7, "head_sha": "abc123", "base_sha": "def456", "title": "Login page" },
     "expected_test_ids": ["TC-001"],
     "e2e_junit_xml": "<testsuite>...</testsuite>",
+    "e2e_report_json": "{ ...TesterArmy report.json... }",
     "static": { "ruff_json": "[]", "eslint_json": "[]", "tsc_output": "", "unformatted_files": [] }
   }
 }

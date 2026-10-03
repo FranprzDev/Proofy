@@ -40,3 +40,7 @@ await fetch("/api/auth/verify", { method: "POST", headers: { "Content-Type": "ap
 ```
 
 `chainId` must equal `NEXT_PUBLIC_SOLANA_CLUSTER` (default `devnet`).
+
+## Tests
+
+`pnpm test` runs vitest unit tests for the pure auth/Solana helpers (SIWS, tokens, discriminators vs the IDL, release verdict checks).
