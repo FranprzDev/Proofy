@@ -404,6 +404,30 @@
         ],
         "title": "Ambiguity"
       },
+      "ChangedFile": {
+        "properties": {
+          "path": {
+            "type": "string",
+            "title": "Path"
+          },
+          "content": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Content"
+          }
+        },
+        "type": "object",
+        "required": [
+          "path"
+        ],
+        "title": "ChangedFile"
+      },
       "CicdInput": {
         "properties": {
           "expected": {
@@ -419,12 +443,50 @@
               }
             ]
           },
+          "pull_request": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PullRequest"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "expected_test_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Expected Test Ids"
+          },
+          "e2e_junit_xml": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "E2E Junit Xml"
+          },
           "results": {
             "items": {
               "$ref": "#/components/schemas/ScenarioResult"
             },
             "type": "array",
             "title": "Results"
+          },
+          "static": {
+            "$ref": "#/components/schemas/StaticReports"
+          },
+          "clauses": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Clauses"
           }
         },
         "type": "object",
@@ -448,12 +510,77 @@
               }
             ]
           },
+          "pull_request": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PullRequest"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "expected_test_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Expected Test Ids"
+          },
+          "e2e_junit_xml": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "E2E Junit Xml"
+          },
           "results": {
             "items": {
               "$ref": "#/components/schemas/ScenarioResult"
             },
             "type": "array",
             "title": "Results"
+          },
+          "static": {
+            "$ref": "#/components/schemas/StaticReports"
+          },
+          "clauses": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Clauses"
+          },
+          "findings": {
+            "items": {
+              "$ref": "#/components/schemas/Finding"
+            },
+            "type": "array",
+            "title": "Findings"
+          },
+          "dynamic_verdict": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Verdict"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "static_verdict": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Verdict"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "analysis": {
             "anyOf": [
@@ -486,6 +613,11 @@
             },
             "type": "array",
             "title": "Observations"
+          },
+          "pr_comment": {
+            "type": "string",
+            "title": "Pr Comment",
+            "default": ""
           }
         },
         "type": "object",
@@ -510,6 +642,11 @@
             },
             "type": "array",
             "title": "Answers"
+          },
+          "contract_version": {
+            "type": "string",
+            "title": "Contract Version",
+            "default": "draft"
           }
         },
         "type": "object",
@@ -536,6 +673,11 @@
             "type": "array",
             "title": "Answers"
           },
+          "contract_version": {
+            "type": "string",
+            "title": "Contract Version",
+            "default": "draft"
+          },
           "status": {
             "$ref": "#/components/schemas/DocumentStatus",
             "default": "pending"
@@ -554,12 +696,26 @@
             "type": "array",
             "title": "Ambiguities"
           },
-          "scenarios": {
+          "test_cases": {
             "items": {
-              "$ref": "#/components/schemas/Scenario"
+              "$ref": "#/components/schemas/TestCase"
             },
             "type": "array",
-            "title": "Scenarios"
+            "title": "Test Cases"
+          },
+          "out_of_scope": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Out Of Scope"
+          },
+          "e2e_suite": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "E2E Suite"
           },
           "pending_items": {
             "items": {
@@ -595,6 +751,93 @@
         ],
         "title": "DocumentStatus"
       },
+      "Finding": {
+        "properties": {
+          "source": {
+            "type": "string",
+            "enum": [
+              "e2e",
+              "ruff",
+              "eslint",
+              "mypy",
+              "tsc",
+              "format",
+              "indentation",
+              "review"
+            ],
+            "title": "Source"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "error",
+              "warning",
+              "info"
+            ],
+            "title": "Severity"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Path"
+          },
+          "line": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Line"
+          },
+          "rule": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rule"
+          },
+          "test_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Test Id"
+          },
+          "blocking": {
+            "type": "boolean",
+            "title": "Blocking",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "source",
+          "severity",
+          "message"
+        ],
+        "title": "Finding"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -607,6 +850,46 @@
         },
         "type": "object",
         "title": "HTTPValidationError"
+      },
+      "PullRequest": {
+        "properties": {
+          "number": {
+            "type": "integer",
+            "title": "Number"
+          },
+          "head_sha": {
+            "type": "string",
+            "title": "Head Sha"
+          },
+          "base_sha": {
+            "type": "string",
+            "title": "Base Sha",
+            "default": ""
+          },
+          "title": {
+            "type": "string",
+            "title": "Title",
+            "default": ""
+          },
+          "diff": {
+            "type": "string",
+            "title": "Diff",
+            "default": ""
+          },
+          "changed_files": {
+            "items": {
+              "$ref": "#/components/schemas/ChangedFile"
+            },
+            "type": "array",
+            "title": "Changed Files"
+          }
+        },
+        "type": "object",
+        "required": [
+          "number",
+          "head_sha"
+        ],
+        "title": "PullRequest"
       },
       "Ref": {
         "properties": {
@@ -631,29 +914,6 @@
         ],
         "title": "Ref",
         "description": "Identifies what is evaluated against: milestone, agreed version and exact revision."
-      },
-      "Scenario": {
-        "properties": {
-          "clause": {
-            "type": "string",
-            "title": "Clause"
-          },
-          "description": {
-            "type": "string",
-            "title": "Description"
-          },
-          "expected_result": {
-            "type": "string",
-            "title": "Expected Result"
-          }
-        },
-        "type": "object",
-        "required": [
-          "clause",
-          "description",
-          "expected_result"
-        ],
-        "title": "Scenario"
       },
       "ScenarioResult": {
         "properties": {
@@ -686,6 +946,138 @@
           "error"
         ],
         "title": "ScenarioStatus"
+      },
+      "StaticReports": {
+        "properties": {
+          "ruff_json": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ruff Json"
+          },
+          "eslint_json": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Eslint Json"
+          },
+          "mypy_output": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mypy Output"
+          },
+          "tsc_output": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tsc Output"
+          },
+          "unformatted_files": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Unformatted Files"
+          }
+        },
+        "type": "object",
+        "title": "StaticReports",
+        "description": "Raw tool outputs; None = the tool was not run."
+      },
+      "TestCase": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "clause": {
+            "type": "string",
+            "title": "Clause"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "objective": {
+            "type": "string",
+            "title": "Objective"
+          },
+          "preconditions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Preconditions"
+          },
+          "steps": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Steps"
+          },
+          "expected_results": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Expected Results"
+          },
+          "start_path": {
+            "type": "string",
+            "title": "Start Path",
+            "default": "/"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "ui",
+              "api"
+            ],
+            "title": "Kind",
+            "default": "ui"
+          },
+          "priority": {
+            "type": "string",
+            "enum": [
+              "high",
+              "medium",
+              "low"
+            ],
+            "title": "Priority",
+            "default": "medium"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "clause",
+          "title",
+          "objective"
+        ],
+        "title": "TestCase",
+        "description": "Verbal test case: plain-language steps and expectations for an agentic E2E runner."
       },
       "ValidationError": {
         "properties": {

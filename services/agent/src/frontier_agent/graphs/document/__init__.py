@@ -4,6 +4,7 @@ from frontier_agent.graphs.document.state import (
     DocumentInput,
     DocumentState,
     DocumentStatus,
+    TestCase,
 )
 
 __all__ = [
@@ -11,5 +12,6 @@ __all__ = [
     "DocumentInput",
     "DocumentState",
     "DocumentStatus",
+    "TestCase",
     "build_document_graph",
 ]

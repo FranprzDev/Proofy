@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="e2e" tests="2">
+    <testcase name="TC-001: Home loads" classname="e2e"/>
+    <testcase name="TC-002: Checkout works" classname="e2e"/>
+  </testsuite>
+</testsuites>

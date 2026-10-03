@@ -12,6 +12,8 @@ class Settings(BaseSettings):
     # Cost caps: configurable via env.
     llm_max_retries: int = 2
     llm_max_tokens: int = 4096
+    # Off = document agent uses deterministic heuristics (no network).
+    llm_enabled: bool = False
     graph_recursion_limit: int = 25
     checkpointer: str = "memory"
     log_level: str = "INFO"
