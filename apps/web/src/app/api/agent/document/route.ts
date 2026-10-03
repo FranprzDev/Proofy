@@ -1,7 +1,7 @@
 import { agent } from "@/lib/agent/client";
-import { handle } from "@/lib/agent/route-helpers";
+import { handle, readJsonObject } from "@/lib/agent/route-helpers";
 import type { DocumentInput } from "@/lib/agent/types";
 
 export async function POST(request: Request) {
-  return handle(async () => agent.document((await request.json()) as DocumentInput));
+  return handle(async () => agent.document(await readJsonObject<DocumentInput>(request)));
 }
