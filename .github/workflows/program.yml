@@ -40,8 +40,10 @@ jobs:
       - name: Clippy
         run: cargo clippy -p frontier-escrow --all-targets -- -D warnings
 
+      # CI has no program keypair; --ignore-keys skips the keypair/declare_id check.
+      # The program id is baked in from declare_id!, so the .so and IDL are unaffected.
       - name: Build
-        run: anchor build
+        run: anchor build --ignore-keys
 
       - name: Test
         run: cargo test -p frontier-escrow

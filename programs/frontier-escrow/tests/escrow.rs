@@ -1,5 +1,5 @@
 use anchor_lang::{AccountDeserialize, InstructionData, ToAccountMetas};
-use frontier_escrow::state::{Agreement, Config};
+use frontier_escrow::state::{Agreement, Config, MilestoneStatus};
 use litesvm::LiteSVM;
 use solana_instruction::Instruction;
 use solana_keypair::Keypair;
@@ -275,7 +275,7 @@ fn happy_path_fee_split() {
     assert_eq!(bal(&env, &env.provider.pubkey()) - p0, 2 * SOL - fee);
     assert_eq!(bal(&env, &env.vault), 3 * SOL);
     let a = read_agreement(&env);
-    assert_eq!(a.milestones[0].status, 1);
+    assert_eq!(a.milestones[0].status, MilestoneStatus::Released);
     assert_eq!(a.milestones[0].evidence_hash, [9u8; 32]);
 
     release(&mut env, 1, &attestor).unwrap();
@@ -356,7 +356,10 @@ fn resolve_refund_to_client() {
     assert_eq!(bal(&env, &env.client.pubkey()) - c0, 2 * SOL);
     assert_eq!(bal(&env, &env.provider.pubkey()), p0);
     assert_eq!(bal(&env, &env.treasury), t0);
-    assert_eq!(read_agreement(&env).milestones[0].status, 3);
+    assert_eq!(
+        read_agreement(&env).milestones[0].status,
+        MilestoneStatus::Refunded
+    );
     assert_eq!(bal(&env, &env.vault), 3 * SOL);
     // cannot resolve twice
     assert_err(resolve(&mut env, 0, false, &admin), E::InvalidStatus);
@@ -373,7 +376,10 @@ fn resolve_pay_provider() {
     let fee = 3 * SOL * 250 / 10_000;
     assert_eq!(bal(&env, &env.treasury) - t0, fee);
     assert_eq!(bal(&env, &env.provider.pubkey()) - p0, 3 * SOL - fee);
-    assert_eq!(read_agreement(&env).milestones[1].status, 1);
+    assert_eq!(
+        read_agreement(&env).milestones[1].status,
+        MilestoneStatus::Released
+    );
 }
 
 #[test]
@@ -409,4 +415,66 @@ fn invalid_agreements_rejected() {
     assert_err(create(&mut env, vec![0]), E::InvalidMilestones);
     env.provider = env.client.insecure_clone();
     assert_err(create(&mut env, vec![SOL]), E::SameParty);
+}
+
+#[test]
+fn dispute_before_funding_rejected() {
+    let mut env = setup();
+    init_config(&mut env, 250).unwrap();
+    create(&mut env, vec![SOL]).unwrap();
+    accept(&mut env, HASH).unwrap();
+    let client = env.client.insecure_clone();
+    assert_err(dispute(&mut env, 0, &client), E::NotFunded);
+}
+
+#[test]
+fn double_dispute_rejected() {
+    let mut env = funded_env();
+    let client = env.client.insecure_clone();
+    dispute(&mut env, 0, &client).unwrap();
+    assert_err(dispute(&mut env, 0, &client), E::InvalidStatus);
+    assert_err(dispute(&mut env, 9, &client), E::InvalidIndex);
+}
+
+#[test]
+fn released_milestone_cannot_be_disputed_or_resolved() {
+    let mut env = funded_env();
+    let attestor = env.attestor.insecure_clone();
+    release(&mut env, 0, &attestor).unwrap();
+    let client = env.client.insecure_clone();
+    assert_err(dispute(&mut env, 0, &client), E::InvalidStatus);
+    let admin = env.admin.insecure_clone();
+    assert_err(resolve(&mut env, 0, false, &admin), E::InvalidStatus);
+}
+
+#[test]
+fn minimum_milestone_amount_covers_provider_rent_at_max_fee() {
+    let mut env = setup();
+    init_config(&mut env, 1000).unwrap();
+    let rent_min = env.svm.minimum_balance_for_rent_exemption(0);
+    // Smallest amount whose 90% net share still reaches the rent minimum.
+    let min = (rent_min * 10_000).div_ceil(9_000);
+    assert_err(create(&mut env, vec![min - 1]), E::InvalidMilestones);
+    create(&mut env, vec![min]).unwrap();
+}
+
+#[test]
+fn status_is_one_byte_tag_in_account_data() {
+    let mut env = funded_env();
+    let status_at = |env: &Env, i: usize| {
+        let data = env.svm.get_account(&env.agreement).unwrap().data;
+        // discriminator + client + provider + id + hash + 2 bools + count
+        let base = 8 + 32 + 32 + 8 + 32 + 1 + 1 + 1;
+        data[base + i * (8 + 1 + 32) + 8]
+    };
+    assert_eq!(status_at(&env, 0), 0);
+    let client = env.client.insecure_clone();
+    dispute(&mut env, 0, &client).unwrap();
+    assert_eq!(status_at(&env, 0), 2);
+    let admin = env.admin.insecure_clone();
+    resolve(&mut env, 0, true, &admin).unwrap();
+    assert_eq!(status_at(&env, 0), 1);
+    dispute(&mut env, 1, &client).unwrap();
+    resolve(&mut env, 1, false, &admin).unwrap();
+    assert_eq!(status_at(&env, 1), 3);
 }
