@@ -21,7 +21,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/documental/invoke": {
+    "/document/invoke": {
         parameters: {
             query?: never;
             header?: never;
@@ -30,15 +30,15 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Documental Invoke */
-        post: operations["documental_invoke_documental_invoke_post"];
+        /** Document Invoke */
+        post: operations["document_invoke_document_invoke_post"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/documental/stream": {
+    "/document/stream": {
         parameters: {
             query?: never;
             header?: never;
@@ -47,8 +47,8 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Documental Stream */
-        post: operations["documental_stream_documental_stream_post"];
+        /** Document Stream */
+        post: operations["document_stream_document_stream_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -100,7 +100,7 @@ export interface paths {
         put?: never;
         /**
          * Github Webhook
-         * @description Stub: valida firma y parsea `workflow_run`. No llama a GitHub ni al grafo todavía.
+         * @description Stub: validates the signature and parses `workflow_run`. No GitHub/graph call yet.
          */
         post: operations["github_webhook_webhooks_github_post"];
         delete?: never;
@@ -113,90 +113,81 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        /** Ambiguedad */
-        Ambiguedad: {
-            /** Inciso */
-            inciso: string;
-            /** Motivo */
-            motivo: string;
-            /** Pregunta Sugerida */
-            pregunta_sugerida: string;
+        /** Ambiguity */
+        Ambiguity: {
+            /** Clause */
+            clause: string;
+            /** Reason */
+            reason: string;
+            /** Suggested Question */
+            suggested_question: string;
         };
         /** CicdInput */
         CicdInput: {
-            esperado: components["schemas"]["Ref"];
-            evidencia_ref?: components["schemas"]["Ref"] | null;
-            /** Resultados */
-            resultados?: components["schemas"]["ScenarioResult"][];
+            expected: components["schemas"]["Ref"];
+            evidence_ref?: components["schemas"]["Ref"] | null;
+            /** Results */
+            results?: components["schemas"]["ScenarioResult"][];
         };
         /** CicdState */
         CicdState: {
-            esperado: components["schemas"]["Ref"];
-            evidencia_ref?: components["schemas"]["Ref"] | null;
-            /** Resultados */
-            resultados?: components["schemas"]["ScenarioResult"][];
-            analisis?: components["schemas"]["Verdict"] | null;
-            veredicto?: components["schemas"]["Verdict"] | null;
+            expected: components["schemas"]["Ref"];
+            evidence_ref?: components["schemas"]["Ref"] | null;
+            /** Results */
+            results?: components["schemas"]["ScenarioResult"][];
+            analysis?: components["schemas"]["Verdict"] | null;
+            verdict?: components["schemas"]["Verdict"] | null;
             /**
-             * Atestacion Autorizada
+             * Attestation Authorized
              * @default false
              */
-            atestacion_autorizada: boolean;
-            /** Observaciones */
-            observaciones?: string[];
+            attestation_authorized: boolean;
+            /** Observations */
+            observations?: string[];
         };
-        /** DocumentalInput */
-        DocumentalInput: {
-            /** Contrato Id */
-            contrato_id: string;
-            /** Documento */
-            documento: string;
-            /** Respuestas */
-            respuestas?: string[];
+        /** DocumentInput */
+        DocumentInput: {
+            /** Contract Id */
+            contract_id: string;
+            /** Document */
+            document: string;
+            /** Answers */
+            answers?: string[];
         };
-        /** DocumentalState */
-        DocumentalState: {
-            /** Contrato Id */
-            contrato_id: string;
-            /** Documento */
-            documento: string;
-            /** Respuestas */
-            respuestas?: string[];
-            /** @default pendiente */
-            estado: components["schemas"]["EstadoDocumental"];
-            /** Incisos */
-            incisos?: string[];
-            /** Ambiguedades */
-            ambiguedades?: components["schemas"]["Ambiguedad"][];
-            /** Escenarios */
-            escenarios?: components["schemas"]["Escenario"][];
-            /** Pendientes */
-            pendientes?: string[];
+        /** DocumentState */
+        DocumentState: {
+            /** Contract Id */
+            contract_id: string;
+            /** Document */
+            document: string;
+            /** Answers */
+            answers?: string[];
+            /** @default pending */
+            status: components["schemas"]["DocumentStatus"];
+            /** Clauses */
+            clauses?: string[];
+            /** Ambiguities */
+            ambiguities?: components["schemas"]["Ambiguity"][];
+            /** Scenarios */
+            scenarios?: components["schemas"]["Scenario"][];
+            /** Pending Items */
+            pending_items?: string[];
             /**
-             * Aceptado Por Cliente
+             * Accepted By Client
              * @default false
              */
-            aceptado_por_cliente: boolean;
+            accepted_by_client: boolean;
             /**
-             * Aceptado Por Proveedor
+             * Accepted By Provider
              * @default false
              */
-            aceptado_por_proveedor: boolean;
-        };
-        /** Escenario */
-        Escenario: {
-            /** Inciso */
-            inciso: string;
-            /** Descripcion */
-            descripcion: string;
-            /** Resultado Esperado */
-            resultado_esperado: string;
+            accepted_by_provider: boolean;
         };
         /**
-         * EstadoDocumental
+         * DocumentStatus
          * @enum {string}
          */
-        EstadoDocumental: "pendiente" | "necesita_aclaracion" | "propuesta";
+        DocumentStatus: "pending" | "needs_clarification" | "proposal";
         /** HTTPValidationError */
         HTTPValidationError: {
             /** Detail */
@@ -204,15 +195,24 @@ export interface components {
         };
         /**
          * Ref
-         * @description Identifica contra qué se evalúa: hito, versión acordada y revisión exacta.
+         * @description Identifies what is evaluated against: milestone, agreed version and exact revision.
          */
         Ref: {
-            /** Hito Id */
-            hito_id: string;
-            /** Contrato Version */
-            contrato_version: string;
+            /** Milestone Id */
+            milestone_id: string;
+            /** Contract Version */
+            contract_version: string;
             /** Revision */
             revision: string;
+        };
+        /** Scenario */
+        Scenario: {
+            /** Clause */
+            clause: string;
+            /** Description */
+            description: string;
+            /** Expected Result */
+            expected_result: string;
         };
         /** ScenarioResult */
         ScenarioResult: {
@@ -247,7 +247,7 @@ export interface components {
          * Verdict
          * @enum {string}
          */
-        Verdict: "favorable" | "requiere_correccion" | "inconcluso";
+        Verdict: "favorable" | "needs_fix" | "inconclusive";
     };
     responses: never;
     parameters: never;
@@ -279,7 +279,7 @@ export interface operations {
             };
         };
     };
-    documental_invoke_documental_invoke_post: {
+    document_invoke_document_invoke_post: {
         parameters: {
             query?: {
                 thread_id?: string | null;
@@ -292,7 +292,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["DocumentalInput"];
+                "application/json": components["schemas"]["DocumentInput"];
             };
         };
         responses: {
@@ -302,7 +302,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["DocumentalState"];
+                    "application/json": components["schemas"]["DocumentState"];
                 };
             };
             /** @description Validation Error */
@@ -316,7 +316,7 @@ export interface operations {
             };
         };
     };
-    documental_stream_documental_stream_post: {
+    document_stream_document_stream_post: {
         parameters: {
             query?: {
                 thread_id?: string | null;
@@ -329,7 +329,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["DocumentalInput"];
+                "application/json": components["schemas"]["DocumentInput"];
             };
         };
         responses: {

@@ -7,8 +7,8 @@ from frontier_agent.config import Settings, get_settings
 
 
 def make_checkpointer(settings: Settings | None = None) -> BaseCheckpointSaver[Any]:
-    """Fábrica única: aquí se cambia a Postgres/SQLite cuando haya persistencia."""
+    """Single factory: switch to Postgres/SQLite here once persistence is needed."""
     s = settings or get_settings()
     if s.checkpointer == "memory":
         return MemorySaver()
-    raise ValueError(f"checkpointer no soportado todavía: {s.checkpointer}")
+    raise ValueError(f"checkpointer not supported yet: {s.checkpointer}")

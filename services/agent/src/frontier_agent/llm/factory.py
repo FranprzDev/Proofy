@@ -5,7 +5,7 @@ from frontier_agent.config import Settings, get_settings
 
 
 def get_chat_model(settings: Settings | None = None) -> BaseChatModel:
-    """Modelo de chat agnóstico: cambiar de proveedor es cambiar LLM_MODEL."""
+    """Provider-agnostic chat model: switching provider means changing LLM_MODEL."""
     s = settings or get_settings()
     return init_chat_model(
         s.llm_model,

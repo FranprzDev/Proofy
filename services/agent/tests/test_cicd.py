@@ -7,9 +7,9 @@ def test_cicd_eval_dataset() -> None:
     assert all(ok for _, ok, _ in rows), rows
 
 
-def test_favorable_autoriza_solo_con_misma_revision() -> None:
+def test_favorable_authorizes_only_with_same_revision() -> None:
     g = build_cicd_graph()
-    ref = {"hito_id": "h", "contrato_version": "v", "revision": "a"}
-    base = {"esperado": ref, "resultados": [{"scenario_id": "s", "status": "passed"}]}
-    assert g.invoke({**base, "evidencia_ref": ref})["atestacion_autorizada"] is True
-    assert g.invoke(base)["atestacion_autorizada"] is False
+    ref = {"milestone_id": "m", "contract_version": "v", "revision": "a"}
+    base = {"expected": ref, "results": [{"scenario_id": "s", "status": "passed"}]}
+    assert g.invoke({**base, "evidence_ref": ref})["attestation_authorized"] is True
+    assert g.invoke(base)["attestation_authorized"] is False

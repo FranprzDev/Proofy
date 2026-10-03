@@ -1,4 +1,4 @@
-"""Harness mínimo: JSONL {"id", "input", "expected"}; compara con la salida del grafo."""
+"""Minimal harness: JSONL {"id", "input", "expected"}; compares against the graph output."""
 
 import json
 from pathlib import Path
@@ -16,15 +16,15 @@ def run_cicd_eval(graph: Any, cases: list[dict[str, Any]]) -> list[tuple[str, bo
     rows = []
     for c in cases:
         out = graph.invoke(c["input"])
-        got = str(out["veredicto"])
-        rows.append((c["id"], got == c["expected"]["veredicto"], got))
+        got = str(out["verdict"])
+        rows.append((c["id"], got == c["expected"]["verdict"], got))
     return rows
 
 
-def run_documental_eval(graph: Any, cases: list[dict[str, Any]]) -> list[tuple[str, bool, str]]:
+def run_document_eval(graph: Any, cases: list[dict[str, Any]]) -> list[tuple[str, bool, str]]:
     rows = []
     for c in cases:
         out = graph.invoke(c["input"])
-        got = str(out["estado"])
-        rows.append((c["id"], got == c["expected"]["estado"], got))
+        got = str(out["status"])
+        rows.append((c["id"], got == c["expected"]["status"], got))
     return rows

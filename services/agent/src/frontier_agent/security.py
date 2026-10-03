@@ -11,17 +11,17 @@ def require_api_key(
     settings: Annotated[Settings, Depends(get_settings)],
     x_api_key: Annotated[str | None, Header()] = None,
 ) -> None:
-    """API key compartida Next.js -> Python, comparada en tiempo constante."""
+    """Shared Next.js -> Python API key, compared in constant time."""
     if not settings.agent_api_key:
-        raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, "API key no configurada")
+        raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, "API key not configured")
     if x_api_key is None or not hmac.compare_digest(
         x_api_key.encode(), settings.agent_api_key.encode()
     ):
-        raise HTTPException(status.HTTP_401_UNAUTHORIZED, "API key inválida")
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Invalid API key")
 
 
 def verify_github_signature(secret: str, body: bytes, signature: str | None) -> bool:
-    """Valida X-Hub-Signature-256 (HMAC SHA-256 del cuerpo crudo)."""
+    """Validate X-Hub-Signature-256 (HMAC SHA-256 of the raw body)."""
     if not secret or not signature:
         return False
     expected = "sha256=" + hmac.new(secret.encode(), body, hashlib.sha256).hexdigest()

@@ -13,10 +13,10 @@ from frontier_agent.checkpoint import make_checkpointer
 from frontier_agent.config import Settings, get_settings
 from frontier_agent.github import WorkflowRunEvent
 from frontier_agent.graphs.cicd import CicdInput, CicdState, build_cicd_graph
-from frontier_agent.graphs.documental import (
-    DocumentalInput,
-    DocumentalState,
-    build_documental_graph,
+from frontier_agent.graphs.document import (
+    DocumentInput,
+    DocumentState,
+    build_document_graph,
 )
 from frontier_agent.logging_config import configure_logging
 from frontier_agent.security import require_api_key, verify_github_signature
@@ -28,7 +28,7 @@ def create_app() -> FastAPI:
     configure_logging(get_settings().log_level)
     app = FastAPI(title="Frontier Agent", version="0.1.0")
     checkpointer = make_checkpointer()
-    documental = build_documental_graph(checkpointer)
+    document = build_document_graph(checkpointer)
     cicd = build_cicd_graph(checkpointer)
     auth = [Depends(require_api_key)]
 
@@ -51,20 +51,20 @@ def create_app() -> FastAPI:
     async def health() -> dict[str, str]:
         return {"status": "ok"}
 
-    @app.post("/documental/invoke", response_model=DocumentalState, dependencies=auth)
-    async def documental_invoke(body: DocumentalInput, thread_id: str | None = None) -> Any:
-        log.info("documental.invoke", extra={"ctx": {"contrato_id": body.contrato_id}})
-        return await documental.ainvoke(body.model_dump(), cfg(thread_id))
+    @app.post("/document/invoke", response_model=DocumentState, dependencies=auth)
+    async def document_invoke(body: DocumentInput, thread_id: str | None = None) -> Any:
+        log.info("document.invoke", extra={"ctx": {"contract_id": body.contract_id}})
+        return await document.ainvoke(body.model_dump(), cfg(thread_id))
 
-    @app.post("/documental/stream", dependencies=auth)
-    async def documental_stream(
-        body: DocumentalInput, thread_id: str | None = None
+    @app.post("/document/stream", dependencies=auth)
+    async def document_stream(
+        body: DocumentInput, thread_id: str | None = None
     ) -> EventSourceResponse:
-        return EventSourceResponse(stream(documental, body.model_dump(), thread_id))
+        return EventSourceResponse(stream(document, body.model_dump(), thread_id))
 
     @app.post("/cicd/invoke", response_model=CicdState, dependencies=auth)
     async def cicd_invoke(body: CicdInput, thread_id: str | None = None) -> Any:
-        log.info("cicd.invoke", extra={"ctx": {"hito_id": body.esperado.hito_id}})
+        log.info("cicd.invoke", extra={"ctx": {"milestone_id": body.expected.milestone_id}})
         return await cicd.ainvoke(body.model_dump(), cfg(thread_id))
 
     @app.post("/cicd/stream", dependencies=auth)
@@ -78,16 +78,16 @@ def create_app() -> FastAPI:
         x_hub_signature_256: Annotated[str | None, Header()] = None,
         x_github_event: Annotated[str | None, Header()] = None,
     ) -> dict[str, str]:
-        """Stub: valida firma y parsea `workflow_run`. No llama a GitHub ni al grafo todavía."""
+        """Stub: validates the signature and parses `workflow_run`. No GitHub/graph call yet."""
         body = await request.body()
         if not verify_github_signature(settings.github_webhook_secret, body, x_hub_signature_256):
-            raise HTTPException(status.HTTP_401_UNAUTHORIZED, "firma inválida")
+            raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Invalid signature")
         if x_github_event != "workflow_run":
             return {"status": "ignored"}
         try:
             event = WorkflowRunEvent.model_validate_json(body)
         except ValidationError as exc:
-            raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, "evento inválido") from exc
+            raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, "Invalid event") from exc
         log.info(
             "github.workflow_run",
             extra={"ctx": {"run_id": event.workflow_run.id, "sha": event.workflow_run.head_sha}},

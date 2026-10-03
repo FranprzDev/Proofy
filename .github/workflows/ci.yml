@@ -19,7 +19,7 @@ jobs:
       - run: uv run ruff format --check .
       - run: uv run mypy
       - run: uv run pytest -q
-      - name: OpenAPI sin cambios pendientes
+      - name: OpenAPI has no pending changes
         run: |
           uv run python -m frontier_agent.export_openapi /tmp/agent.json
           diff -u ../../apps/web/openapi/agent.json /tmp/agent.json

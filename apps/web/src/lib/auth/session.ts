@@ -1,6 +1,6 @@
-// TODO(auth): acceso con Phantom + SIWS (Sign-In With Solana). Conectar la wallet no basta:
-// hay que verificar la firma del mensaje y emitir una sesión. Ver docs/arquitectura-web.md.
-// Placeholder: hasta implementarlo, los route handlers no tienen identidad real.
+// TODO(auth): Phantom + SIWS (Sign-In With Solana) access. Connecting the wallet is not enough:
+// the message signature must be verified and a session issued. See docs/arquitectura-web.md.
+// Placeholder: until implemented, route handlers have no real identity.
 
 export type Session = { wallet: string } | null;
 

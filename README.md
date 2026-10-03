@@ -1,35 +1,35 @@
 # Proofy
 
-Pagos por hito verificados por agentes (Solana). Documentación en [docs/](docs/): [producto](docs/proyecto.md), [web](docs/arquitectura-web.md), [agentes](docs/arquitectura-agentes.md), [ADR](docs/adr/).
+Milestone payments verified by agents (Solana). Product docs live in [docs/](docs/) (Spanish): [product](docs/proyecto.md), [web](docs/arquitectura-web.md), [agents](docs/arquitectura-agentes.md), [ADR](docs/adr/).
 
-| Carpeta | Contenido |
+| Folder | Contents |
 | --- | --- |
-| `apps/web` | Next.js (App Router, TypeScript, Tailwind, pnpm): landing, marketplace y route handlers que llaman al agente |
-| `services/agent` | Python 3.12 + LangGraph + FastAPI (uv): agentes documental y CI/CD |
+| `apps/web` | Next.js (App Router, TypeScript, Tailwind, pnpm): landing, marketplace and route handlers that call the agent |
+| `services/agent` | Python 3.12 + LangGraph + FastAPI (uv): document and CI/CD agents |
 
-## Requisitos
+## Requirements
 
-Node 22+, pnpm, Python 3.12+ y [uv](https://docs.astral.sh/uv/).
+Node 22+, pnpm, Python 3.12+ and [uv](https://docs.astral.sh/uv/).
 
-## Levantar
+## Run
 
 ```bash
 make setup
-cp services/agent/.env.example services/agent/.env   # AGENT_API_KEY, GOOGLE_API_KEY (solo para Gemini real)
-cp apps/web/.env.example apps/web/.env.local         # AGENT_API_URL, AGENT_API_KEY (misma clave que el agente)
+cp services/agent/.env.example services/agent/.env   # AGENT_API_KEY, GOOGLE_API_KEY (real Gemini only)
+cp apps/web/.env.example apps/web/.env.local         # AGENT_API_URL, AGENT_API_KEY (same key as the agent)
 make dev-agent   # http://localhost:8000  (/docs, /health)
 make dev-web     # http://localhost:3000
 ```
 
-`AGENT_API_KEY` solo vive en servidores: la web la usa desde route handlers, nunca el navegador.
+`AGENT_API_KEY` only lives on servers: the web app uses it from route handlers, never the browser.
 
-## Verificar
+## Verify
 
 ```bash
-make check       # lint + typecheck + tests + build, sin red ni claves reales
-make gen-api     # regenera OpenAPI y tipos TS tras cambiar contratos del agente
+make check       # lint + typecheck + tests + build, no network or real keys
+make gen-api     # regenerate OpenAPI and TS types after changing agent contracts
 ```
 
-## Estado
+## Status
 
-Scaffold: los grafos son stubs sin LLM, el webhook de GitHub solo valida firma y la sesión (Phantom/SIWS) es un placeholder. No hay pagos ni claves de atestación.
+Scaffold: graphs are stubs without an LLM, the GitHub webhook only validates the signature, and the session (Phantom/SIWS) is a placeholder. There are no payments or attestation keys.

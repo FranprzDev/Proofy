@@ -24,7 +24,7 @@ typecheck:
 build:
 	cd apps/web && pnpm build
 
-# Regenera el contrato OpenAPI del agente y los tipos TypeScript de la web.
+# Regenerate the agent OpenAPI contract and the web TypeScript types.
 gen-api:
 	cd services/agent && uv run python -m frontier_agent.export_openapi ../../apps/web/openapi/agent.json
 	cd apps/web && pnpm gen:api

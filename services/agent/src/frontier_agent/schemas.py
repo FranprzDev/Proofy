@@ -1,4 +1,4 @@
-"""Contratos compartidos entre agentes y Next.js (se exportan a OpenAPI)."""
+"""Contracts shared between agents and Next.js (exported to OpenAPI)."""
 
 from enum import StrEnum
 
@@ -7,15 +7,15 @@ from pydantic import BaseModel, ConfigDict
 
 class Verdict(StrEnum):
     FAVORABLE = "favorable"
-    REQUIERE_CORRECCION = "requiere_correccion"
-    INCONCLUSO = "inconcluso"
+    NEEDS_FIX = "needs_fix"
+    INCONCLUSIVE = "inconclusive"
 
 
 class Ref(BaseModel):
-    """Identifica contra qué se evalúa: hito, versión acordada y revisión exacta."""
+    """Identifies what is evaluated against: milestone, agreed version and exact revision."""
 
     model_config = ConfigDict(frozen=True)
 
-    hito_id: str
-    contrato_version: str
+    milestone_id: str
+    contract_version: str
     revision: str

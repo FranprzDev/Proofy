@@ -1,4 +1,4 @@
-"""Logging estructurado (JSON) sin dependencias. Solo identificadores; nunca payloads privados."""
+"""Structured (JSON) logging with no dependencies. Identifiers only; never private payloads."""
 
 import json
 import logging

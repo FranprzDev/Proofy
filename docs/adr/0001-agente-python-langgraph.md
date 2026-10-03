@@ -12,7 +12,7 @@ Dos agentes (documental y CI/CD) con estados explícitos, trazabilidad por hito/
 - Evidencia de CI/CD por webhook `workflow_run` de GitHub App, por SHA exacto, firma HMAC. En el scaffold solo contrato + endpoint stub.
 - Checkpoints: `MemorySaver` tras una fábrica; Postgres más adelante.
 - Observabilidad: logging JSON estructurado sin payloads privados; sin LangSmith/OTel por ahora.
-- Ante documentación ambigua o incompleta el agente documental avisa (`necesita_aclaracion` + preguntas sugeridas) y no propone escenarios.
+- Ante documentación ambigua o incompleta el agente documental avisa (`needs_clarification` + preguntas sugeridas) y no propone escenarios.
 - Un resultado favorable solo autoriza si la evidencia coincide con hito, versión y revisión esperados; faltante o inconsistente = inconcluso. El servicio no ejecuta pagos ni guarda claves de atestación.
 
 ## Consecuencias

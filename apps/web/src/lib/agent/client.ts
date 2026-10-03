@@ -1,6 +1,6 @@
 import "server-only";
 
-import type { CicdInput, CicdState, DocumentalInput, DocumentalState } from "./types";
+import type { CicdInput, CicdState, DocumentInput, DocumentState } from "./types";
 
 export class AgentError extends Error {
   constructor(
@@ -14,7 +14,7 @@ export class AgentError extends Error {
 function config() {
   const url = process.env.AGENT_API_URL;
   const key = process.env.AGENT_API_KEY;
-  if (!url || !key) throw new AgentError(503, "Servicio de agentes no configurado");
+  if (!url || !key) throw new AgentError(503, "Agent service not configured");
   return { url: url.replace(/\/$/, ""), key };
 }
 
@@ -28,15 +28,15 @@ async function post<TIn, TOut>(path: string, body: TIn, threadId?: string): Prom
     cache: "no-store",
   });
   if (!res.ok) {
-    // No se reenvía el cuerpo del upstream: puede contener datos privados.
-    throw new AgentError(res.status === 401 || res.status === 503 ? 502 : res.status, "Error del servicio de agentes");
+    // The upstream body is not forwarded: it may contain private data.
+    throw new AgentError(res.status === 401 || res.status === 503 ? 502 : res.status, "Agent service error");
   }
   return (await res.json()) as TOut;
 }
 
 export const agent = {
-  documental: (input: DocumentalInput, threadId?: string) =>
-    post<DocumentalInput, DocumentalState>("/documental/invoke", input, threadId),
+  document: (input: DocumentInput, threadId?: string) =>
+    post<DocumentInput, DocumentState>("/document/invoke", input, threadId),
   cicd: (input: CicdInput, threadId?: string) =>
     post<CicdInput, CicdState>("/cicd/invoke", input, threadId),
 };

@@ -1,4 +1,4 @@
-"""Contrato del evento `workflow_run` de la GitHub App (solo los campos usados)."""
+"""Contract for the GitHub App `workflow_run` event (only the fields we use)."""
 
 from pydantic import BaseModel, ConfigDict
 
@@ -8,7 +8,7 @@ class WorkflowRun(BaseModel):
 
     id: int
     name: str | None = None
-    head_sha: str  # SHA exacto: identifica la revisión evaluada
+    head_sha: str  # Exact SHA: identifies the evaluated revision
     status: str
     conclusion: str | None = None
 

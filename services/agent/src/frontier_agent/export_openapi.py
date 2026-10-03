@@ -1,4 +1,4 @@
-"""Exporta el contrato OpenAPI para generar el cliente TypeScript en Next.js."""
+"""Export the OpenAPI contract used to generate the TypeScript client in Next.js."""
 
 import json
 import sys

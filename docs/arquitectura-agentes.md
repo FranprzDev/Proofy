@@ -12,7 +12,7 @@ Python con LangGraph organiza dos agentes especializados del producto: documenta
 
 **Trabajo:** ayudar a interpretar incisos, detectar ambigüedades, conducir el grill compartido, proponer condiciones medibles y escenarios legibles y hacer visible la cobertura inciso→escenarios→resultado esperado.
 
-**Salida prevista:** si hay ambigüedades o falta información, estado `necesita_aclaracion` con la lista de ambigüedades (inciso, motivo, pregunta sugerida): el agente avisa y no propone escenarios ni inventa condiciones. Si no, propuesta de requisitos y escenarios ligada a una versión, pendientes y obligaciones fuera del alcance verificable. Ambas partes deben leer y aceptar el acuerdo antes de activarlo; el agente no acepta por ellas.
+**Salida prevista:** si hay ambigüedades o falta información, estado `needs_clarification` con la lista de ambigüedades (`clause`, `reason`, `suggested_question`): el agente avisa y no propone escenarios ni inventa condiciones. Si no, propuesta de requisitos y escenarios ligada a una versión, pendientes y obligaciones fuera del alcance verificable. Ambas partes deben leer y aceptar el acuerdo antes de activarlo; el agente no acepta por ellas.
 
 No se presupone que la IA comprende el contrato sin errores. No redefine unilateralmente montos, alcance ni obligaciones; no convierte tests en sustituto del documento rector.
 
@@ -63,7 +63,7 @@ Tomadas para el scaffold (`services/agent`, ver [ADR 0001](adr/0001-agente-pytho
 - **LLM:** agnóstico mediante `LLM_MODEL=<proveedor>:<modelo>`; Gemini por defecto para la demo. Topes por env de reintentos, tokens y recursión del grafo.
 - **Evidencia CI/CD:** llega por webhook `workflow_run` de una GitHub App, identificada por SHA exacto; firma HMAC con secret por env. El scaffold solo valida firma y parsea el evento (stub), sin llamar a GitHub.
 - **Persistencia:** `MemorySaver` tras una fábrica de checkpointer; Postgres después.
-- **Ambigüedad:** el grafo documental termina en `necesita_aclaracion` en vez de proponer escenarios; vuelve a evaluarse cuando llegan `respuestas`. El scaffold detecta marcas léxicas (stub determinista); el criterio real lo definirá el LLM.
+- **Ambigüedad:** el grafo documental termina en `needs_clarification` en vez de proponer escenarios; vuelve a evaluarse cuando llegan `answers`. El scaffold detecta marcas léxicas (stub determinista); el criterio real lo definirá el LLM.
 - **Observabilidad:** logging estructurado JSON, solo identificadores y sin payloads privados. Sin LangSmith ni OpenTelemetry por ahora.
 
 Los grafos son stubs sin LLM: la separación análisis → validación/autorización existe, sin ejecución de pago ni claves.

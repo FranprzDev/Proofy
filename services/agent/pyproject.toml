@@ -1,7 +1,7 @@
 [project]
 name = "frontier-agent"
 version = "0.1.0"
-description = "Agentes documental y CI/CD del Frontier Agent (LangGraph)"
+description = "Frontier Agent: document and CI/CD agents (LangGraph)"
 readme = "README.md"
 authors = [
     { name = "FranPrzDev", email = "franciscoperezdeveloper@gmail.com" }

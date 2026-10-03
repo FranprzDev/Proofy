@@ -19,15 +19,15 @@ class ScenarioResult(BaseModel):
 
 
 class CicdInput(BaseModel):
-    esperado: Ref
-    # Referencia de la que proviene la evidencia del pipeline.
-    evidencia_ref: Ref | None = None
-    resultados: list[ScenarioResult] = Field(default_factory=list)
+    expected: Ref
+    # Reference the pipeline evidence comes from.
+    evidence_ref: Ref | None = None
+    results: list[ScenarioResult] = Field(default_factory=list)
 
 
 class CicdState(CicdInput):
-    analisis: Verdict | None = None
-    veredicto: Verdict | None = None
-    # Solo la validación puede marcarlo; no ejecuta pagos ni usa claves.
-    atestacion_autorizada: bool = False
-    observaciones: list[str] = Field(default_factory=list)
+    analysis: Verdict | None = None
+    verdict: Verdict | None = None
+    # Only validation may set it; it neither executes payments nor uses keys.
+    attestation_authorized: bool = False
+    observations: list[str] = Field(default_factory=list)

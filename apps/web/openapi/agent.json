@@ -27,10 +27,10 @@
         }
       }
     },
-    "/documental/invoke": {
+    "/document/invoke": {
       "post": {
-        "summary": "Documental Invoke",
-        "operationId": "documental_invoke_documental_invoke_post",
+        "summary": "Document Invoke",
+        "operationId": "document_invoke_document_invoke_post",
         "parameters": [
           {
             "name": "thread_id",
@@ -70,7 +70,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/DocumentalInput"
+                "$ref": "#/components/schemas/DocumentInput"
               }
             }
           }
@@ -81,7 +81,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DocumentalState"
+                  "$ref": "#/components/schemas/DocumentState"
                 }
               }
             }
@@ -99,10 +99,10 @@
         }
       }
     },
-    "/documental/stream": {
+    "/document/stream": {
       "post": {
-        "summary": "Documental Stream",
-        "operationId": "documental_stream_documental_stream_post",
+        "summary": "Document Stream",
+        "operationId": "document_stream_document_stream_post",
         "parameters": [
           {
             "name": "thread_id",
@@ -142,7 +142,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/DocumentalInput"
+                "$ref": "#/components/schemas/DocumentInput"
               }
             }
           }
@@ -314,7 +314,7 @@
     "/webhooks/github": {
       "post": {
         "summary": "Github Webhook",
-        "description": "Stub: valida firma y parsea `workflow_run`. No llama a GitHub ni al grafo todav\u00eda.",
+        "description": "Stub: validates the signature and parses `workflow_run`. No GitHub/graph call yet.",
         "operationId": "github_webhook_webhooks_github_post",
         "parameters": [
           {
@@ -381,35 +381,35 @@
   },
   "components": {
     "schemas": {
-      "Ambiguedad": {
+      "Ambiguity": {
         "properties": {
-          "inciso": {
+          "clause": {
             "type": "string",
-            "title": "Inciso"
+            "title": "Clause"
           },
-          "motivo": {
+          "reason": {
             "type": "string",
-            "title": "Motivo"
+            "title": "Reason"
           },
-          "pregunta_sugerida": {
+          "suggested_question": {
             "type": "string",
-            "title": "Pregunta Sugerida"
+            "title": "Suggested Question"
           }
         },
         "type": "object",
         "required": [
-          "inciso",
-          "motivo",
-          "pregunta_sugerida"
+          "clause",
+          "reason",
+          "suggested_question"
         ],
-        "title": "Ambiguedad"
+        "title": "Ambiguity"
       },
       "CicdInput": {
         "properties": {
-          "esperado": {
+          "expected": {
             "$ref": "#/components/schemas/Ref"
           },
-          "evidencia_ref": {
+          "evidence_ref": {
             "anyOf": [
               {
                 "$ref": "#/components/schemas/Ref"
@@ -419,26 +419,26 @@
               }
             ]
           },
-          "resultados": {
+          "results": {
             "items": {
               "$ref": "#/components/schemas/ScenarioResult"
             },
             "type": "array",
-            "title": "Resultados"
+            "title": "Results"
           }
         },
         "type": "object",
         "required": [
-          "esperado"
+          "expected"
         ],
         "title": "CicdInput"
       },
       "CicdState": {
         "properties": {
-          "esperado": {
+          "expected": {
             "$ref": "#/components/schemas/Ref"
           },
-          "evidencia_ref": {
+          "evidence_ref": {
             "anyOf": [
               {
                 "$ref": "#/components/schemas/Ref"
@@ -448,14 +448,14 @@
               }
             ]
           },
-          "resultados": {
+          "results": {
             "items": {
               "$ref": "#/components/schemas/ScenarioResult"
             },
             "type": "array",
-            "title": "Resultados"
+            "title": "Results"
           },
-          "analisis": {
+          "analysis": {
             "anyOf": [
               {
                 "$ref": "#/components/schemas/Verdict"
@@ -465,7 +465,7 @@
               }
             ]
           },
-          "veredicto": {
+          "verdict": {
             "anyOf": [
               {
                 "$ref": "#/components/schemas/Verdict"
@@ -475,148 +475,125 @@
               }
             ]
           },
-          "atestacion_autorizada": {
+          "attestation_authorized": {
             "type": "boolean",
-            "title": "Atestacion Autorizada",
+            "title": "Attestation Authorized",
             "default": false
           },
-          "observaciones": {
+          "observations": {
             "items": {
               "type": "string"
             },
             "type": "array",
-            "title": "Observaciones"
+            "title": "Observations"
           }
         },
         "type": "object",
         "required": [
-          "esperado"
+          "expected"
         ],
         "title": "CicdState"
       },
-      "DocumentalInput": {
+      "DocumentInput": {
         "properties": {
-          "contrato_id": {
+          "contract_id": {
             "type": "string",
-            "title": "Contrato Id"
+            "title": "Contract Id"
           },
-          "documento": {
+          "document": {
             "type": "string",
-            "title": "Documento"
+            "title": "Document"
           },
-          "respuestas": {
+          "answers": {
             "items": {
               "type": "string"
             },
             "type": "array",
-            "title": "Respuestas"
+            "title": "Answers"
           }
         },
         "type": "object",
         "required": [
-          "contrato_id",
-          "documento"
+          "contract_id",
+          "document"
         ],
-        "title": "DocumentalInput"
+        "title": "DocumentInput"
       },
-      "DocumentalState": {
+      "DocumentState": {
         "properties": {
-          "contrato_id": {
+          "contract_id": {
             "type": "string",
-            "title": "Contrato Id"
+            "title": "Contract Id"
           },
-          "documento": {
+          "document": {
             "type": "string",
-            "title": "Documento"
+            "title": "Document"
           },
-          "respuestas": {
+          "answers": {
             "items": {
               "type": "string"
             },
             "type": "array",
-            "title": "Respuestas"
+            "title": "Answers"
           },
-          "estado": {
-            "$ref": "#/components/schemas/EstadoDocumental",
-            "default": "pendiente"
+          "status": {
+            "$ref": "#/components/schemas/DocumentStatus",
+            "default": "pending"
           },
-          "incisos": {
+          "clauses": {
             "items": {
               "type": "string"
             },
             "type": "array",
-            "title": "Incisos"
+            "title": "Clauses"
           },
-          "ambiguedades": {
+          "ambiguities": {
             "items": {
-              "$ref": "#/components/schemas/Ambiguedad"
+              "$ref": "#/components/schemas/Ambiguity"
             },
             "type": "array",
-            "title": "Ambiguedades"
+            "title": "Ambiguities"
           },
-          "escenarios": {
+          "scenarios": {
             "items": {
-              "$ref": "#/components/schemas/Escenario"
+              "$ref": "#/components/schemas/Scenario"
             },
             "type": "array",
-            "title": "Escenarios"
+            "title": "Scenarios"
           },
-          "pendientes": {
+          "pending_items": {
             "items": {
               "type": "string"
             },
             "type": "array",
-            "title": "Pendientes"
+            "title": "Pending Items"
           },
-          "aceptado_por_cliente": {
+          "accepted_by_client": {
             "type": "boolean",
-            "title": "Aceptado Por Cliente",
+            "title": "Accepted By Client",
             "default": false
           },
-          "aceptado_por_proveedor": {
+          "accepted_by_provider": {
             "type": "boolean",
-            "title": "Aceptado Por Proveedor",
+            "title": "Accepted By Provider",
             "default": false
           }
         },
         "type": "object",
         "required": [
-          "contrato_id",
-          "documento"
+          "contract_id",
+          "document"
         ],
-        "title": "DocumentalState"
+        "title": "DocumentState"
       },
-      "Escenario": {
-        "properties": {
-          "inciso": {
-            "type": "string",
-            "title": "Inciso"
-          },
-          "descripcion": {
-            "type": "string",
-            "title": "Descripcion"
-          },
-          "resultado_esperado": {
-            "type": "string",
-            "title": "Resultado Esperado"
-          }
-        },
-        "type": "object",
-        "required": [
-          "inciso",
-          "descripcion",
-          "resultado_esperado"
-        ],
-        "title": "Escenario"
-      },
-      "EstadoDocumental": {
+      "DocumentStatus": {
         "type": "string",
         "enum": [
-          "pendiente",
-          "necesita_aclaracion",
-          "propuesta"
+          "pending",
+          "needs_clarification",
+          "proposal"
         ],
-        "title": "EstadoDocumental"
+        "title": "DocumentStatus"
       },
       "HTTPValidationError": {
         "properties": {
@@ -633,13 +610,13 @@
       },
       "Ref": {
         "properties": {
-          "hito_id": {
+          "milestone_id": {
             "type": "string",
-            "title": "Hito Id"
+            "title": "Milestone Id"
           },
-          "contrato_version": {
+          "contract_version": {
             "type": "string",
-            "title": "Contrato Version"
+            "title": "Contract Version"
           },
           "revision": {
             "type": "string",
@@ -648,12 +625,35 @@
         },
         "type": "object",
         "required": [
-          "hito_id",
-          "contrato_version",
+          "milestone_id",
+          "contract_version",
           "revision"
         ],
         "title": "Ref",
-        "description": "Identifica contra qu\u00e9 se eval\u00faa: hito, versi\u00f3n acordada y revisi\u00f3n exacta."
+        "description": "Identifies what is evaluated against: milestone, agreed version and exact revision."
+      },
+      "Scenario": {
+        "properties": {
+          "clause": {
+            "type": "string",
+            "title": "Clause"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "expected_result": {
+            "type": "string",
+            "title": "Expected Result"
+          }
+        },
+        "type": "object",
+        "required": [
+          "clause",
+          "description",
+          "expected_result"
+        ],
+        "title": "Scenario"
       },
       "ScenarioResult": {
         "properties": {
@@ -731,8 +731,8 @@
         "type": "string",
         "enum": [
           "favorable",
-          "requiere_correccion",
-          "inconcluso"
+          "needs_fix",
+          "inconclusive"
         ],
         "title": "Verdict"
       }

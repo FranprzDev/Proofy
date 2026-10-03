@@ -1,1 +1,1 @@
-"""Frontier Agent: agentes documental y CI/CD (Python + LangGraph)."""
+"""Frontier Agent: document and CI/CD agents (Python + LangGraph)."""
