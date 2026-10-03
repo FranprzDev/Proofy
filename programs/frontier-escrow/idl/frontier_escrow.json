@@ -771,6 +771,11 @@
   "types": [
     {
       "name": "Agreement",
+      "docs": [
+        "Escrow between a client and a provider. PDA at",
+        "`[AGREEMENT_SEED, client, agreement_id_le]`; funds live in the system-owned",
+        "vault PDA at `[VAULT_SEED, agreement]`."
+      ],
       "type": {
         "kind": "struct",
         "fields": [
@@ -910,6 +915,9 @@
     },
     {
       "name": "Config",
+      "docs": [
+        "Program-wide settings. Singleton PDA at `[CONFIG_SEED]`."
+      ],
       "type": {
         "kind": "struct",
         "fields": [
@@ -986,6 +994,9 @@
     },
     {
       "name": "Milestone",
+      "docs": [
+        "One payment tranche of an agreement."
+      ],
       "type": {
         "kind": "struct",
         "fields": [
@@ -995,7 +1006,11 @@
           },
           {
             "name": "status",
-            "type": "u8"
+            "type": {
+              "defined": {
+                "name": "MilestoneStatus"
+              }
+            }
           },
           {
             "name": "evidence_hash",
@@ -1042,6 +1057,38 @@
                 32
               ]
             }
+          }
+        ]
+      }
+    },
+    {
+      "name": "MilestoneStatus",
+      "docs": [
+        "Lifecycle of a single milestone. Borsh encodes it as a one-byte tag, so the",
+        "on-chain layout is identical to the former `u8` status",
+        "(Pending = 0, Released = 1, Disputed = 2, Refunded = 3).",
+        "",
+        "Transitions: `Pending -> Released` (attestor), `Pending -> Disputed`",
+        "(client or provider), `Disputed -> Released | Refunded` (admin). `Released`",
+        "and `Refunded` are terminal."
+      ],
+      "repr": {
+        "kind": "rust"
+      },
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Pending"
+          },
+          {
+            "name": "Released"
+          },
+          {
+            "name": "Disputed"
+          },
+          {
+            "name": "Refunded"
           }
         ]
       }

@@ -1,11 +1,9 @@
 use anchor_lang::prelude::*;
 
-use super::{compute_fee, vault_transfer};
+use super::{payout_to_provider, VaultSeeds};
 use crate::errors::EscrowError;
 use crate::events::MilestoneReleased;
-use crate::state::{
-    Agreement, Config, AGREEMENT_SEED, CONFIG_SEED, STATUS_PENDING, STATUS_RELEASED, VAULT_SEED,
-};
+use crate::state::{Agreement, Config, MilestoneStatus, AGREEMENT_SEED, CONFIG_SEED, VAULT_SEED};
 
 #[derive(Accounts)]
 pub struct ReleaseMilestone<'info> {
@@ -43,37 +41,27 @@ pub fn handler(ctx: Context<ReleaseMilestone>, index: u8, evidence_hash: [u8; 32
     let agreement = &mut ctx.accounts.agreement;
     require!(agreement.funded, EscrowError::NotFunded);
     require!(index < agreement.milestone_count, EscrowError::InvalidIndex);
+    let agreement_key = agreement.key();
+    let seeds = VaultSeeds::new(agreement_key, agreement.vault_bump);
     let milestone = &mut agreement.milestones[index as usize];
     require!(
-        milestone.status == STATUS_PENDING,
+        milestone.status == MilestoneStatus::Pending,
         EscrowError::InvalidStatus
     );
 
-    let amount = milestone.amount;
-    let fee = compute_fee(amount, ctx.accounts.config.fee_bps)?;
-    let provider_amount = amount.checked_sub(fee).ok_or(EscrowError::MathOverflow)?;
-
     // Effects before interactions.
-    milestone.status = STATUS_RELEASED;
+    let amount = milestone.amount;
+    milestone.status = MilestoneStatus::Released;
     milestone.evidence_hash = evidence_hash;
 
-    let agreement_key = agreement.key();
-    let vault_bump = [agreement.vault_bump];
-    let seeds: &[&[u8]] = &[VAULT_SEED, agreement_key.as_ref(), &vault_bump];
-    let signer_seeds = &[seeds];
-    vault_transfer(
+    let (fee, provider_amount) = payout_to_provider(
         &ctx.accounts.system_program,
         &ctx.accounts.vault,
         &ctx.accounts.treasury.to_account_info(),
-        fee,
-        signer_seeds,
-    )?;
-    vault_transfer(
-        &ctx.accounts.system_program,
-        &ctx.accounts.vault,
         &ctx.accounts.provider.to_account_info(),
-        provider_amount,
-        signer_seeds,
+        amount,
+        ctx.accounts.config.fee_bps,
+        &seeds,
     )?;
 
     emit!(MilestoneReleased {

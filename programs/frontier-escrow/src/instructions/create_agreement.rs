@@ -1,9 +1,10 @@
 use anchor_lang::prelude::*;
 
+use super::min_milestone_amount;
 use crate::errors::EscrowError;
 use crate::events::AgreementCreated;
 use crate::state::{
-    Agreement, Milestone, AGREEMENT_SEED, MAX_MILESTONES, STATUS_PENDING, VAULT_SEED,
+    Agreement, Milestone, MilestoneStatus, AGREEMENT_SEED, MAX_MILESTONES, VAULT_SEED,
 };
 
 #[derive(Accounts)]
@@ -34,11 +35,9 @@ pub fn handler(
         !amounts.is_empty() && amounts.len() <= MAX_MILESTONES,
         EscrowError::InvalidMilestones
     );
-    // Each remaining vault balance must stay rent-exempt (or reach zero), so every
-    // milestone must be at least the minimum balance of a zero-data account.
-    let min_amount = Rent::get()?.minimum_balance(0);
+    let min_amount = min_milestone_amount()?;
     require!(
-        amounts.iter().all(|a| *a >= min_amount.max(1)),
+        amounts.iter().all(|a| *a >= min_amount),
         EscrowError::InvalidMilestones
     );
     require_keys_neq!(
@@ -55,11 +54,12 @@ pub fn handler(
     agreement.contract_hash = contract_hash;
     agreement.provider_accepted = false;
     agreement.funded = false;
-    agreement.milestone_count = amounts.len() as u8;
+    agreement.milestone_count =
+        u8::try_from(amounts.len()).map_err(|_| error!(EscrowError::InvalidMilestones))?;
     agreement.milestones = [Milestone::default(); MAX_MILESTONES];
     for (slot, amount) in agreement.milestones.iter_mut().zip(amounts.iter()) {
         slot.amount = *amount;
-        slot.status = STATUS_PENDING;
+        slot.status = MilestoneStatus::Pending;
     }
     agreement.bump = ctx.bumps.agreement;
     agreement.vault_bump =

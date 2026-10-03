@@ -14,7 +14,7 @@ Milestone status: 0 Pending, 1 Released, 2 Disputed, 3 Refunded.
 ## Instructions
 `initialize_config`, `create_agreement`, `accept_agreement`, `fund_agreement`, `release_milestone` (attestor), `open_dispute` (client or provider), `resolve_dispute` (admin). Events and errors are in the IDL (`idl/frontier_escrow.json`).
 
-Note: each milestone amount must be at least the rent-exempt minimum of a 0-byte account (890,880 lamports) so the vault never ends in a non-exempt state. Recipients (provider, treasury) must be able to hold the received lamports (existing account or amount >= rent minimum).
+Note: each milestone amount must be at least `ceil(rent_min * 10000 / 9000)` (rent_min = 890,880 lamports for a 0-byte account, so 989,867 lamports) so the vault never ends non-exempt and the provider's share stays rent-exempt even at the maximum 10% fee. Disputes can only be opened on funded agreements. Recipients (provider, treasury) must be able to hold the received lamports (existing account or amount >= rent minimum).
 
 ## Build / test
 ```
