@@ -20,6 +20,7 @@ import {
   type GetMultipleAccountsApi,
 } from "@solana/kit";
 import { MAX_MILESTONES } from "./constants";
+import { isMilestoneStatus, MilestoneStatus } from "./enums";
 import { anchorDiscriminator } from "./instructions";
 
 export const ACCOUNT_DISCRIMINATORS = {
@@ -34,10 +35,7 @@ export async function verifyAccountDiscriminators(): Promise<void> {
   }
 }
 
-export const MilestoneStatus = { Pending: 0, Released: 1, Disputed: 2, Refunded: 3 } as const;
-export const MILESTONE_STATUS_LABEL: Record<number, string> = { 0: "Pending", 1: "Released", 2: "Disputed", 3: "Refunded" };
-
-export type Milestone = { amount: bigint; status: number; evidenceHash: ReadonlyUint8Array };
+export type Milestone = { amount: bigint; status: MilestoneStatus; evidenceHash: ReadonlyUint8Array };
 export type Agreement = {
   client: Address;
   provider: Address;
@@ -90,7 +88,9 @@ export function decodeAgreement(bytes: Uint8Array): Agreement | null {
   try {
     const a = agreementDecoder.decode(payload);
     if (a.milestoneCount < 1 || a.milestoneCount > MAX_MILESTONES) return null;
-    return { ...a, milestones: a.milestones.slice(0, a.milestoneCount) };
+    const milestones = a.milestones.slice(0, a.milestoneCount);
+    if (!milestones.every((m) => isMilestoneStatus(m.status))) return null;
+    return { ...a, milestones: milestones as Milestone[] };
   } catch {
     return null;
   }
