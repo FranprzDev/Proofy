@@ -59,61 +59,12 @@ body {
 }
 
 /* ===== Animations ===== */
-@keyframes gradient-shift {
-  0%, 100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
 @keyframes float {
   0%, 100% {
     transform: translateY(0);
   }
   50% {
     transform: translateY(-12px);
-  }
-}
-
-@keyframes pulse-glow {
-  0%, 100% {
-    opacity: 0.4;
-  }
-  50% {
-    opacity: 0.8;
-  }
-}
-
-@keyframes reveal-up {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slide-in-left {
-  from {
-    opacity: 0;
-    transform: translateX(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes typing-cursor {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
   }
 }
 
@@ -125,15 +76,6 @@ body {
   40% {
     transform: scale(1);
     opacity: 1;
-  }
-}
-
-@keyframes line-grow {
-  from {
-    transform: scaleY(0);
-  }
-  to {
-    transform: scaleY(1);
   }
 }
 
@@ -155,58 +97,10 @@ body {
   transform: translateY(0);
 }
 
-.reveal-delay-1 {
-  transition-delay: 0.1s;
-}
-.reveal-delay-2 {
-  transition-delay: 0.2s;
-}
-.reveal-delay-3 {
-  transition-delay: 0.3s;
-}
-.reveal-delay-4 {
-  transition-delay: 0.4s;
-}
-
 .glass {
   background: rgba(10, 10, 15, 0.8);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-}
-
-.gradient-text {
-  background: linear-gradient(135deg, #BEFF00 0%, #7fff00 50%, #BEFF00 100%);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: gradient-shift 4s ease infinite;
-}
-
-.hero-gradient {
-  background: radial-gradient(
-      ellipse 60% 50% at 50% 0%,
-      rgba(190, 255, 0, 0.08) 0%,
-      transparent 70%
-    ),
-    radial-gradient(
-      ellipse 40% 40% at 80% 20%,
-      rgba(100, 200, 0, 0.04) 0%,
-      transparent 60%
-    );
-}
-
-.dot-grid {
-  background-image: radial-gradient(
-    rgba(190, 255, 0, 0.07) 1px,
-    transparent 1px
-  );
-  background-size: 32px 32px;
-}
-
-.card-glow:hover {
-  box-shadow: 0 0 30px rgba(190, 255, 0, 0.06),
-    0 0 60px rgba(190, 255, 0, 0.03);
 }
 
 .btn-glow {
@@ -217,21 +111,6 @@ body {
 .btn-glow:hover {
   box-shadow: 0 0 30px rgba(190, 255, 0, 0.35),
     0 0 60px rgba(190, 255, 0, 0.15);
-}
-
-/* ===== Step connector line ===== */
-.step-line {
-  position: absolute;
-  left: 1.25rem;
-  top: 3.5rem;
-  bottom: 0;
-  width: 2px;
-  background: linear-gradient(
-    to bottom,
-    var(--color-lime) 0%,
-    var(--color-subtle) 100%
-  );
-  transform-origin: top;
 }
 
 /* ===== FAQ accordion ===== */
@@ -251,7 +130,6 @@ body {
 
 /* ===== Proofy landing / motion system ===== */
 .landing-page { --color-muted: #94949e; }
-.landing-hero { background: #080a08; }
 .hero-grid {
   position: absolute;
   inset: 0;
@@ -277,9 +155,6 @@ body {
 }
 .hero-copy { animation: hero-enter 900ms both; }
 .hero-visual { animation: hero-enter 1100ms 150ms both; }
-.hero-primary { position: relative; overflow: hidden; }
-.hero-primary::before { content: ""; position: absolute; inset: 0; background: linear-gradient(110deg, transparent 30%, #ffffff80 50%, transparent 70%); transform: translateX(-110%); transition: transform 600ms; }
-.hero-primary:hover::before { transform: translateX(110%); }
 .status-dot { display: inline-block; width: 6px; height: 6px; flex-shrink: 0; border-radius: 50%; background: var(--color-lime); box-shadow: 0 0 0 4px #beff0012; animation: signal-pulse 3s ease-in-out infinite; }
 .workflow-scene { position: relative; max-width: 470px; margin: 20px auto 0; padding: 28px 25px 0; }
 .workflow-panel { position: relative; z-index: 2; overflow: hidden; border: 1px solid #beff0033; border-radius: 20px; background: linear-gradient(145deg, #1b211a, #0c100e 65%); box-shadow: 0 30px 80px #0008, 0 0 70px #beff0008, inset 0 1px 0 #ffffff0c; }
@@ -304,11 +179,6 @@ body {
 .workflow-tab:hover { background: #ffffff05; color: white; }
 .workflow-tab.is-active { color: var(--color-lime); background: #beff0009; }
 .workflow-tab.is-active::before { content: ""; position: absolute; top: 0; left: 20%; right: 20%; height: 2px; background: var(--color-lime); box-shadow: 0 0 12px #beff0060; }
-.landing-page .card-glow { overflow: hidden; background-image: radial-gradient(ellipse at top right, #beff0007, transparent 65%); }
-.landing-page .card-glow:hover { transform: translateY(-6px); box-shadow: 0 16px 40px #0005, 0 0 30px #beff000b; }
-.landing-page .feature-icon { width: 56px; height: 56px; display: grid; place-items: center; border: 1px solid #beff0025; border-radius: 16px; background: #beff0009; }
-.landing-page .process-grid { position: relative; }
-.landing-page .process-grid::before { content: ""; position: absolute; top: 48px; left: 5%; right: 5%; height: 1px; background: linear-gradient(90deg, transparent, #beff0060, transparent); }
 .landing-page :is(a, button, input):focus-visible { outline: 2px solid var(--color-lime); outline-offset: 5px; }
 @keyframes orbit-spin { to { transform: rotate(360deg); } }
 @keyframes ambient-breathe { to { opacity: 0.5; transform: scale(1.1); } }
@@ -328,47 +198,35 @@ body {
   html { scroll-behavior: auto; }
   .landing-page *, .landing-page *::before, .landing-page *::after { animation: none !important; transition: none !important; }
   .landing-page .reveal.reveal-pending { opacity: 1; transform: none; }
-  .landing-page .card-glow:hover { transform: none; }
-}
-
-
-/* A luminous pause every three sections, echoed in the footer. */
-.landing-page main > section:nth-of-type(3n),
-.landing-page .landing-aurora {
-  isolation: isolate;
-  overflow: hidden;
-  background-color: #080c03;
-  border: 1px solid #caff9010;
-  border-radius: 0 0 28px 28px;
-  padding-bottom: clamp(10rem, 18vw, 14rem);
-}
-
-.landing-page main > section:nth-of-type(3n)::before,
-.landing-page .landing-aurora::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  inset: auto -8% 0;
-  height: 340px;
-  max-height: 55%;
-  pointer-events: none;
-  background:
-    radial-gradient(ellipse at 35% 115%, #ceef55b3 0%, #b9dd4c59 30%, transparent 65%),
-    radial-gradient(ellipse at 85% 120%, #66c5a58c 0%, #459a7940 32%, transparent 68%),
-    radial-gradient(ellipse at 5% 125%, #a8b67170 0%, transparent 60%);
-  filter: blur(24px);
-}
-
-.landing-page main > section:nth-of-type(6n)::before {
-  transform: scaleX(-1);
 }
 
 /* Keep the larger navigation clear of anchor destinations. */
 .landing-page section[id] { scroll-margin-top: 1.5rem; }
 
-@media (max-width: 640px) {
-  .landing-page main > section:nth-of-type(3n),
-  .landing-page .landing-aurora { border-radius: 0 0 20px 20px; }
+/* Sections after the hero read over a dark, translucent scrim; it eases off
+   toward the closing CTA so the shared shader comes back through. */
+.landing-body {
+  background: linear-gradient(
+    to bottom,
+    rgb(4 6 4 / 0) 0,
+    rgb(4 6 4 / 0.72) 18rem,
+    rgb(4 6 4 / 0.72) calc(100% - 44rem),
+    rgb(4 6 4 / 0.45) 100%
+  );
+}
+.landing-footer { background: linear-gradient(to bottom, rgb(4 6 4 / 0.45), rgb(4 6 4 / 0.9) 14rem); }
+
+/* How it works: numbered steps joined by a thin rule (vertical, horizontal on lg). */
+.landing-steps { display: grid; gap: 2.75rem; }
+.landing-step { position: relative; padding-left: 2.25rem; }
+.landing-step::before { content: ""; position: absolute; left: 5px; top: 22px; bottom: -2.75rem; width: 1px; background: rgb(255 255 255 / 0.14); }
+.landing-step:last-child::before { display: none; }
+.landing-step-node { position: absolute; left: 0; top: 3px; width: 11px; height: 11px; border: 1px solid var(--color-lime); background: #040604; }
+@media (min-width: 1024px) {
+  .landing-steps { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2.5rem; }
+  .landing-step { padding-left: 0; padding-top: 2.25rem; }
+  .landing-step::before { left: 20px; right: -2.5rem; top: 5px; bottom: auto; width: auto; height: 1px; }
+  .landing-step-node { top: 0; }
 }
 
 /* ===== WebGPU backgrounds (vgpu) ===== */
@@ -376,8 +234,7 @@ body {
 .shader-canvas[data-ready] { opacity: 1; }
 /* The live shader replaces the static CSS ambience it was layered over. */
 .shader-canvas[data-ready] ~ .hero-grid,
-.shader-canvas[data-ready] ~ .hero-halo,
-.shader-canvas[data-ready] ~ .cta-static-glow { display: none; }
+.shader-canvas[data-ready] ~ .hero-halo { display: none; }
 
 /* ===== Contract workspace (/contrato) — BEGIN ===== */
 .cw-page { background: radial-gradient(ellipse 70% 40% at 50% 0%, #beff000a, transparent 70%), #050605; }

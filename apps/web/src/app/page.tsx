@@ -7,38 +7,35 @@ import { Architecture } from "@/components/landing/Architecture";
 import { FAQ } from "@/components/landing/FAQ";
 import { CTASection } from "@/components/landing/CTASection";
 import { Footer } from "@/components/landing/Footer";
+import { ShaderCanvas } from "@/components/landing/gpu/ShaderCanvas";
+import { HERO_FIELD_SHADER } from "@/components/landing/gpu/heroField.wgsl";
 
 export default function Home() {
   return (
-    <div className="landing-page min-h-screen bg-black text-white selection:bg-lime/30 selection:text-white">
-      {/* Navigation */}
+    <div className="landing-page relative isolate min-h-screen text-white selection:bg-lime/30 selection:text-white">
+      {/* One fixed shader behind the whole page. The CSS layers are the fallback when WebGPU is unavailable. */}
+      <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden="true">
+        <ShaderCanvas shader={HERO_FIELD_SHADER} interactive className="block h-full w-full" />
+        <div className="hero-grid" />
+        <div className="hero-halo" />
+      </div>
+
       <Navbar />
 
-      {/* Main Content */}
-      <main>
-        {/* Hero Section */}
+      <main className="relative z-10">
         <Hero />
 
-        {/* How it Works / Stepper Flow */}
-        <HowItWorks />
-
-        {/* Value Proposition / Benefits Grid */}
-        <Benefits />
-
-        {/* Target Audience (Clients vs Developers) */}
-        <Audience />
-
-        {/* Architecture / Interactive Terminal */}
-        <Architecture />
-
-        {/* Frequently Asked Questions */}
-        <FAQ />
-
-        {/* Final CTA / Waitlist Pre-registration */}
-        <CTASection />
+        {/* Everything after the hero sits on a translucent scrim so body copy stays readable. */}
+        <div className="landing-body">
+          <HowItWorks />
+          <Benefits />
+          <Audience />
+          <Architecture />
+          <FAQ />
+          <CTASection />
+        </div>
       </main>
 
-      {/* Footer */}
       <Footer />
     </div>
   );

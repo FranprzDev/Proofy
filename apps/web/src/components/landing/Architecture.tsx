@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { RevealOnScroll } from "./RevealOnScroll";
+import { SectionHeading } from "./SectionHeading";
 
 const codeLines = [
   { text: "Cliente + Proveedor → Next.js + Phantom", indent: 0, highlight: false },
@@ -11,122 +12,76 @@ const codeLines = [
   { text: "└─ Agente CI/CD → GitHub PRs", indent: 2, highlight: false },
   { text: "→ Pipeline aislado: ejecución y pruebas", indent: 1, highlight: false },
   { text: "→ Verificación → Atestación técnica", indent: 1, highlight: true },
-  { text: "→ Programa Solana → Pago + Comisión ✓", indent: 1, highlight: true },
+  { text: "→ Programa Solana → Pago + Comisión", indent: 1, highlight: true },
 ];
+
+const stack = ["Next.js", "TypeScript", "Python", "LangGraph", "Solana", "Phantom", "GitHub"];
 
 export function Architecture() {
   const [visibleLines, setVisibleLines] = useState(0);
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
   const hasAnimated = useRef(false);
 
   useEffect(() => {
-    const el = sectionRef.current;
+    const el = panelRef.current;
     if (!el) return;
+    let interval: ReturnType<typeof setInterval> | undefined;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !hasAnimated.current) {
           hasAnimated.current = true;
           let i = 0;
-          const interval = setInterval(() => {
+          interval = setInterval(() => {
             i++;
             setVisibleLines(i);
             if (i >= codeLines.length) clearInterval(interval);
-          }, 200);
+          }, 180);
         }
       },
       { threshold: 0.3 }
     );
 
     observer.observe(el);
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      clearInterval(interval);
+    };
   }, []);
 
   return (
-    <section className="relative py-28 px-6">
-      {/* Background */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-surface/50 to-transparent" />
-
-      <div className="relative mx-auto max-w-7xl">
+    <section id="arquitectura" className="relative px-6 py-24 sm:py-32">
+      <div className="mx-auto max-w-7xl">
         <RevealOnScroll>
-          <div className="mb-16 max-w-2xl">
-            <span className="mb-4 inline-block text-sm font-medium tracking-widest text-lime uppercase">
-              Tecnología
-            </span>
-            <h2 className="font-heading text-5xl sm:text-6xl md:text-7xl">
-              ARQUITECTURA
-            </h2>
-            <p className="mt-4 text-lg text-muted">
-              Flujo técnico simplificado de la plataforma. El desarrollo, las
-              pruebas y la distribución ocurren fuera de la cadena; Solana hace
-              cumplir las condiciones de pago.
-            </p>
-          </div>
+          <SectionHeading index="04" label="Tecnología" title="ARQUITECTURA">
+            Flujo técnico simplificado. El desarrollo, las pruebas y la distribución ocurren fuera de la
+            cadena; Solana hace cumplir las condiciones de pago.
+          </SectionHeading>
         </RevealOnScroll>
 
         <RevealOnScroll>
-          <div
-            ref={sectionRef}
-            className="overflow-hidden rounded-2xl border border-subtle bg-card"
-          >
-            {/* Terminal header */}
-            <div className="flex items-center gap-2 border-b border-subtle px-5 py-3">
-              <div className="h-3 w-3 rounded-full bg-red-500/60" />
-              <div className="h-3 w-3 rounded-full bg-yellow-500/60" />
-              <div className="h-3 w-3 rounded-full bg-green-500/60" />
-              <span className="ml-3 font-mono text-xs text-muted">
-                proofy-architecture.sh
-              </span>
+          <div ref={panelRef} className="border border-white/10 bg-black/40 backdrop-blur-md">
+            <div className="border-b border-white/10 px-5 py-3 font-mono text-xs text-white/40">
+              arquitectura.txt
             </div>
-
-            {/* Code content */}
-            <div className="p-6 sm:p-8">
-              <pre className="font-mono text-sm leading-loose sm:text-base">
-                {codeLines.map((line, i) => (
-                  <div
-                    key={i}
-                    className={`transition-all duration-500 ${
-                      i < visibleLines
-                        ? "translate-x-0 opacity-100"
-                        : "translate-x-4 opacity-0"
-                    }`}
-                    style={{ paddingLeft: `${line.indent * 1.5}rem` }}
-                  >
-                    <span className={line.highlight ? "text-lime" : "text-white/70"}>
-                      {line.text}
-                    </span>
-                  </div>
-                ))}
-                {/* Typing cursor */}
-                <span
-                  className="ml-1 inline-block h-5 w-2 bg-lime"
-                  style={{ animation: "typing-cursor 1s infinite" }}
-                />
-              </pre>
-            </div>
+            <pre className="overflow-x-auto p-6 font-mono text-sm leading-loose sm:p-8 sm:text-base">
+              {codeLines.map((line, i) => (
+                <div
+                  key={line.text}
+                  className={`transition-all duration-500 ${
+                    i < visibleLines ? "translate-x-0 opacity-100" : "translate-x-4 opacity-0"
+                  }`}
+                  style={{ paddingLeft: `${line.indent * 1.5}rem` }}
+                >
+                  <span className={line.highlight ? "text-lime" : "text-white/70"}>{line.text}</span>
+                </div>
+              ))}
+            </pre>
           </div>
-        </RevealOnScroll>
-
-        {/* Tech badges */}
-        <RevealOnScroll>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            {[
-              "Next.js",
-              "TypeScript",
-              "Python",
-              "LangGraph",
-              "Solana",
-              "Phantom",
-              "GitHub",
-            ].map((tech) => (
-              <span
-                key={tech}
-                className="rounded-full border border-subtle bg-card px-4 py-1.5 text-xs text-muted transition-colors hover:border-lime/30 hover:text-lime"
-              >
-                {tech}
-              </span>
-            ))}
-          </div>
+          <p className="mt-6 font-mono text-xs leading-relaxed text-white/45">
+            <span className="text-white/30">Stack: </span>
+            {stack.join(" · ")}
+          </p>
         </RevealOnScroll>
       </div>
     </section>
