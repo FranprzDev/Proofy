@@ -1,136 +1,74 @@
 import { RevealOnScroll } from "./RevealOnScroll";
+import { SectionHeading } from "./SectionHeading";
 
 const benefits = [
   {
-    icon: (
-      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-        <path d="M16 4L6 10V22L16 28L26 22V10L16 4Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
-        <path d="M16 14V20M13 17H19" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-      </svg>
-    ),
-    title: "Fondos Garantizados",
+    title: "Fondos en escrow desde el inicio",
     description:
-      "Tu pago está en escrow antes de empezar. Cumplís con los criterios → cobrás automáticamente.",
+      "El pago queda depositado antes de que empieces. Si la entrega cumple los criterios, se libera.",
     tag: "Desarrollador",
   },
   {
-    icon: (
-      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-        <path d="M16 4L6 10V16C6 22.6 10.4 28.6 16 30C21.6 28.6 26 22.6 26 16V10L16 4Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
-        <path d="M12 16L15 19L20 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    ),
-    title: "Entregas Verificables",
+    title: "Entregas verificables",
     description:
-      "El Frontier Agent verifica que el código cumple exactamente lo acordado. Sin sorpresas ni subjetividades.",
+      "El agente contrasta la entrega con los criterios acordados y deja registro de qué se cumplió y qué no.",
     tag: "Cliente",
   },
   {
-    icon: (
-      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-        <rect x="4" y="8" width="24" height="16" rx="3" stroke="currentColor" strokeWidth="1.5" />
-        <path d="M4 14H28" stroke="currentColor" strokeWidth="1.5" />
-        <path d="M8 19H14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-        <path d="M8 22H11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-      </svg>
-    ),
-    title: "Escrow Transparente",
+    title: "Reglas a la vista",
     description:
-      "Los fondos se custodian on-chain con reglas claras y verificables. Sin intermediarios opacos.",
+      "Los fondos se custodian on-chain y las condiciones de liberación son las mismas para las dos partes.",
     tag: "Ambos",
   },
   {
-    icon: (
-      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-        <circle cx="16" cy="16" r="10" stroke="currentColor" strokeWidth="1.5" />
-        <path d="M16 10V16H22" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    ),
-    title: "Liquidación Instantánea",
+    title: "Pago sin trámites",
     description:
-      "Verificación → pago en la misma transacción. Sin esperar aprobaciones manuales ni botones de cobro.",
+      "Cuando la verificación es válida, el escrow libera el pago. No hay aprobaciones manuales de por medio.",
     tag: "Ambos",
   },
   {
-    icon: (
-      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-        <path d="M8 6H24C25.1 6 26 6.9 26 8V24C26 25.1 25.1 26 24 26H8C6.9 26 6 25.1 6 24V8C6 6.9 6.9 6 8 6Z" stroke="currentColor" strokeWidth="1.5" />
-        <path d="M12 16L16 12L20 16L16 20L12 16Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
-        <circle cx="16" cy="16" r="2" fill="currentColor" />
-      </svg>
-    ),
-    title: "IA que Acompaña",
+    title: "Feedback durante el desarrollo",
     description:
-      "El Frontier Agent te ayuda durante el desarrollo, no solo evalúa al final. Comenta qué corregir sin modificar tu código.",
+      "El agente comenta en cada pull request qué falta para cumplir los criterios. No toca tu código.",
     tag: "Desarrollador",
   },
   {
-    icon: (
-      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-        <path d="M6 6H20L26 12V26H6V6Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
-        <path d="M20 6V12H26" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
-        <path d="M11 18H21M11 22H17" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-      </svg>
-    ),
-    title: "Criterios Claros desde el Día 0",
+    title: "Criterios claros desde el día cero",
     description:
-      "Ambas partes acuerdan escenarios y pruebas antes de escribir una línea de código. Sin ambigüedades.",
+      "Escenarios y pruebas se acuerdan antes de escribir la primera línea, así no se discute después qué era lo pedido.",
     tag: "Ambos",
   },
 ];
 
 export function Benefits() {
   return (
-    <section id="beneficios" className="relative py-28 px-6">
-      {/* Background accent */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-lime/[0.02] to-transparent" />
-
-      <div className="relative mx-auto max-w-7xl">
-        {/* Section header */}
+    <section id="beneficios" className="relative px-6 py-24 sm:py-32">
+      <div className="mx-auto max-w-7xl">
         <RevealOnScroll>
-          <div className="mb-16 text-center">
-            <span className="mb-4 inline-block text-sm font-medium tracking-widest text-lime uppercase">
-              Ventajas
-            </span>
-            <h2 className="font-heading text-5xl sm:text-6xl md:text-7xl">
-              ¿POR QUÉ PROOFY?
-            </h2>
-            <p className="mx-auto mt-4 max-w-xl text-lg text-muted">
-              Diseñado para reducir dos riesgos: que el desarrollador entregue
-              sin cobrar y que el cliente pague sin recibir lo acordado.
-            </p>
-          </div>
+          <SectionHeading index="02" label="Ventajas" title="¿POR QUÉ PROOFY?">
+            Diseñado para reducir dos riesgos: que el desarrollador entregue sin cobrar y que el
+            cliente pague sin recibir lo acordado.
+          </SectionHeading>
         </RevealOnScroll>
 
-        {/* Benefits grid */}
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {benefits.map((benefit, i) => (
-            <RevealOnScroll
-              key={benefit.title}
-              delay={((i % 3) + 1) as 1 | 2 | 3}
-            >
-              <div className="card-glow group flex h-full flex-col rounded-2xl border border-subtle bg-card p-7 transition-all duration-300 hover:border-lime/30 hover:bg-card-hover">
-                {/* Icon */}
-                <div className="feature-icon mb-5 text-lime transition-transform duration-300 group-hover:scale-110">
-                  {benefit.icon}
-                </div>
-
-                {/* Content */}
-                <h3 className="mb-2 text-lg font-semibold text-white">
-                  {benefit.title}
-                </h3>
-                <p className="mb-4 flex-1 text-sm leading-relaxed text-muted">
+        <RevealOnScroll>
+          <ul className="border-b border-white/10">
+            {benefits.map((benefit) => (
+              <li
+                key={benefit.title}
+                className="grid gap-2 border-t border-white/10 py-7 md:grid-cols-12 md:gap-8"
+              >
+                <h3 className="text-lg font-medium text-white md:col-span-4">{benefit.title}</h3>
+                <p className="text-sm leading-relaxed text-white/60 md:col-span-6 md:text-base">
                   {benefit.description}
                 </p>
-
-                {/* Tag */}
-                <span className="inline-block w-fit rounded-full border border-lime/20 bg-lime/5 px-3 py-1 text-xs text-lime">
+                <span className="font-mono text-[11px] tracking-wider text-white/40 uppercase md:col-span-2 md:pt-1 md:text-right">
                   {benefit.tag}
                 </span>
-              </div>
-            </RevealOnScroll>
-          ))}
-        </div>
+              </li>
+            ))}
+          </ul>
+        </RevealOnScroll>
       </div>
     </section>
   );
