@@ -21,18 +21,8 @@ export function Footer() {
             <h4 className="mb-4 font-mono text-xs tracking-wide text-white/40">Proyecto</h4>
             <ul className="space-y-2.5 text-sm text-white/60">
               <li>
-                <Link href="/marketplace" className="transition-colors hover:text-lime">
-                  Marketplace demo
-                </Link>
-              </li>
-              <li>
                 <a href="https://github.com/FranprzDev/Proofy" target="_blank" rel="noreferrer" className="transition-colors hover:text-white">
                   GitHub ↗
-                </a>
-              </li>
-              <li>
-                <a href="https://explorer.solana.com/?cluster=devnet" target="_blank" rel="noreferrer" className="transition-colors hover:text-white">
-                  Solana Explorer (Devnet) ↗
                 </a>
               </li>
             </ul>
