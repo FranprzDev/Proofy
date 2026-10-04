@@ -62,7 +62,7 @@ export function Footer() {
 
         <div className="flex flex-col gap-2 border-t border-white/10 pt-8 font-mono text-xs text-white/40 sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} Proofy</p>
-          <p>Construido sobre Solana · Solana Hackathon 2026</p>
+          <p>Construido sobre Solana · Colosseum Hackathon — Superteam Argentina</p>
         </div>
       </div>
     </footer>
