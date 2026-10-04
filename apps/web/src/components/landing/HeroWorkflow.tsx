@@ -24,7 +24,6 @@ export function HeroWorkflow() {
       <div className="workflow-panel">
         <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
           <span className="flex items-center gap-2 text-sm font-medium"><LandingIcon name="spark" className="text-lime" /> Proofy Engine</span>
-          <span className="rounded-full border border-white/10 px-2.5 py-1 text-[10px] tracking-widest text-white/50 uppercase">Demo interactiva</span>
         </div>
         <div className="px-5 pt-6 sm:px-7">
           <div className="flex items-center justify-between text-[10px] tracking-[0.18em] text-white/45 uppercase"><span>Proyecto / 001</span><span>Hito 01 de 03</span></div>

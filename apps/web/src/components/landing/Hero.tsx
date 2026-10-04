@@ -1,3 +1,4 @@
+import { HeroVideo } from "./HeroVideo";
 import { HeroWorkflow } from "./HeroWorkflow";
 import { LandingIcon, type LandingIconName } from "./LandingIcon";
 
@@ -17,7 +18,7 @@ export function Hero() {
           <p className="mt-7 max-w-lg text-base leading-relaxed text-white/55 sm:text-lg">Vos construís. La IA verifica. Solana paga.<br className="hidden sm:block" /> Conectamos cada entrega con su recompensa, con reglas claras desde el primer día.</p>
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
             <a href="#acceso-temprano" className="group inline-flex items-center justify-center gap-4 rounded-full bg-lime px-7 py-4 text-sm font-semibold text-black transition-colors hover:bg-lime-hover" id="hero-cta-start">Quiero ser parte<LandingIcon name="arrow" className="transition-transform group-hover:translate-x-1" /></a>
-            <a href="#como-funciona" className="inline-flex items-center justify-center gap-3 rounded-full border border-white/20 px-6 py-4 text-sm transition-colors hover:border-lime/50 hover:bg-white/5" id="hero-cta-learn"><span className="flex h-5 w-5 items-center justify-center rounded-full border border-white/40 text-[9px]" aria-hidden="true">▶</span>Así funciona Proofy</a>
+            <HeroVideo />
           </div>
           <div className="mt-7 flex items-center gap-2 text-xs text-white/40"><LandingIcon name="shield" width={15} height={15} />Menos incertidumbre. Más foco en construir.</div>
         </div>
