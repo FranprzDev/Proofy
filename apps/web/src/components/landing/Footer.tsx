@@ -12,9 +12,6 @@ export function Footer() {
               <span className="font-logo text-3xl font-bold tracking-tight text-white sm:text-4xl">Proofy</span>
             </Link>
             <p className="font-heading text-xl tracking-wide text-white/90">ENTREGAS VERIFICADAS. PAGOS AUTOMÁTICOS.</p>
-            <p className="max-w-sm text-sm leading-relaxed text-white/55">
-              Proofy guarda el pago de cada hito en un escrow en Solana y lo libera cuando la entrega cumple lo acordado.
-            </p>
           </div>
 
           <div>
