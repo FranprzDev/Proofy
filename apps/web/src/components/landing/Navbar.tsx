@@ -3,12 +3,13 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { ConnectWallet } from "@/components/wallet/ConnectWallet";
 
 const navLinks = [
-  { href: "#como-funciona", label: "Cómo funciona" },
-  { href: "#beneficios", label: "Beneficios" },
-  { href: "#para-quien", label: "Para quién" },
-  { href: "#faq", label: "FAQ" },
+  { href: "/#como-funciona", label: "Cómo funciona" },
+  { href: "/#beneficios", label: "Beneficios" },
+  { href: "/#para-quien", label: "Para quién" },
+  { href: "/#faq", label: "FAQ" },
 ];
 
 export function Navbar() {
@@ -53,15 +54,16 @@ export function Navbar() {
               {label}
             </a>
           ))}
+          <Link
+            href="/contrato"
+            className="text-sm font-medium text-lime transition-colors duration-200 hover:text-lime-hover"
+          >
+            Analizar contrato
+          </Link>
         </div>
 
         {/* Desktop CTA */}
-        <button
-          className="btn-glow hidden rounded-full bg-lime px-5 py-2.5 text-sm font-semibold text-black transition-all duration-200 hover:bg-lime-hover md:block"
-          id="navbar-connect-wallet"
-        >
-          Conectar Wallet
-        </button>
+        <ConnectWallet className="hidden md:block" id="navbar-connect-wallet" redirectTo="/contrato" />
 
         {/* Mobile Toggle */}
         <button
@@ -95,7 +97,7 @@ export function Navbar() {
         id="mobile-navigation"
         inert={!mobileOpen}
         className={`overflow-hidden transition-all duration-300 md:hidden ${
-          mobileOpen ? "max-h-80" : "max-h-0"
+          mobileOpen ? "max-h-[28rem]" : "max-h-0"
         }`}
       >
         <div className="glass border-t border-subtle px-6 pb-6 pt-2">
@@ -109,12 +111,14 @@ export function Navbar() {
               {label}
             </a>
           ))}
-          <button
-            className="mt-3 w-full rounded-full bg-lime px-5 py-2.5 text-sm font-semibold text-black"
-            id="navbar-mobile-connect"
+          <Link
+            href="/contrato"
+            className="block py-3 text-lime transition-colors hover:text-lime-hover"
+            onClick={() => setMobileOpen(false)}
           >
-            Conectar Wallet
-          </button>
+            Analizar contrato
+          </Link>
+          <ConnectWallet className="mt-3" id="navbar-mobile-connect" redirectTo="/contrato" />
         </div>
       </div>
     </nav>

@@ -377,6 +377,69 @@
           }
         }
       }
+    },
+    "/github/manifest": {
+      "get": {
+        "summary": "Github Manifest",
+        "description": "GitHub App manifest for https://github.com/settings/apps/new?manifest_url=...",
+        "operationId": "github_manifest_github_manifest_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Github Manifest Github Manifest Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/github/callback": {
+      "get": {
+        "summary": "Github Callback",
+        "description": "Exchange the temporary manifest code for real app credentials.",
+        "operationId": "github_callback_github_callback_get",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Code"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Github Callback Github Callback Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {

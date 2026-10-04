@@ -78,3 +78,20 @@ describe("checkVerdict", () => {
     expect(checkVerdict({ attestation_authorized: true, expected: { ...ref, revision: "x" } }, ref).refMatches).toBe(false);
   });
 });
+
+describe("phantom sign-in helpers", () => {
+  it("builds a SIWS message the server accepts", async () => {
+    const { buildSignInMessage, bytesToBase64 } = await import("@/lib/auth/phantom");
+    const msg = buildSignInMessage({ address: fields.address, nonce: "abc123", host: "proofy.test", origin: "https://proofy.test", now });
+    const parsed = parseSiwsMessage(msg);
+    expect(parsed).not.toBeNull();
+    expect(checkSiwsFields(parsed!, expect_)).toBeNull();
+    const sig = new Uint8Array(64).fill(9);
+    expect(decodeSignatures(bytesToBase64(sig))).toEqual([sig]);
+  });
+  it("detects user rejection", async () => {
+    const { isUserRejection } = await import("@/lib/auth/phantom");
+    expect(isUserRejection({ code: 4001, message: "User rejected" })).toBe(true);
+    expect(isUserRejection(new Error("x"))).toBe(false);
+  });
+});
