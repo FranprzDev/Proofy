@@ -1,3 +1,4 @@
+import asyncio
 import json
 import logging
 import uuid
@@ -12,6 +13,7 @@ from sse_starlette.sse import EventSourceResponse
 from frontier_agent.checkpoint import make_checkpointer
 from frontier_agent.config import Settings, get_settings
 from frontier_agent.github import WorkflowRunEvent
+from frontier_agent.github_app import build_manifest, exchange_code
 from frontier_agent.graphs.cicd import CicdInput, CicdState, build_cicd_graph
 from frontier_agent.graphs.document import (
     DocumentInput,
@@ -95,6 +97,29 @@ def create_app() -> FastAPI:
             extra={"ctx": {"run_id": event.workflow_run.id, "sha": event.workflow_run.head_sha}},
         )
         return {"status": "accepted", "head_sha": event.workflow_run.head_sha}
+
+    @app.get("/github/manifest")
+    async def github_manifest(
+        settings: Annotated[Settings, Depends(get_settings)],
+    ) -> dict[str, Any]:
+        """GitHub App manifest for https://github.com/settings/apps/new?manifest_url=..."""
+        return build_manifest(settings)
+
+    @app.get("/github/callback")
+    async def github_callback(
+        code: str,
+        settings: Annotated[Settings, Depends(get_settings)],
+    ) -> dict[str, Any]:
+        """Exchange the temporary manifest code for real app credentials."""
+        try:
+            creds = await asyncio.to_thread(exchange_code, code)
+        except RuntimeError as exc:
+            raise HTTPException(status.HTTP_502_BAD_GATEWAY, str(exc)) from exc
+        log.info(
+            "github.app.created",
+            extra={"ctx": {"app_id": creds.get("id"), "slug": creds.get("slug")}},
+        )
+        return creds
 
     return app
 

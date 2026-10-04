@@ -378,3 +378,84 @@ body {
 .shader-canvas[data-ready] ~ .hero-grid,
 .shader-canvas[data-ready] ~ .hero-halo,
 .shader-canvas[data-ready] ~ .cta-static-glow { display: none; }
+
+/* ===== Contract workspace (/contrato) — BEGIN ===== */
+.cw-page { background: radial-gradient(ellipse 70% 40% at 50% 0%, #beff000a, transparent 70%), #050605; }
+.cw-title { font-size: clamp(3rem, 7vw, 5.4rem); line-height: 0.95; letter-spacing: -0.01em; text-transform: uppercase; }
+.cw-panel { position: relative; border: 1px solid #beff0029; border-radius: 24px; background: linear-gradient(160deg, #161b15, #0b0e0c 45%, #090a09); box-shadow: 0 30px 80px #0009, 0 0 70px #beff0008, inset 0 1px 0 #ffffff0c; }
+.cw-panel :is(a, button, input):focus-visible { outline: 2px solid var(--color-lime); outline-offset: 3px; }
+
+.cw-stepper { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.cw-step { position: relative; display: flex; align-items: center; gap: 10px; min-width: 0; color: #ffffff60; }
+.cw-step + .cw-step::before { content: ""; position: absolute; left: -8px; width: 8px; top: 50%; height: 1px; background: #ffffff18; }
+.cw-step-dot { display: grid; place-items: center; flex-shrink: 0; width: 30px; height: 30px; border-radius: 10px; border: 1px solid #ffffff1a; background: #ffffff05; font-family: monospace; font-size: 12px; transition: all 300ms; }
+.cw-step.is-active { color: #fff; }
+.cw-step.is-active .cw-step-dot { border-color: #beff0080; color: var(--color-lime); background: #beff0012; box-shadow: 0 0 0 4px #beff000c, 0 0 20px #beff0030; }
+.cw-step.is-done { color: #ffffffb0; }
+.cw-step.is-done .cw-step-dot { border-color: transparent; background: var(--color-lime); color: #000; }
+@media (min-width: 640px) {
+  .cw-stepper { gap: 24px; }
+  .cw-step + .cw-step::before { left: -24px; width: 24px; }
+}
+
+.cw-lock-badge { position: relative; display: grid; place-items: center; width: 68px; height: 68px; border: 1px solid #beff0050; border-radius: 20px; color: var(--color-lime); background: linear-gradient(135deg, #beff0020, #beff0005); box-shadow: 0 0 40px #beff0014; }
+.cw-lock-badge::after { content: ""; position: absolute; inset: -9px; border: 1px dashed #beff0030; border-radius: 26px; }
+
+.cw-dropzone { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 48px 20px; border-radius: 20px; text-align: center; cursor: pointer; border: 1.5px dashed #ffffff22; background: radial-gradient(ellipse at 50% 0%, #beff000a, transparent 70%), #ffffff03; transition: border-color 250ms, background 250ms, box-shadow 250ms, transform 250ms; }
+.cw-dropzone:hover { border-color: #beff0066; background-color: #beff0006; }
+.cw-dropzone:has(input:focus-visible) { outline: 2px solid var(--color-lime); outline-offset: 3px; }
+.cw-dropzone[data-dragging] { border-style: solid; border-color: var(--color-lime); background-color: #beff000f; transform: scale(1.01); animation: cw-drop-glow 1.4s ease-in-out infinite; }
+.cw-dropzone[aria-disabled] { cursor: not-allowed; opacity: 0.5; }
+.cw-drop-icon { position: relative; display: grid; place-items: center; width: 84px; height: 84px; border: 1px solid #beff0040; border-radius: 24px; color: var(--color-lime); background: linear-gradient(135deg, #beff001c, #beff0004); box-shadow: 0 0 40px #beff0012; transition: transform 300ms; }
+.cw-dropzone:hover .cw-drop-icon, .cw-dropzone[data-dragging] .cw-drop-icon { transform: translateY(-4px); }
+.cw-drop-tag { position: absolute; right: -10px; bottom: 10px; padding: 2px 6px; border-radius: 6px; background: var(--color-lime); color: #000; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; }
+@media (min-width: 640px) { .cw-dropzone { padding: 64px 32px; } }
+.cw-dropzone[data-compact] { padding: 28px 20px; }
+.cw-dropzone[data-compact] .cw-drop-icon { width: 60px; height: 60px; border-radius: 18px; }
+.cw-dropzone[data-compact] .cw-drop-icon svg { width: 26px; height: 26px; }
+.cw-dropzone[data-compact] > span:nth-of-type(2) { margin-top: 16px; font-size: 1rem; }
+.cw-dropzone[data-compact] > span:last-child { display: none; }
+
+.cw-file-chip { display: flex; align-items: center; gap: 14px; padding: 12px 12px 12px 14px; border: 1px solid #ffffff14; border-radius: 16px; background: #ffffff06; }
+
+.cw-spinner { display: inline-block; width: 16px; height: 16px; border-radius: 50%; border: 2px solid #beff0040; border-top-color: var(--color-lime); animation: orbit-spin 800ms linear infinite; }
+.cw-spinner-sm { width: 11px; height: 11px; border-width: 1.5px; }
+
+.cw-scan-doc { --cw-doc-h: 212px; position: relative; display: flex; flex-direction: column; gap: 11px; width: 168px; height: var(--cw-doc-h); padding: 26px 20px; overflow: hidden; border: 1px solid #beff0030; border-radius: 16px; background: linear-gradient(160deg, #1a2018, #0d110e); box-shadow: 0 20px 50px #0008, 0 0 50px #beff000c; }
+.cw-scan-doc::before { content: ""; position: absolute; top: 0; right: 0; width: 26px; height: 26px; background: linear-gradient(225deg, #050605 50%, #beff0030 50%); }
+.cw-scan-line { display: block; height: 5px; flex-shrink: 0; border-radius: 3px; background: #ffffff14; animation: cw-line-read 2.4s ease-in-out infinite; }
+.cw-scan-beam { position: absolute; left: 0; right: 0; top: 0; height: 44px; background: linear-gradient(to bottom, transparent, #beff0026 85%, var(--color-lime)); border-bottom: 1px solid var(--color-lime); box-shadow: 0 6px 18px #beff0050; animation: cw-scan 2.4s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate; }
+
+.cw-phase { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border: 1px solid transparent; border-radius: 12px; font-size: 14px; color: #ffffff45; transition: all 300ms; }
+.cw-phase.is-done { color: #ffffffa0; }
+.cw-phase.is-active { color: #fff; border-color: #beff0030; background: #beff000a; }
+.cw-phase-dot { display: grid; place-items: center; flex-shrink: 0; width: 18px; height: 18px; border-radius: 50%; border: 1px solid #ffffff25; }
+.cw-phase.is-done .cw-phase-dot { border-color: transparent; background: var(--color-lime); color: #000; }
+.cw-phase.is-active .cw-phase-dot { border-color: var(--color-lime); box-shadow: inset 0 0 0 4px #050605, inset 0 0 0 9px var(--color-lime); animation: signal-pulse 2s ease-in-out infinite; }
+.cw-phase-dots { display: inline-flex; gap: 3px; margin-left: auto; }
+.cw-phase-dots i { width: 4px; height: 4px; border-radius: 50%; background: var(--color-lime); animation: dot-pulse 1.2s ease-in-out infinite; }
+.cw-phase-dots i:nth-child(2) { animation-delay: 0.15s; }
+.cw-phase-dots i:nth-child(3) { animation-delay: 0.3s; }
+
+.cw-ambiguity { position: relative; overflow: hidden; padding: 18px 18px 18px 22px; border: 1px solid #fcd34d30; border-radius: 16px; background: linear-gradient(135deg, #fcd34d0d, #fcd34d03 60%); }
+.cw-ambiguity::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: #fcd34d; box-shadow: 0 0 14px #fcd34d80; }
+
+.cw-case { border: 1px solid #ffffff12; border-radius: 16px; background: #ffffff04; transition: border-color 200ms, background 200ms; }
+.cw-case:hover { border-color: #beff0033; }
+.cw-case.is-open { border-color: #beff0040; background: #beff0005; }
+.cw-case > button { border-radius: 16px; }
+.cw-case-chevron { transition: transform 250ms, color 200ms, border-color 200ms; }
+.cw-case.is-open .cw-case-chevron { transform: rotate(180deg); color: var(--color-lime); border-color: #beff0050; }
+.cw-case-body { animation: hero-enter 300ms both; }
+
+@keyframes cw-scan { from { transform: translateY(-44px); } to { transform: translateY(var(--cw-doc-h)); } }
+@media (max-width: 639px) { .cw-scan-doc { --cw-doc-h: 150px; width: 120px; gap: 8px; padding: 20px 16px; } .cw-scan-doc .cw-scan-line:nth-child(n+9) { display: none; } }
+@keyframes cw-line-read { 0%, 100% { background: #ffffff12; } 50% { background: #beff0030; } }
+@keyframes cw-drop-glow { 0%, 100% { box-shadow: 0 0 0 0 #beff0000, 0 0 30px #beff0018; } 50% { box-shadow: 0 0 0 6px #beff0010, 0 0 50px #beff0030; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .cw-page *, .cw-page *::before, .cw-page *::after { animation: none !important; transition: none !important; }
+  .cw-dropzone[data-dragging] { transform: none; box-shadow: 0 0 40px #beff0025; }
+  .cw-scan-beam { top: 45%; }
+}
+/* ===== Contract workspace (/contrato) — END ===== */
