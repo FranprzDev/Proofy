@@ -1,19 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
 
-const navigation = [
-  { href: "#como-funciona", label: "Cómo funciona" },
-  { href: "#beneficios", label: "Beneficios" },
-  { href: "#para-quien", label: "Para quién" },
-  { href: "#arquitectura", label: "Arquitectura" },
-  { href: "#faq", label: "Preguntas frecuentes" },
-];
-
 export function Footer() {
   return (
     <footer className="landing-footer relative z-10 px-6 pt-16 pb-12">
       <div className="mx-auto max-w-7xl border-t border-white/10 pt-12">
-        <div className="mb-14 grid grid-cols-1 gap-12 md:grid-cols-4">
+        <div className="mb-14 grid grid-cols-1 gap-12 md:grid-cols-3">
           <div className="space-y-4 md:col-span-2">
             <Link href="/" className="inline-flex items-center gap-3">
               <Image src="/Icono-Proofy.svg" alt="Proofy" width={64} height={64} className="invert" />
@@ -23,19 +15,6 @@ export function Footer() {
             <p className="max-w-sm text-sm leading-relaxed text-white/55">
               Proofy guarda el pago de cada hito en un escrow en Solana y lo libera cuando la entrega cumple lo acordado.
             </p>
-          </div>
-
-          <div>
-            <h4 className="mb-4 font-mono text-xs tracking-wide text-white/40">Navegación</h4>
-            <ul className="space-y-2.5 text-sm text-white/60">
-              {navigation.map((item) => (
-                <li key={item.href}>
-                  <a href={item.href} className="transition-colors hover:text-white">
-                    {item.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
           </div>
 
           <div>
