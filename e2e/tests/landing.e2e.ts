@@ -25,7 +25,7 @@ test('the how-it-works section lists the four steps', async ({ app, screen }) =>
   await app.open('/');
   await screen.getByRole('navigation').first().getByRole('link', { name: 'Cómo funciona' }).click();
   await expect(screen.getByRole('heading', { name: 'CÓMO FUNCIONA' })).toBeVisible();
-  for (const name of ['Acuerdo Bilateral', 'Desarrollo con Pipeline', 'Verificación del Frontier Agent', 'Pago Automático en Solana']) {
+  for (const name of ['Acuerdo bilateral', 'Desarrollo con pipeline', 'Verificación del Frontier Agent', 'Pago automático en Solana']) {
     await expect(screen.getByRole('heading', { name })).toBeAttached();
   }
 });
