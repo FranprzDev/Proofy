@@ -45,7 +45,7 @@ export function HeroVideo() {
           </button>
           <video
             ref={videoRef}
-            src="/proofy-promo.mp4"
+            src="/proofy-demo-2026-10-04.mp4"
             poster="/proofy-promo-poster.jpg"
             controls
             playsInline
