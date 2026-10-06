@@ -1,84 +1,84 @@
 # Proofy
 
-**Del alcance acordado a la evidencia verificable. De la evidencia al pago por hitos en Solana.**
+**From agreed scope to verifiable evidence. From evidence to milestone payments on Solana.**
 
-Proofy conecta contratos de software, pruebas y pagos para clientes, freelancers y software factories. **Frontier Agent** transforma requisitos en escenarios de prueba y evalúa entregas contra evidencia de CI/CD; un programa de escrow en Solana controla la liberación de fondos por hito.
+Proofy connects software contracts, testing, and payments for clients, freelancers, and software development agencies. **Frontier Agent** turns requirements into test scenarios and evaluates deliveries against CI/CD evidence; a Solana escrow program controls the release of funds for each milestone.
 
-El objetivo es reducir dos riesgos: entregar sin cobrar y pagar sin recibir lo acordado. Las pruebas verifican fuera de la cadena; Solana hace cumplir las reglas de pago dentro de ella.
+The goal is to reduce two risks: delivering without getting paid and paying without receiving the agreed work. Verification happens off-chain; Solana enforces payment rules on-chain.
 
-> **Prototipo en desarrollo · integración de pagos limitada a devnet · no auditado.** Este repositorio no representa un flujo comercial completo ni una garantía de calidad, validez jurídica o seguridad para fondos reales.
+> **Prototype in development · payment integration limited to devnet · not audited.** This repository does not represent a complete commercial workflow or guarantee software quality, legal validity, or safety for real funds.
 
-[Inicio rápido](#inicio-rápido) · [Cómo funciona](#cómo-funciona) · [Arquitectura](#arquitectura) · [Verificación](#verificación) · [Documentación](#documentación)
+[Quick start](#quick-start) · [How it works](#how-it-works) · [Architecture](#architecture) · [Verification](#verification) · [Documentation](#documentation)
 
-## Cómo funciona
+## How it works
 
-El flujo de producto que guía la implementación es:
+The product workflow guiding implementation is:
 
-1. **Definir el alcance.** Las partes aportan un documento rector con módulos, entregables y criterios de aceptación.
-2. **Aclarar y acordar.** El agente documental identifica ambigüedades y propone escenarios verificables. Una propuesta de IA no sustituye el consentimiento bilateral.
-3. **Financiar los hitos.** El acuerdo vincula las partes y el hash del contrato; los fondos se depositan en un vault del programa de escrow.
-4. **Entregar con evidencia.** Cada entrega vincula la versión contractual, el hito, la revisión del código y los resultados de las pruebas.
-5. **Evaluar y liquidar.** El agente de CI/CD emite un veredicto. La autorización de atestación pasa por controles deterministas antes de que un firmante autorizado pueda liberar el pago.
+1. **Define the scope.** Both parties provide a governing document specifying modules, deliverables, and acceptance criteria.
+2. **Clarify and agree.** The document agent identifies ambiguities and proposes verifiable scenarios. An AI proposal does not replace both parties' consent.
+3. **Fund the milestones.** The agreement binds the parties and the contract hash; funds are deposited into the escrow program's vault.
+4. **Deliver with evidence.** Each delivery links the contract version, milestone, code revision, and test results.
+5. **Evaluate and settle.** The CI/CD agent issues a verdict. Attestation authorization passes deterministic checks before an authorized signer can release payment.
 
-**Un PR no es un hito pagable. Un check verde no demuestra por sí solo cumplimiento contractual.** Evidencia incompleta, una revisión distinta o un resultado inconcluso no habilitan el pago.
+**A PR is not a payable milestone. A green check alone does not prove contractual compliance.** Incomplete evidence, a mismatched revision, or an inconclusive result does not authorize payment.
 
-## Estado actual
+## Current status
 
-| Componente | Implementado en el repositorio | Límite actual |
+| Component | Implemented in the repository | Current limitation |
 | --- | --- | --- |
-| Web | Landing, marketplace, carga y análisis de PDF en `/contrato` | No equivale a contratación y entrega completas de extremo a extremo |
-| Autenticación | Wallet, Sign-In With Solana y sesión firmada | Iniciar sesión no acepta un contrato ni autoriza pagos |
-| Agente documental | Lectura de requisitos, ambigüedades y planes de pruebas TesterArmy | Necesita un LLM configurado; el resultado es una propuesta |
-| Agente de CI/CD | Revisión de evidencia dinámica y estática, hallazgos y control de autorización | Sin LLM, revisión inconclusa; no ejecuta código del PR ni arbitra disputas |
-| Escrow | Programa Anchor para SOL nativo: aceptación, financiación, liberación y disputas | Hasta 8 hitos por acuerdo; no auditado |
-| Integración de pago | Endpoint servidor que consulta el agente y envía una liberación autorizada | Solo devnet; requiere configuración on-chain y firmante servidor |
-| Automatización | CI de web/agente, E2E y workflow del programa | No prueba despliegue ni pagos reales |
+| Web | Landing page, marketplace, PDF upload and analysis at `/contrato` | Not a complete end-to-end contracting and delivery workflow |
+| Authentication | Wallet connection, Sign-In With Solana, and signed sessions | Signing in does not accept a contract or authorize payments |
+| Document agent | Requirement analysis, ambiguity detection, and TesterArmy test plans | Requires a configured LLM; output is a proposal |
+| CI/CD agent | Dynamic and static evidence review, findings, and authorization checks | Inconclusive without an LLM; does not execute PR code or arbitrate disputes |
+| Escrow | Anchor program for native SOL: acceptance, funding, release, and disputes | Up to 8 milestones per agreement; not audited |
+| Payment integration | Server endpoint that queries the agent and submits an authorized release | Devnet only; requires on-chain configuration and a server-side signer |
+| Automation | Web/agent CI, E2E, and a program workflow | Does not prove deployment or real payments |
 
-La aceptación bilateral completa en la interfaz, el onboarding de repositorios y la operación comercial integrada siguen pendientes. La presencia de código no confirma un despliegue activo.
+Complete bilateral acceptance in the UI, repository onboarding, and integrated commercial operations remain pending. Code in the repository does not confirm an active deployment.
 
-## Arquitectura
+## Architecture
 
 ```text
-Cliente / proveedor
-        │ wallet + sesión SIWS
+Client / provider
+        │ wallet + SIWS session
         ▼
 Next.js ─── route handlers ───► Frontier Agent
         │                      Python · FastAPI · LangGraph
-        │                      documento → plan de pruebas
-        │                      evidencia CI/CD → veredicto
+        │                      document → test plan
+        │                      CI/CD evidence → verdict
         │
-        └── firmante servidor ─► Escrow en Solana
-                                acuerdo · vault · hitos · disputas
+        └── server-side signer ► Solana escrow
+                                agreement · vault · milestones · disputes
 
-GitHub + TesterArmy ───────────► evidencia fuera de la cadena
+GitHub + TesterArmy ───────────► off-chain evidence
 ```
 
-- **On-chain:** estado del acuerdo, compromiso del contrato, custodia de SOL, pagos y disputas según las autoridades del programa.
-- **Off-chain:** documento rector, código, pruebas, reportes, revisión de IA y archivos. Solana no ejecuta pruebas ni distribuye repositorios.
-- **Confianza explícita:** un atestador autorizado libera hitos y un administrador de plataforma resuelve disputas. No es verificación de IA ejecutada de forma trustless en la blockchain.
+- **On-chain:** agreement state, contract commitment, SOL custody, payments, and disputes governed by the program's authorities.
+- **Off-chain:** governing document, code, tests, reports, AI review, and files. Solana does not run tests or distribute repositories.
+- **Explicit trust assumptions:** an authorized attestor releases milestones and a platform administrator resolves disputes. This is not trustless AI verification running on the blockchain.
 
-| Ruta | Responsabilidad |
+| Path | Responsibility |
 | --- | --- |
-| [`apps/web/`](apps/web/) | Next.js App Router, React, TypeScript, Tailwind y Solana Kit |
-| [`services/agent/`](services/agent/) | Frontier Agent: Python, FastAPI, LangGraph, CLI y tests |
-| [`programs/frontier-escrow/`](programs/frontier-escrow/) | Rust/Anchor, IDL y tests LiteSVM |
-| [`e2e/`](e2e/) | TesterArmy y reportes de evidencia |
-| [`apps/intro-video/`](apps/intro-video/) | Presentación Remotion, independiente de la aplicación |
-| [`docs/`](docs/) | Producto, arquitectura, API y decisiones |
-| [`.github/workflows/`](.github/workflows/) | CI y E2E |
+| [`apps/web/`](apps/web/) | Next.js App Router, React, TypeScript, Tailwind, and Solana Kit |
+| [`services/agent/`](services/agent/) | Frontier Agent: Python, FastAPI, LangGraph, CLI, and tests |
+| [`programs/frontier-escrow/`](programs/frontier-escrow/) | Rust/Anchor, IDL, and LiteSVM tests |
+| [`e2e/`](e2e/) | TesterArmy and evidence reports |
+| [`apps/intro-video/`](apps/intro-video/) | Remotion presentation, independent of the application |
+| [`docs/`](docs/) | Product, architecture, API, and decisions |
+| [`.github/workflows/`](.github/workflows/) | CI and E2E |
 
-## Inicio rápido
+## Quick start
 
-### Requisitos
+### Requirements
 
-- Node.js 22+ y la versión de pnpm indicada en `packageManager` de cada aplicación.
-- Python 3.12+, `uv` y `make`.
-- Phantom para usar las rutas web autenticadas.
-- API key del proveedor de IA para análisis real; los tests unitarios usan modelos simulados.
+- Node.js 22+ and the pnpm version specified in each application's `packageManager` field.
+- Python 3.12+, `uv`, and `make`.
+- Phantom to use authenticated web routes.
+- An AI provider API key for real analysis; unit tests use fake models.
 
-Para compilar el programa: Rust, Solana CLI y Anchor. Las versiones de CI están en [el workflow del programa](.github/workflows/program.yml).
+Building the program also requires Rust, Solana CLI, and Anchor. CI versions are listed in [the program workflow](.github/workflows/program.yml).
 
-### 1. Instalar y configurar
+### 1. Install and configure
 
 ```bash
 git clone https://github.com/FranprzDev/Proofy.git
@@ -88,22 +88,22 @@ cp services/agent/.env.example services/agent/.env
 cp apps/web/.env.example apps/web/.env.local
 ```
 
-Configurar los archivos copiados:
+Configure the copied files:
 
-| Variable | Archivo | Uso |
+| Variable | File | Purpose |
 | --- | --- | --- |
-| `AGENT_API_KEY` | Ambos | Misma clave no vacía para llamadas servidor web → agente |
-| `AGENT_API_URL` | Web | `http://localhost:8000` en desarrollo |
-| `SESSION_SECRET` | Web | Secreto de al menos 32 caracteres; generar con `openssl rand -hex 32` |
-| `LLM_ENABLED` | Agente | `true` para análisis y revisión con IA; por defecto `false` |
-| `LLM_MODEL` | Agente | `<provider>:<model>` disponible para tu cuenta |
-| `GOOGLE_API_KEY` | Agente | Credencial de Google si se usa ese proveedor |
+| `AGENT_API_KEY` | Both | Same non-empty key for web server → agent requests |
+| `AGENT_API_URL` | Web | `http://localhost:8000` in development |
+| `SESSION_SECRET` | Web | Secret of at least 32 characters; generate with `openssl rand -hex 32` |
+| `LLM_ENABLED` | Agent | `true` for AI analysis and review; defaults to `false` |
+| `LLM_MODEL` | Agent | `<provider>:<model>` available to your account |
+| `GOOGLE_API_KEY` | Agent | Google credential when using that provider |
 
-Consultar los ejemplos completos de [web](apps/web/.env.example) y [agente](services/agent/.env.example). No publicar archivos `.env` ni claves privadas. `AGENT_API_KEY`, `SESSION_SECRET` y `ATTESTOR_SECRET_KEY` son exclusivos del servidor: nunca usar `NEXT_PUBLIC_` para ellos.
+See the complete [web](apps/web/.env.example) and [agent](services/agent/.env.example) examples. Never publish `.env` files or private keys. `AGENT_API_KEY`, `SESSION_SECRET`, and `ATTESTOR_SECRET_KEY` are server-only: never prefix them with `NEXT_PUBLIC_`.
 
-### 2. Iniciar los servicios
+### 2. Start the services
 
-En dos terminales separadas, desde la raíz:
+Run these from the repository root in two separate terminals:
 
 ```bash
 make dev-agent
@@ -113,54 +113,54 @@ make dev-agent
 make dev-web
 ```
 
-Abrir `http://localhost:3000`, conectar Phantom y firmar el mensaje de acceso. Visitar `/contrato` para cargar un PDF. El agente expone `/docs` y `/health` en `http://localhost:8000`.
+Open `http://localhost:3000`, connect Phantom, and sign the login message. Visit `/contrato` to upload a PDF. The agent exposes `/docs` and `/health` at `http://localhost:8000`.
 
-Con `LLM_ENABLED=false`, el agente documental informa `llm_unavailable`: no inventa una evaluación. Iniciar sesión no requiere SOL; financiar acuerdos y enviar transacciones sí requiere fondos de prueba.
+With `LLM_ENABLED=false`, the document agent reports `llm_unavailable` rather than inventing an evaluation. Signing in does not require SOL; funding agreements and sending transactions require test funds.
 
-### 3. Opcional: E2E y pagos en devnet
+### 3. Optional: E2E and devnet payments
 
-- **TesterArmy:** instalar dependencias en `e2e/`, copiar `e2e/.env.example` a `e2e/.env` y configurar `GOOGLE_GENERATIVE_AI_API_KEY`. El agente usa `E2E_PROJECT_DIR` para localizar el proyecto; `E2E_ALLOW_RUN=true` habilita ejecución desde sus herramientas. Las ejecuciones pueden consumir llamadas pagas al modelo.
-- **Escrow:** compilar y preparar el programa y su cuenta de configuración según [la guía del programa](programs/frontier-escrow/README.md). Configurar RPC, program ID y `ATTESTOR_SECRET_KEY` con una clave de prueba autorizada como atestador. No reutilizar claves con fondos reales.
+- **TesterArmy:** install dependencies in `e2e/`, copy `e2e/.env.example` to `e2e/.env`, and configure `GOOGLE_GENERATIVE_AI_API_KEY`. The agent uses `E2E_PROJECT_DIR` to locate the project; `E2E_ALLOW_RUN=true` enables execution from its tools. Runs may incur model API costs.
+- **Escrow:** build and prepare the program and its configuration account following [the program guide](programs/frontier-escrow/README.md). Configure the RPC, program ID, and `ATTESTOR_SECRET_KEY` using a test key authorized as the attestor. Never reuse keys holding real funds.
 
-Son pasos adicionales a `make setup`: arrancar la web no despliega ni inicializa el programa.
+These steps are additional to `make setup`: starting the web app does not deploy or initialize the program.
 
-## Verificación
+## Verification
 
-Desde la raíz:
+From the repository root:
 
 ```bash
-make check                      # lint, tipos, tests del agente y build web
-(cd apps/web && pnpm test)       # tests web, no incluidos en make check
-make gen-api                    # regenerar OpenAPI y tipos tras cambiar la API
+make check                      # lint, types, agent tests, and web build
+(cd apps/web && pnpm test)       # web tests, not included in make check
+make gen-api                    # regenerate OpenAPI and types after API changes
 ```
 
-Las pruebas unitarias no requieren claves reales de IA. Para suites opcionales, con sus requisitos instalados:
+Unit tests do not require real AI keys. For optional suites, with their prerequisites installed:
 
 ```bash
 anchor build
-cargo test -p frontier-escrow    # necesita el binario .so construido
+cargo test -p frontier-escrow    # requires the built .so binary
 (cd e2e && pnpm exec playwright install chromium && pnpm test:e2e)
 ```
 
-CI verifica web/agente y consistencia de OpenAPI; E2E publica reportes y artefactos y necesita el secreto de IA correspondiente. El workflow del programa se ejecuta cuando cambian sus rutas relevantes.
+CI checks the web app, agent, and OpenAPI consistency. E2E publishes reports and artifacts and requires the corresponding AI secret. The program workflow runs when its relevant paths change.
 
-## Documentación
+## Documentation
 
-| Documento | Contenido |
+| Document | Contents |
 | --- | --- |
-| [Producto y reglas](docs/proyecto.md) | Visión, documento rector, hitos, consentimiento y decisiones |
-| [Arquitectura web](docs/arquitectura-web.md) | Fronteras y responsabilidades de Next.js |
-| [Arquitectura de agentes](docs/arquitectura-agentes.md) | Preparación documental, revisión y evidencias |
-| [API](docs/api-endpoints.md) | Endpoints y contratos de integración |
-| [Guía del agente](services/agent/README.md) | Herramientas, comandos `plan`/`review` y códigos de salida |
-| [Guía web](apps/web/README.md) | SIWS, cliente servidor y liberación de hitos |
-| [Guía del escrow](programs/frontier-escrow/README.md) | Cuentas, PDAs, instrucciones y restricciones |
-| [Decisiones de arquitectura](docs/adr/) | Fundamentos de las elecciones técnicas |
+| [Product and rules](docs/proyecto.md) | Vision, governing document, milestones, consent, and decisions (Spanish) |
+| [Web architecture](docs/arquitectura-web.md) | Next.js boundaries and responsibilities (Spanish) |
+| [Agent architecture](docs/arquitectura-agentes.md) | Document preparation, review, and evidence (Spanish) |
+| [API](docs/api-endpoints.md) | Endpoints and integration contracts |
+| [Agent guide](services/agent/README.md) | Tools, `plan`/`review` commands, and exit codes |
+| [Web guide](apps/web/README.md) | SIWS, server client, and milestone release |
+| [Escrow guide](programs/frontier-escrow/README.md) | Accounts, PDAs, instructions, and constraints |
+| [Architecture decisions](docs/adr/) | Rationale for technical choices |
 
-Algunos documentos conservan propuestas y descripciones de etapas anteriores. Distinguirlas de lo implementado y de lo verificado en ejecución: este README resume el código publicado, no acredita producción.
+Some documents retain proposals and descriptions of earlier stages. Distinguish them from implemented and runtime-verified behavior: this README summarizes published code, not production readiness.
 
-## Contribuir
+## Contributing
 
-Abrir una rama y un PR acotado con motivación y checks ejecutados. Si cambia la API, regenerar OpenAPI y tipos; si cambia el programa, mantener la IDL sincronizada. No incluir secretos ni datos privados de contratos.
+Open a branch and a focused PR with the motivation and checks you ran. For API changes, regenerate OpenAPI and types; for program changes, keep the IDL in sync. Do not include secrets or private contract data.
 
-**Licencia:** no hay una licencia general en el repositorio. No asumir permisos de redistribución o uso comercial; las dependencias mantienen sus propias licencias.
+**License:** the repository has no general license. Do not assume redistribution or commercial-use permissions; dependencies retain their own licenses.
